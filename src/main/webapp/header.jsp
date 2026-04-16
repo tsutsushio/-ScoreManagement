@@ -4,7 +4,7 @@
 </head>
 <!-- 上部バー -->
 <div class="top-bar">
-  <div class="nav-left">出席管理システム</div>
+  <div class="nav-left">得点管理システム</div>
 </div>
 
 <style>
