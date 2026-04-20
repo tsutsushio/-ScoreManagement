@@ -56,7 +56,20 @@
         margin-bottom: 8px;
         color: #388e3c; /* ラベル：中くらいの緑 */
     }
+    
+    .password-wrapper {
+    position: relative;
+}
 
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;
+}
     /* 入力フィールド（テキストボックスとパスワード） */
     .input-group input[type="text"],
     .input-group input[type="password"] {
@@ -112,15 +125,31 @@
                 <input type="text" id="id" name="id" placeholder="IDを入力" required>
             </div>
 
-            <div class="input-group">
-                <label for="password">パスワード</label>
-                <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
-            </div>
+            <div class="input-group password-group">
+			    <label for="password">パスワード</label>
+			    <div class="password-wrapper">
+			        <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
+			        <span id="togglePassword" class="toggle-password">🤔</span>
+			    </div>
+			</div>
 
             <input type="submit" value="ログイン" class="login-btn">
         </form>
         
     </div>
+<script>
+    const toggle = document.getElementById("togglePassword");
+    const password = document.getElementById("password");
 
+    toggle.addEventListener("click", function () {
+        if (password.type === "password") {
+            password.type = "text";
+            toggle.textContent = "👁"; // 見える
+        } else {
+            password.type = "password";
+            toggle.textContent = "🙄"; // 見えない
+        }
+    });
+</script>
 </body>
 </html>
