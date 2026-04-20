@@ -118,7 +118,7 @@
         
         <p class="error-msg">${error}</p>
 
-        <form action="${pageContext.request.contextPath}/action/Login.action" method="post">
+        <form action="${pageContext.request.contextPath}/action/LoginExecute.action" method="post">
             
             <div class="input-group">
                 <label for="id">ユーザーID</label>
