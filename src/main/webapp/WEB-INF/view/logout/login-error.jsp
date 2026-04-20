@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ include file="../header.html" %>
+<%@ include file="/header.html" %>
 
 <%@include file="../menu.jsp" %>
 
@@ -20,4 +20,4 @@
     </p>
 </form>
 
-<%@ include file="../footer.html" %>
+<%@ include file="/footer.html" %>
