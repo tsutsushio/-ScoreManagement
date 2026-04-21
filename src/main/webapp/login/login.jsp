@@ -186,48 +186,48 @@ body {
 </style>
 
 </head>
-<body>
-
-    <div class="login-container">
-        
-        <h1>生徒管理システム</h1>
-        
-		<c:if test="${not empty error}">
-		    <p class="error-msg">${error}</p>
-		</c:if>
-
-        <form action="${pageContext.request.contextPath}/action/LoginExecute.action" method="post">
-            
-            <div class="input-group">
-                <label for="id">ユーザーID</label>
-                <input type="text" id="id" name="id" placeholder="IDを入力" required>
-            </div>
-
-            <div class="input-group password-group">
-			    <label for="password">パスワード</label>
-			    <div class="password-wrapper">
-			        <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
-			        <span id="togglePassword" class="toggle-password">🔒</span>
-			    </div>
-			</div>
-
-            <input type="submit" value="ログイン" class="login-btn">
-        </form>
-        
-    </div>
-<script>
-    const toggle = document.getElementById("togglePassword");
-    const password = document.getElementById("password");
-
-    toggle.addEventListener("click", function () {
-        if (password.type === "password") {
-            password.type = "text";
-            toggle.textContent = "🔓"; // 見える
-        } else {
-            password.type = "password";
-            toggle.textContent = "🔒"; // 見えない
-        }
-    });
-</script>
-</body>
+	<body>
+	
+	    <div class="login-container">
+	        
+	        <h1>生徒管理システム</h1>
+	        
+			<c:if test="${not empty error}">
+			    <p class="error-msg">${error}</p>
+			</c:if>
+	
+	        <form action="${pageContext.request.contextPath}/action/LoginExecute.action" method="post">
+	            
+	            <div class="input-group">
+	                <label for="id">ユーザーID</label>
+	                <input type="text" id="id" name="id" placeholder="IDを入力" required>
+	            </div>
+	
+	            <div class="input-group password-group">
+				    <label for="password">パスワード</label>
+				    <div class="password-wrapper">
+				        <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
+				        <span id="togglePassword" class="toggle-password">🔒</span>
+				    </div>
+				</div>
+	
+	            <input type="submit" value="ログイン" class="login-btn">
+	        </form>
+	        
+	    </div>
+		<script>
+		    const toggle = document.getElementById("togglePassword");
+		    const password = document.getElementById("password");
+		
+		    toggle.addEventListener("click", function () {
+		        if (password.type === "password") {
+		            password.type = "text";
+		            toggle.textContent = "🔓"; // 見える
+		        } else {
+		            password.type = "password";
+		            toggle.textContent = "🔒"; // 見えない
+		        }
+		    });
+		</script>
+	</body>
 </html>
