@@ -44,7 +44,6 @@ public class StudentListAction extends Action {
 
         // 4. DAOを使って条件に合う学生を検索する
         StudentDAO studentDao = new StudentDAO();
-        // ※メソッド名を検索用の filter に修正し、4つの引数を渡す
         List<StudentBean> studentList = studentDao.filter(schoolCd, entYear, classNum, isAttend);
 
         // 5. 検索結果をリクエストスコープに保存する

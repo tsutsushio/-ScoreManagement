@@ -23,7 +23,7 @@ public class DAO {
 
             // ② データ取得
             // ※出席管理システム用に "jdbc/exam" と命名
-            ds = (DataSource) ic.lookup("java:comp/env/jdbc/exam");
+            ds = (DataSource) ic.lookup("java:comp/env/jdbc/test");
         }
 
         // データソースからDB接続を取得して返す
