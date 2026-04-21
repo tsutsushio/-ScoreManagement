@@ -207,7 +207,7 @@ body {
 			    <label for="password">パスワード</label>
 			    <div class="password-wrapper">
 			        <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
-			        <span id="togglePassword" class="toggle-password">🤔</span>
+			        <span id="togglePassword" class="toggle-password">🔒</span>
 			    </div>
 			</div>
 
@@ -222,10 +222,10 @@ body {
     toggle.addEventListener("click", function () {
         if (password.type === "password") {
             password.type = "text";
-            toggle.textContent = "👁"; // 見える
+            toggle.textContent = "🔓"; // 見える
         } else {
             password.type = "password";
-            toggle.textContent = "🙄"; // 見えない
+            toggle.textContent = "🔒"; // 見えない
         }
     });
 </script>
