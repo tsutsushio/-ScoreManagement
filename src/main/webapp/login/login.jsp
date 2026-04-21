@@ -5,110 +5,186 @@
 <meta charset="UTF-8">
 <title>生徒管理システム - ログイン</title>
 <style>
-    /* 全体の背景設定（薄い緑色で画面全体を覆い、中央揃えにする） */
-    body {
-        font-family: 'Helvetica Neue', Arial, sans-serif;
-        background-color: #e8f5e9; /* 背景：とても薄い緑 */
-        margin: 0;
-        height: 100vh; /* 画面の高さを100%に */
-        display: flex;
-        justify-content: center; /* 左右の中央揃え */
-        align-items: center;     /* 上下の中央揃え */
-    }
+    /* ===== 全体 ===== */
+body {
+    font-family: 'Helvetica Neue', Arial, 
+        "Hiragino Kaku Gothic ProN", 
+        "Hiragino Sans", 
+        sans-serif;
 
-    /* ログインフォームを囲む白いボックス */
-    .login-container {
-        background-color: #ffffff; /* 白 */
-        padding: 50px 60px;
-        border-radius: 12px; /* 角を丸く */
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* ふんわりとした影 */
-        text-align: center;
-        width: 100%;
-        max-width: 400px; /* ボックスの最大幅 */
-    }
+    /* 落ち着いたブルーグラデーション */
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
 
-    /* タイトル（生徒管理システム） */
-    .login-container h1 {
-        font-size: 28px;
-        margin-top: 0;
-        margin-bottom: 30px;
-        color: #2e7d32; /* メインカラー：濃い緑 */
-        letter-spacing: 2px;
-    }
+    margin: 0;
+    height: 100vh;
 
-    /* エラーメッセージ（間違えた時用の赤文字） */
-    .error-msg {
-        color: #d32f2f;
-        margin-bottom: 20px;
-        font-size: 14px;
-        font-weight: bold;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    /* 入力フォームのグループ */
-    .input-group {
-        margin-bottom: 25px;
-        text-align: left;
-    }
+/* ===== ログイン枠 ===== */
+.login-container {
+    background-color: rgba(255, 255, 255, 0.97);
 
-    .input-group label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 8px;
-        color: #388e3c; /* ラベル：中くらいの緑 */
-    }
-    
-    .password-wrapper {
+    padding: 50px 60px;
+    border-radius: 18px;
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+
+    text-align: center;
+
+    width: 100%;
+    max-width: 420px;
+
+    transition: transform 0.2s;
+}
+
+.login-container:hover {
+    transform: translateY(-2px);
+}
+
+/* ===== タイトル ===== */
+.login-container h1 {
+    font-size: 26px;
+    margin-bottom: 30px;
+
+    color: #1565c0;
+
+    letter-spacing: 1px;
+    position: relative;
+}
+
+.login-container h1::after {
+    content: "";
+    display: block;
+
+    width: 50px;
+    height: 3px;
+
+    background: #64b5f6;
+
+    margin: 10px auto 0;
+}
+
+/* ===== エラーメッセージ ===== */
+.error-msg {
+    color: #c62828;
+    background: #ffebee;
+
+    padding: 10px;
+    border-radius: 6px;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    margin-bottom: 20px;
+}
+
+/* ===== 入力欄グループ ===== */
+.input-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+
+    font-weight: bold;
+    margin-bottom: 8px;
+
+    color: #1565c0;
+}
+
+/* ===== パスワード表示ボタン ===== */
+.password-wrapper {
     position: relative;
 }
 
 .toggle-password {
     position: absolute;
+
     right: 12px;
     top: 50%;
+
     transform: translateY(-50%);
+
     cursor: pointer;
-    font-size: 18px;
-    user-select: none;
+    font-size: 20px;
+
+    transition: transform 0.2s;
 }
-    /* 入力フィールド（テキストボックスとパスワード） */
-    .input-group input[type="text"],
-    .input-group input[type="password"] {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #a5d6a7; /* 枠線：薄い緑 */
-        border-radius: 6px;
-        box-sizing: border-box;
-        font-size: 16px;
-        transition: border-color 0.3s;
-    }
 
-    /* 入力フィールドを選択（クリック）した時 */
-    .input-group input[type="text"]:focus,
-    .input-group input[type="password"]:focus {
-        outline: none;
-        border-color: #4caf50; /* 枠線：鮮やかな緑に変化 */
-    }
+.toggle-password:hover {
+    transform: translateY(-50%) scale(1.1);
+}
 
-    /* ログインボタン */
-    .login-btn {
-        width: 100%;
-        padding: 14px;
-        background-color: #4caf50; /* ボタン：鮮やかな緑 */
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        margin-top: 10px;
-    }
+/* ===== 入力欄 ===== */
+.input-group input[type="text"],
+.input-group input[type="password"] {
+    width: 100%;
 
-    /* ログインボタンにマウスを乗せた時 */
-    .login-btn:hover {
-        background-color: #388e3c; /* 少し暗い緑にして押せる感を出す */
-    }
+    padding: 14px;
+
+    border: 1px solid #cfd8dc;
+    border-radius: 10px;
+
+    box-sizing: border-box;
+
+    font-size: 16px;
+
+    transition: all 0.25s ease;
+
+    background-color: #f7fbff;
+}
+
+/* フォーカス時 */
+.input-group input:focus {
+    outline: none;
+
+    border-color: #42a5f5;
+
+    box-shadow: 0 0 0 4px rgba(66, 165, 245, 0.2);
+
+    background-color: #ffffff;
+}
+
+/* ===== ログインボタン ===== */
+.login-btn {
+    width: 100%;
+
+    padding: 15px;
+
+    background: linear-gradient(to right, #42a5f5, #1e88e5);
+
+    color: white;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 15px rgba(30, 136, 229, 0.25);
+
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 6px 20px rgba(30, 136, 229, 0.35);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+
 </style>
+
 </head>
 <body>
 
