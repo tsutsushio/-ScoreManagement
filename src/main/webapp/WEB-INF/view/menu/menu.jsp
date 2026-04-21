@@ -227,7 +227,17 @@
 
             <li>
                 <a href="${pageContext.request.contextPath}/action/StudentList.action">
-                    学生管理
+                 <li>
+                   学生管理
+                            <ul class="sub-menu">
+                 <li>
+                     <a href="${pageContext.request.contextPath}/action/StudentList.action">
+                      学生一覧
+                     </a>
+                </li>
+           </ul>
+      </li>
+                 
                 </a>
             </li>
 
