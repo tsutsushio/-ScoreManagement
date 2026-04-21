@@ -192,7 +192,9 @@ body {
         
         <h1>生徒管理システム</h1>
         
-        <p class="error-msg">${error}</p>
+		<c:if test="${not empty error}">
+		    <p class="error-msg">${error}</p>
+		</c:if>
 
         <form action="${pageContext.request.contextPath}/action/LoginExecute.action" method="post">
             
