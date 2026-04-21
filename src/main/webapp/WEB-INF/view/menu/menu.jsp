@@ -218,42 +218,44 @@
 
     <!-- サイドバー -->
     <div class="sidebar">
-        <ul>
-            <li>
-                <a href="${pageContext.request.contextPath}/action/Menu.action">
-                    メニュー
-                </a>
-            </li>
+    <ul>
+        <li>
+            メニュー
+        </li>
 
-            <li>
-                <a href="${pageContext.request.contextPath}/action/StudentList.action">
-                 <li>
-                   学生管理
-                            <ul class="sub-menu">
-                 <li>
-                     <a href="${pageContext.request.contextPath}/action/StudentList.action">
-                      学生一覧
-                     </a>
+        <li>
+            学生管理
+            <ul class="sub-menu">
+                <li>
+                    <a href="${pageContext.request.contextPath}/action/StudentList.action">
+                        学生一覧
+                    </a>
                 </li>
-           </ul>
-      </li>
-                 
-                </a>
-            </li>
+            </ul>
+        </li>
 
-            <li>
-                成績管理
-                <ul class="sub-menu">
-                    <li><a href="#">成績登録</a></li>
-                    <li><a href="#">成績参照</a></li>
-                </ul>
-            </li>
+        <li>
+            成績管理
+            <ul class="sub-menu">
+                <li>
+                    <a href="#">成績登録</a></li>
+                <li>
+                    <a href="#">成績参照</a>
+                </li>
+            </ul>
+        </li>
 
-            <li>
-                <a href="#">科目管理</a>
-            </li>
-        </ul>
-    </div>
+        <li>
+            科目管理
+            <ul class="sub-menu">
+                <li>
+                    <a href="#">科目一覧</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+    
 
     <!-- メイン -->
     <div class="main-content">
