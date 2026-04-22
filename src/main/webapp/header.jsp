@@ -1,49 +1,38 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<head>
-	<title>${pageTitle}</title>
-</head>
-<!-- 上部バー -->
-<div class="top-bar">
-  <div class="nav-left"><h1>得点管理システム</h1></div>
-</div>
 
 <style>
-/* 上部バー */
-.top-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
 
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+ header {
+        background-color: #e6f0ff; /* 薄い青色 */
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #b3d4ff;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 24px;
+        color: #333;
+    }
+    .user-info {
+        font-size: 14px;
+        color: #555;
+    }
+    .user-info a {
+        margin-left: 15px;
+        color: #0066cc;
+        text-decoration: none;
+    }
 
-  padding: 0 20px; /* 画面端に余白を確保 */
-  box-sizing: border-box;
 
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid #ddd;
-
-  z-index: 1000;
-}
-
-/* 左タイトル */
-.nav-left {
-  font-weight: bold;
-  color: #333;
-  font-size: 18px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* コンテンツ被り防止 */
-body {
-  margin-top: 60px; /* バー分の余白を確保 */
-}
 </style>
-<body>
-	<br>
+
+<header>
+<h1>得点管理システム</h1>
+        <div class="user-info">
+            ${loginUser.name} 様 
+            <a href="${pageContext.request.contextPath}/action/Logout.action">ログアウト</a>
+        </div>
+</header>
+        
