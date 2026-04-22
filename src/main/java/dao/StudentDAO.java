@@ -115,4 +115,64 @@ public class StudentDAO extends DAO {
         }
         return student;
     }
+    
+ // =========================================================
+    // 【登録・更新】学生データを保存するメソッド
+    // （※データがなければ新規登録(INSERT)、あれば更新(UPDATE)を行う）
+    // =========================================================
+    public boolean save(StudentBean student) throws Exception {
+        boolean isSuccess = false;
+        
+        // 1. 渡された学生番号(NO)のデータが既に存在するかチェック
+        StudentBean existingStudent = get(student.getNo());
+        
+        String sql = "";
+        
+        try (Connection con = getConnection()) {
+            
+            PreparedStatement st = null;
+            
+            if (existingStudent == null) {
+                // -------------------------------------------
+                // データが存在しない場合：新規登録（INSERT）
+                // -------------------------------------------
+                sql = "INSERT INTO STUDENT (NO, NAME, ENT_YEAR, CLASS_NUM, IS_ATTEND, SCHOOL_CD) VALUES (?, ?, ?, ?, ?, ?)";
+                st = con.prepareStatement(sql);
+                
+                st.setString(1, student.getNo());
+                st.setString(2, student.getName());
+                st.setInt(3, student.getEntYear());
+                st.setString(4, student.getClassNum());
+                st.setBoolean(5, student.getIsAttend());
+                st.setString(6, student.getSchool().getCd());
+                
+            } else {
+                // -------------------------------------------
+                // データが存在する場合：情報の更新（UPDATE）
+                // -------------------------------------------
+                sql = "UPDATE STUDENT SET NAME = ?, ENT_YEAR = ?, CLASS_NUM = ?, IS_ATTEND = ?, SCHOOL_CD = ? WHERE NO = ?";
+                st = con.prepareStatement(sql);
+                
+                st.setString(1, student.getName());
+                st.setInt(2, student.getEntYear());
+                st.setString(3, student.getClassNum());
+                st.setBoolean(4, student.getIsAttend());
+                st.setString(5, student.getSchool().getCd());
+                st.setString(6, student.getNo()); // WHERE句の条件
+            }
+            
+            // SQLを実行する
+            // executeUpdate() は、変更が成功した「行数」を返します
+            int result = st.executeUpdate();
+            
+            // 1行以上変更されていれば成功
+            if (result > 0) {
+                isSuccess = true;
+            }
+            
+            st.close();
+        }
+        
+        return isSuccess;
+    }
 }
