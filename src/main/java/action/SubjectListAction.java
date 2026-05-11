@@ -21,6 +21,6 @@ public class SubjectListAction extends Action {
 
         request.setAttribute("subjectList", subjectList);
 
-        return "/WEB-INF/view/subject/subject-list.jsp";
+        return "/subject/subject_list.jsp";
     }
 }
