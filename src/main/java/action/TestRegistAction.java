@@ -22,13 +22,13 @@ public class TestRegistAction extends Action {
         
         // 1. セッションからユーザー情報を取得
         TeacherBean teacher = (TeacherBean) session.getAttribute("user");
-        
-        // ★修正ポイント: teacherがnull（ログインしていない状態）ならログイン画面へ
+
+        // ★重要：もしログインしていない（teacherがnull）なら、以降の処理をせずログイン画面へ
         if (teacher == null) {
             return "/login/login.jsp";
         }
 
-        // ここまで来れば、teacherは必ず存在するのでぬるぽになりません
+        // ここから先は teacher が null ではないことが確定しているので安全です
         SchoolBean school = teacher.getSchool();
 
         String entYearStr = request.getParameter("f1");
@@ -40,12 +40,14 @@ public class TestRegistAction extends Action {
         SubjectDAO subDAO = new SubjectDAO();
         TestDAO tDAO = new TestDAO();
 
+        // 2. 学校情報を元にリストを取得
         List<String> classNumList = cNumDAO.filter(school);
         List<SubjectBean> subjectList = subDAO.filter(school);
 
         request.setAttribute("class_num_set", classNumList);
         request.setAttribute("subject_set", subjectList);
 
+        // 3. 検索条件が揃っている場合のみ実行
         if (entYearStr != null && classNum != null && subjectCd != null && numStr != null) {
             try {
                 int entYear = Integer.parseInt(entYearStr);
@@ -56,7 +58,8 @@ public class TestRegistAction extends Action {
                 
                 request.setAttribute("tests", tests);
             } catch (NumberFormatException e) {
-                // 数値変換エラーが起きても止まらないように、必要に応じてログ出力など
+                // 数値変換エラー時のログ（任意）
+                System.out.println("数値変換に失敗しました");
             }
         }
 
