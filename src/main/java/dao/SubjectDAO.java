@@ -3,15 +3,19 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.security.auth.Subject;
+import bean.SubjectBean;
 
 public class SubjectDAO extends DAO {
 
-    // 科目コードで1件取得
-    public Subject get(String cd) throws Exception {
+    /**
+     * 科目コードで1件取得
+     */
+    public SubjectBean get(String cd) throws Exception {
 
-        Subject subject = null;
+        SubjectBean subject = null;
 
         Connection con = getConnection();
 
@@ -23,7 +27,7 @@ public class SubjectDAO extends DAO {
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
-            subject = new Subject();
+            subject = new SubjectBean();
             subject.setCd(rs.getString("CD"));
             subject.setName(rs.getString("NAME"));
         }
@@ -35,8 +39,10 @@ public class SubjectDAO extends DAO {
         return subject;
     }
 
-    // 新規登録
-    public int insert(Subject subject) throws Exception {
+    /**
+     * 科目を新規登録
+     */
+    public int insert(SubjectBean subject) throws Exception {
 
         Connection con = getConnection();
 
@@ -52,5 +58,35 @@ public class SubjectDAO extends DAO {
         con.close();
 
         return count;
+    }
+
+    /**
+     * 科目一覧を取得
+     */
+    public List<SubjectBean> list() throws Exception {
+
+        List<SubjectBean> list = new ArrayList<>();
+
+        Connection con = getConnection();
+
+        String sql = "SELECT CD, NAME FROM SUBJECT ORDER BY CD";
+
+        PreparedStatement st = con.prepareStatement(sql);
+
+        ResultSet rs = st.executeQuery();
+
+        while (rs.next()) {
+            SubjectBean subject = new SubjectBean();
+            subject.setCd(rs.getString("CD"));
+            subject.setName(rs.getString("NAME"));
+
+            list.add(subject);
+        }
+
+        rs.close();
+        st.close();
+        con.close();
+
+        return list;
     }
 }

@@ -1,7 +1,6 @@
 package action;
 
-import javax.security.auth.Subject;
-
+import bean.SubjectBean;
 import dao.SubjectDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,41 +13,53 @@ public class SubjectCreateExecuteAction extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
+        // 文字コード設定
         request.setCharacterEncoding("UTF-8");
 
+        // フォームから入力値を取得
         String cd = request.getParameter("cd");
         String name = request.getParameter("name");
 
-        // 入力値を戻す用
+        // 入力値をJSPに戻すために保持
         request.setAttribute("cd", cd);
         request.setAttribute("name", name);
 
         // 未入力チェック
-        if (cd == null || cd.isBlank() ||
-            name == null || name.isBlank()) {
+        if (cd == null || cd.isBlank()
+                || name == null || name.isBlank()) {
 
-            request.setAttribute("errorMessage", "科目コードと科目名を入力してください。");
-            return "/subject/subjectcreate.jsp";
+            request.setAttribute("errorMessage",
+                    "科目コードと科目名を入力してください。");
+
+            return "/WEB-INF/view/subject/subject-create.jsp";
         }
 
+        // DAO生成
         SubjectDAO dao = new SubjectDAO();
 
         // 重複チェック
-        Subject exists = dao.get(cd);
+        SubjectBean exists = dao.get(cd);
 
         if (exists != null) {
-            request.setAttribute("errorMessage", "その科目コードは既に登録されています。");
-            return "/subject/subjectcreate.jsp";
+            request.setAttribute("errorMessage",
+                    "その科目コードは既に登録されています。");
+
+            return "/WEB-INF/view/subject/subject-create.jsp";
         }
 
-        // 登録
-        Subject subject = new Subject();
+        // SubjectBean作成
+        SubjectBean subject = new SubjectBean();
         subject.setCd(cd);
         subject.setName(name);
 
+        // 登録実行
         dao.insert(subject);
 
-        // 一覧へ戻る
-        return "SubjectList.java";
+        // 登録成功メッセージ
+        request.setAttribute("successMessage",
+                "科目を登録しました。");
+
+        // 科目一覧画面へ遷移
+        return "SubjectList.action";
     }
 }

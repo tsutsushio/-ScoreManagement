@@ -111,6 +111,28 @@
         box-shadow: 0 4px 10px rgba(74,123,216,0.35);
     }
 
+    /* 新規追加：学生登録リンクのスタイル */
+    .create-link {
+        margin-left: auto; /* これで同じ列の右端に寄ります */
+        padding: 9px 20px;
+        background-color: #6ea8ff; /* 背景色 */
+        color: #ffffff; /* 文字白 */
+        border: 2px solid #2f5fb8; /* 青色の淵 */
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+        transition: 0.2s;
+        text-align: center;
+    }
+
+    .create-link:hover {
+        background-color: #4a7bd8;
+        color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(74,123,216,0.35);
+    }
+
     .error-message {
         background: #ffe5e5;
         color: #d33;
@@ -190,6 +212,13 @@
             width: 100%;
         }
 
+        /* スマホ用：右寄せを解除し、幅いっぱいに広げる */
+        .create-link {
+            margin-left: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
         table {
             display: block;
             overflow-x: auto;
@@ -243,6 +272,9 @@
                 </label>
 
                 <button type="submit">絞り込む</button>
+
+                <a href="<%= request.getContextPath() %>/action/StudentCreate.action" class="create-link">学生登録</a>
+
             </div>
         </form>
     </div>
@@ -294,4 +326,3 @@
 
 </body>
 </html>
-```

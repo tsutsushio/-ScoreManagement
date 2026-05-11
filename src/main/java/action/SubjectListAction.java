@@ -2,8 +2,7 @@ package action;
 
 import java.util.List;
 
-import javax.security.auth.Subject;
-
+import bean.SubjectBean;
 import dao.SubjectDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,13 +17,10 @@ public class SubjectListAction extends Action {
 
         SubjectDAO dao = new SubjectDAO();
 
-        // 科目一覧を取得
-        List<Subject> subjectList = dao.list();
+        List<SubjectBean> subjectList = dao.list();
 
-        // JSPへ渡す
         request.setAttribute("subjectList", subjectList);
 
-        // 一覧画面へ
-        return "/subject/subject_list.jsp";
+        return "/WEB-INF/view/subject/subject-list.jsp";
     }
 }
