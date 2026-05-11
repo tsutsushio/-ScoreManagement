@@ -249,7 +249,7 @@
             科目管理
             <ul class="sub-menu">
                 <li>
-                    <a href="#">科目一覧</a>
+                    <a href="${pageContext.request.contextPath}/action/StudentList.action">科目一覧</a>
                 </li>
             </ul>
         </li>
