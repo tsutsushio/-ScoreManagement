@@ -289,7 +289,7 @@
                 <h3>科目管理</h3>
 
                 <div class="menu-links">
-                    <a href="#">科目一覧</a>
+                    <a href="${pageContext.request.contextPath}/action/SubjectList.action">科目一覧</a>
                 </div>
             </div>
 
