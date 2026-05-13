@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -135,10 +136,28 @@ button[type="submit"]:hover {
 
             <div class="form-group">
                 <label>科目</label>
-                <select name="subjectCd">
-                    <option value="">--選択--</option>
-                    <option value="B02" <c:if test="${subjectCd == 'B02'}">selected</c:if>>数学</option>
-                    <option value="D02" <c:if test="${subjectCd == 'D02'}">selected</c:if>>英語</option>
+				<select name="subjectCd">
+				
+				    <option value="">
+				        --選択--
+				    </option>
+				
+				    <c:forEach
+				        var="subject"
+				        items="${subjectList}">
+				
+				        <option
+				            value="${subject.cd}"
+				
+				            <c:if test="${subjectCd == subject.cd}">
+				                selected
+				            </c:if>
+				        >
+				            ${subject.name}
+				        </option>
+				
+				    </c:forEach>
+				
                 </select>
                 <div class="error">${errors.subjectCd}</div>
             </div>

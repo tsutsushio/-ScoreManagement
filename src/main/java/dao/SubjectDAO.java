@@ -87,4 +87,70 @@ public class SubjectDAO extends DAO {
 
         return list;
     }
+    
+
+
+    
+    
+    
+    
+    
+    
+    
+    //ここから追加分　いらなかったらけす
+    
+    
+ // 学校ごとの科目一覧取得
+    public List<SubjectBean> filter(
+            String schoolCd
+    ) throws Exception {
+
+        List<SubjectBean> list =
+            new ArrayList<>();
+
+        Connection con =
+            getConnection();
+
+        String sql =
+            "SELECT SCHOOL_CD, CD, NAME " +
+            "FROM SUBJECT " +
+            "WHERE SCHOOL_CD = ? " +
+            "ORDER BY CD";
+
+        PreparedStatement st =
+            con.prepareStatement(sql);
+
+        st.setString(1, schoolCd);
+
+        ResultSet rs =
+            st.executeQuery();
+
+        while (rs.next()) {
+
+            SubjectBean subject =
+                new SubjectBean();
+
+            subject.setSchoolCd(
+                rs.getString(
+                    "SCHOOL_CD"
+                )
+            );
+
+            subject.setCd(
+                rs.getString("CD")
+            );
+
+            subject.setName(
+                rs.getString("NAME")
+            );
+
+            list.add(subject);
+        }
+
+        rs.close();
+        st.close();
+        con.close();
+
+        return list;
+    }
 }

@@ -67,6 +67,11 @@ body{
     <a href="${pageContext.request.contextPath}/action/Menu.action">
     メニューへ戻る
 	</a>
+	
+	<a href="${pageContext.request.contextPath}/action/TestRegist.action"">
+     続けて登録
+	</a>
+	
 
 </div>
 
