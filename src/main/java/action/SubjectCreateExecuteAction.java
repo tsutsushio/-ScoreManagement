@@ -1,9 +1,11 @@
 package action;
 
 import bean.SubjectBean;
+import bean.TeacherBean;
 import dao.SubjectDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
 public class SubjectCreateExecuteAction extends Action {
@@ -16,11 +18,21 @@ public class SubjectCreateExecuteAction extends Action {
         // 文字コード設定
         request.setCharacterEncoding("UTF-8");
 
+        // ログイン情報取得
+        HttpSession session = request.getSession();
+        TeacherBean loginUser =
+                (TeacherBean) session.getAttribute("loginUser");
+
+        // 未ログインの場合
+        if (loginUser == null) {
+            return "/login/login.jsp";
+        }
+
         // フォームから入力値を取得
         String cd = request.getParameter("cd");
         String name = request.getParameter("name");
 
-        // 入力値をJSPに戻すために保持
+        // 入力値を保持
         request.setAttribute("cd", cd);
         request.setAttribute("name", name);
 
@@ -31,7 +43,7 @@ public class SubjectCreateExecuteAction extends Action {
             request.setAttribute("errorMessage",
                     "科目コードと科目名を入力してください。");
 
-            return "/WEB-INF/view/subject/subject-create.jsp";
+            return "/subject/subject-create.jsp";
         }
 
         // DAO生成
@@ -44,22 +56,19 @@ public class SubjectCreateExecuteAction extends Action {
             request.setAttribute("errorMessage",
                     "その科目コードは既に登録されています。");
 
-            return "/WEB-INF/view/subject/subject-create.jsp";
+            return "/subject/subject-create.jsp";
         }
 
         // SubjectBean作成
         SubjectBean subject = new SubjectBean();
+        subject.setSchoolCd(loginUser.getSchool().getCd());
         subject.setCd(cd);
         subject.setName(name);
 
         // 登録実行
         dao.insert(subject);
 
-        // 登録成功メッセージ
-        request.setAttribute("successMessage",
-                "科目を登録しました。");
-
-        // 科目一覧画面へ遷移
+        // 一覧画面へ戻る
         return "SubjectList.action";
     }
 }

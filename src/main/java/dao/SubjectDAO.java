@@ -10,16 +10,14 @@ import bean.SubjectBean;
 
 public class SubjectDAO extends DAO {
 
-    /**
-     * 科目コードで1件取得
-     */
+    // 科目コードで1件取得
     public SubjectBean get(String cd) throws Exception {
 
         SubjectBean subject = null;
 
         Connection con = getConnection();
 
-        String sql = "SELECT CD, NAME FROM SUBJECT WHERE CD = ?";
+        String sql = "SELECT SCHOOL_CD, CD, NAME FROM SUBJECT WHERE CD = ?";
 
         PreparedStatement st = con.prepareStatement(sql);
         st.setString(1, cd);
@@ -28,6 +26,7 @@ public class SubjectDAO extends DAO {
 
         if (rs.next()) {
             subject = new SubjectBean();
+            subject.setSchoolCd(rs.getString("SCHOOL_CD"));
             subject.setCd(rs.getString("CD"));
             subject.setName(rs.getString("NAME"));
         }
@@ -39,18 +38,18 @@ public class SubjectDAO extends DAO {
         return subject;
     }
 
-    /**
-     * 科目を新規登録
-     */
+    // 新規登録
     public int insert(SubjectBean subject) throws Exception {
 
         Connection con = getConnection();
 
-        String sql = "INSERT INTO SUBJECT (CD, NAME) VALUES (?, ?)";
+        String sql =
+            "INSERT INTO SUBJECT (SCHOOL_CD, CD, NAME) VALUES (?, ?, ?)";
 
         PreparedStatement st = con.prepareStatement(sql);
-        st.setString(1, subject.getCd());
-        st.setString(2, subject.getName());
+        st.setString(1, subject.getSchoolCd());
+        st.setString(2, subject.getCd());
+        st.setString(3, subject.getName());
 
         int count = st.executeUpdate();
 
@@ -60,16 +59,14 @@ public class SubjectDAO extends DAO {
         return count;
     }
 
-    /**
-     * 科目一覧を取得
-     */
+    // 一覧取得
     public List<SubjectBean> list() throws Exception {
 
         List<SubjectBean> list = new ArrayList<>();
 
         Connection con = getConnection();
 
-        String sql = "SELECT CD, NAME FROM SUBJECT ORDER BY CD";
+        String sql = "SELECT SCHOOL_CD, CD, NAME FROM SUBJECT ORDER BY CD";
 
         PreparedStatement st = con.prepareStatement(sql);
 
@@ -77,6 +74,7 @@ public class SubjectDAO extends DAO {
 
         while (rs.next()) {
             SubjectBean subject = new SubjectBean();
+            subject.setSchoolCd(rs.getString("SCHOOL_CD"));
             subject.setCd(rs.getString("CD"));
             subject.setName(rs.getString("NAME"));
 
