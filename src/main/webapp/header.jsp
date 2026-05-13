@@ -1,49 +1,101 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<html>
 <head>
-	<title>${pageTitle}</title>
-</head>
-<!-- 上部バー -->
-<div class="top-bar">
-  <div class="nav-left">得点管理システム</div>
-</div>
+<meta charset="UTF-8">
+<title>${pageTitle}</title>
 
 <style>
+
+/* 全体 */
+body {
+    margin: 0;
+    padding-top: 70px; /* ヘッダー分 */
+    font-family: "Yu Gothic", sans-serif;
+    background: #f8fbff;
+}
+
 /* 上部バー */
 .top-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
 
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  padding: 0 20px; /* 画面端に余白を確保 */
-  box-sizing: border-box;
+    padding: 0 30px;
+    box-sizing: border-box;
 
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid #ddd;
+    background: rgba(230, 240, 255, 0.9);
+    backdrop-filter: blur(8px);
 
-  z-index: 1000;
+    border-bottom: 1px solid #c9dfff;
+
+    z-index: 1000;
 }
 
-/* 左タイトル */
+/* 左側 */
 .nav-left {
-  font-weight: bold;
-  color: #333;
-  font-size: 18px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    font-size: 20px;
+    font-weight: bold;
+    color: #2d4f7c;
 }
 
-/* コンテンツ被り防止 */
-body {
-  margin-top: 60px; /* バー分の余白を確保 */
+/* 右側 */
+.nav-right {
+    display: flex;
+    gap: 15px;
 }
+
+/* ボタン */
+.nav-btn {
+    text-decoration: none;
+
+    padding: 8px 16px;
+
+    background: white;
+    color: #2d4f7c;
+
+    border-radius: 10px;
+    border: 1px solid #bcd6ff;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+/* ホバー */
+.nav-btn:hover {
+    background: #dbe9ff;
+    transform: translateY(-1px);
+}
+
 </style>
+</head>
+
 <body>
-	<br>
+
+<!-- 上部バー -->
+<div class="top-bar">
+
+    <!-- タイトル -->
+    <div class="nav-left">
+        得点管理システム
+    </div>
+
+    <!-- メニュー -->
+    <div class="nav-right">
+        <a href="Menu.action" class="nav-btn">ホーム</a>
+        <a href="Logout.action" class="nav-btn">ログアウト</a>
+    </div>
+
+</div>
+
+</body>
+</html>
