@@ -31,7 +31,7 @@ public class StudentDeleteAction extends Action {
         StudentBean student = dao.get(no);
 
         if (student == null) {
-            return "/action/StudentList.action"; // 既に存在しない場合
+            return "/action/StudentList.action"; 
         }
 
         // IDOR（不正削除）対策
