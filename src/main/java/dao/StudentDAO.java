@@ -175,4 +175,34 @@ public class StudentDAO extends DAO {
         
         return isSuccess;
     }
+    
+    // =========================================================
+    // 【削除】学生データをデータベースから削除するメソッド
+    // =========================================================
+    public boolean delete(StudentBean student) throws Exception {
+        boolean isSuccess = false;
+        
+        // 削除対象の学生番号を取得
+        String no = student.getNo();
+        
+        // NO（学生番号）を条件にしてレコードを削除するSQL
+        String sql = "DELETE FROM STUDENT WHERE NO = ?";
+        
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+            
+            // プレースホルダ（?）に学生番号をセット
+            st.setString(1, no);
+            
+            // SQLを実行する。executeUpdate() は削除された「行数」を返す
+            int result = st.executeUpdate();
+            
+            // 1行以上削除されていれば成功とみなす
+            if (result > 0) {
+                isSuccess = true;
+            }
+        }
+        
+        return isSuccess;
+    }
 }
