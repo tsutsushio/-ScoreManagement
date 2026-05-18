@@ -1,6 +1,3 @@
-// ===============================
-// TestBean.java
-// ===============================
 package bean;
 
 public class TestBean {
@@ -12,28 +9,41 @@ public class TestBean {
     private int point;
     private String classNum;
 
+    // 追加
+    private String studentName;
+    private int entYear;
+
     public String getStudentNo() {
         return studentNo;
     }
 
-    public void setStudentNo(String studentNo) {
-        this.studentNo = studentNo;
+    public void setStudentNo(
+            String studentNo
+    ) {
+        this.studentNo =
+            studentNo;
     }
 
     public String getSubjectCd() {
         return subjectCd;
     }
 
-    public void setSubjectCd(String subjectCd) {
-        this.subjectCd = subjectCd;
+    public void setSubjectCd(
+            String subjectCd
+    ) {
+        this.subjectCd =
+            subjectCd;
     }
 
     public String getSchoolCd() {
         return schoolCd;
     }
 
-    public void setSchoolCd(String schoolCd) {
-        this.schoolCd = schoolCd;
+    public void setSchoolCd(
+            String schoolCd
+    ) {
+        this.schoolCd =
+            schoolCd;
     }
 
     public int getNo() {
@@ -48,7 +58,9 @@ public class TestBean {
         return point;
     }
 
-    public void setPoint(int point) {
+    public void setPoint(
+            int point
+    ) {
         this.point = point;
     }
 
@@ -56,7 +68,34 @@ public class TestBean {
         return classNum;
     }
 
-    public void setClassNum(String classNum) {
-        this.classNum = classNum;
+    public void setClassNum(
+            String classNum
+    ) {
+        this.classNum =
+            classNum;
+    }
+
+    // =====追加=====
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(
+            String studentName
+    ) {
+        this.studentName =
+            studentName;
+    }
+
+    public int getEntYear() {
+        return entYear;
+    }
+
+    public void setEntYear(
+            int entYear
+    ) {
+        this.entYear =
+            entYear;
     }
 }
