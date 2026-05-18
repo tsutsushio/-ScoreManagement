@@ -241,6 +241,7 @@
                     <a href="${pageContext.request.contextPath}/action/TestRegist.action">
 					    成績登録
 					</a>
+				</li>
                 <li>
                     <a href="#">成績参照</a>
                 </li>
