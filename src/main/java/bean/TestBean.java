@@ -9,6 +9,15 @@ public class TestBean implements Serializable {
     private String schoolCd;
     private int no;
     private int point;
+    private String classNum;
+    
+    // 画面表示用などの追加フィールド
+    private String studentName;
+    private int entYear;
+
+    // =========================================
+    // ゲッター・セッター
+    // =========================================
 
     public String getStudentNo() {
         return studentNo;
@@ -48,5 +57,29 @@ public class TestBean implements Serializable {
 
     public void setPoint(int point) {
         this.point = point;
+    }
+
+    public String getClassNum() {
+        return classNum;
+    }
+
+    public void setClassNum(String classNum) {
+        this.classNum = classNum;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public int getEntYear() {
+        return entYear;
+    }
+
+    public void setEntYear(int entYear) {
+        this.entYear = entYear;
     }
 }

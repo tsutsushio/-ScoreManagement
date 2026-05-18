@@ -11,117 +11,169 @@ import bean.TestBean;
 public class TestDAO extends DAO {
 
     // =========================================
-    // 1件取得（重複チェック用）
+    // 1件取得
     // =========================================
-    public TestBean get(String studentNo, String subjectCd, int no, String schoolCd) throws Exception {
-
+    public TestBean get(String studentNo, String subjectCd, String schoolCd, int no) throws Exception {
         TestBean test = null;
-
         Connection con = getConnection();
 
-        String sql =
-            "SELECT STUDENT_NO, SUBJECT_CD, NO, POINT, SCHOOL_CD " +
-            "FROM TEST " +
-            "WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND NO = ? AND SCHOOL_CD = ?";
+        try {
+            String sql = "SELECT STUDENT_NO, SUBJECT_CD, SCHOOL_CD, NO, POINT, CLASS_NUM " +
+                         "FROM TEST " +
+                         "WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND SCHOOL_CD = ? AND NO = ?";
 
-        PreparedStatement st = con.prepareStatement(sql);
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, studentNo);
+            st.setString(2, subjectCd);
+            st.setString(3, schoolCd);
+            st.setInt(4, no);
 
-        st.setString(1, studentNo);
-        st.setString(2, subjectCd);
-        st.setInt(3, no);
-        st.setString(4, schoolCd);
+            ResultSet rs = st.executeQuery();
 
-        ResultSet rs = st.executeQuery();
-
-        if (rs.next()) {
-
-            test = new TestBean();
-            test.setStudentNo(rs.getString("STUDENT_NO"));
-            test.setSubjectCd(rs.getString("SUBJECT_CD"));
-            test.setNo(rs.getInt("NO"));
-            test.setPoint(rs.getInt("POINT"));
-            test.setSchoolCd(rs.getString("SCHOOL_CD"));
+            if (rs.next()) {
+                test = new TestBean();
+                test.setStudentNo(rs.getString("STUDENT_NO"));
+                test.setSubjectCd(rs.getString("SUBJECT_CD"));
+                test.setSchoolCd(rs.getString("SCHOOL_CD"));
+                test.setNo(rs.getInt("NO"));
+                test.setPoint(rs.getInt("POINT"));
+                test.setClassNum(rs.getString("CLASS_NUM"));
+            }
+            rs.close();
+            st.close();
+        } finally {
+            con.close();
         }
-
-        rs.close();
-        st.close();
-        con.close();
 
         return test;
     }
 
     // =========================================
-    // 登録
+    // 重複チェック
     // =========================================
-    public boolean save(TestBean test) throws Exception {
-
+    public boolean exists(String studentNo, String subjectCd, String schoolCd, int no) throws Exception {
         Connection con = getConnection();
+        boolean exists = false;
 
-        String sql =
-            "INSERT INTO TEST (STUDENT_NO, SUBJECT_CD, NO, POINT, SCHOOL_CD) " +
-            "VALUES (?, ?, ?, ?, ?)";
+        try {
+            String sql = "SELECT COUNT(*) FROM TEST " +
+                         "WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND SCHOOL_CD = ? AND NO = ?";
 
-        PreparedStatement st = con.prepareStatement(sql);
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, studentNo);
+            st.setString(2, subjectCd);
+            st.setString(3, schoolCd);
+            st.setInt(4, no);
 
-        st.setString(1, test.getStudentNo());
-        st.setString(2, test.getSubjectCd());
-        st.setInt(3, test.getNo());
-        st.setInt(4, test.getPoint());
-        st.setString(5, test.getSchoolCd());
+            ResultSet rs = st.executeQuery();
 
-        int count = st.executeUpdate();
+            if (rs.next()) {
+                exists = rs.getInt(1) > 0;
+            }
+            rs.close();
+            st.close();
+        } finally {
+            con.close();
+        }
 
-        st.close();
-        con.close();
-
-        return count > 0;
+        return exists;
     }
 
     // =========================================
-    // 一覧取得（学校＋科目検索対応）
+    // 登録（CLASS_NUM対応）
     // =========================================
-    public List<TestBean> filter(String schoolCd, String subjectCd) throws Exception {
-
-        List<TestBean> list = new ArrayList<>();
-
+    public boolean save(TestBean test) throws Exception {
         Connection con = getConnection();
 
-        String sql =
-            "SELECT STUDENT_NO, SUBJECT_CD, NO, POINT, SCHOOL_CD " +
-            "FROM TEST WHERE SCHOOL_CD = ? ";
+        try {
+            String sql = "INSERT INTO TEST (STUDENT_NO, SUBJECT_CD, SCHOOL_CD, NO, POINT, CLASS_NUM) " +
+                         "VALUES (?, ?, ?, ?, ?, ?)";
 
-        if (subjectCd != null) {
-            sql += "AND SUBJECT_CD = ? ";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, test.getStudentNo());
+            st.setString(2, test.getSubjectCd());
+            st.setString(3, test.getSchoolCd());
+            st.setInt(4, test.getNo());
+            st.setInt(5, test.getPoint());
+            st.setString(6, test.getClassNum());
+
+            int count = st.executeUpdate();
+            st.close();
+            return count > 0;
+        } finally {
+            con.close();
         }
+    }
 
-        sql += "ORDER BY STUDENT_NO, SUBJECT_CD, NO";
+    // =========================================
+    // 編集（更新）
+    // =========================================
+    public boolean update(TestBean test) throws Exception {
+        Connection con = getConnection();
 
-        PreparedStatement st = con.prepareStatement(sql);
+        try {
+            String sql = "UPDATE TEST " +
+                         "SET POINT = ?, CLASS_NUM = ? " +
+                         "WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND SCHOOL_CD = ? AND NO = ?";
 
-        st.setString(1, schoolCd);
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1, test.getPoint());
+            st.setString(2, test.getClassNum());
+            st.setString(3, test.getStudentNo());
+            st.setString(4, test.getSubjectCd());
+            st.setString(5, test.getSchoolCd());
+            st.setInt(6, test.getNo());
 
-        if (subjectCd != null) {
-            st.setString(2, subjectCd);
+            int count = st.executeUpdate();
+            st.close();
+            return count > 0;
+        } finally {
+            con.close();
         }
+    }
 
-        ResultSet rs = st.executeQuery();
+    // =========================================
+    // 一覧取得（学校＋科目検索対応、CLASS_NUMも取得）
+    // =========================================
+    public List<TestBean> filter(String schoolCd, String subjectCd) throws Exception {
+        List<TestBean> list = new ArrayList<>();
+        Connection con = getConnection();
 
-        while (rs.next()) {
+        try {
+            String sql = "SELECT STUDENT_NO, SUBJECT_CD, SCHOOL_CD, NO, POINT, CLASS_NUM " +
+                         "FROM TEST WHERE SCHOOL_CD = ? ";
 
-            TestBean test = new TestBean();
+            if (subjectCd != null) {
+                sql += "AND SUBJECT_CD = ? ";
+            }
 
-            test.setStudentNo(rs.getString("STUDENT_NO"));
-            test.setSubjectCd(rs.getString("SUBJECT_CD"));
-            test.setNo(rs.getInt("NO"));
-            test.setPoint(rs.getInt("POINT"));
-            test.setSchoolCd(rs.getString("SCHOOL_CD"));
+            sql += "ORDER BY STUDENT_NO, SUBJECT_CD, NO";
 
-            list.add(test);
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, schoolCd);
+
+            if (subjectCd != null) {
+                st.setString(2, subjectCd);
+            }
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                TestBean test = new TestBean();
+                test.setStudentNo(rs.getString("STUDENT_NO"));
+                test.setSubjectCd(rs.getString("SUBJECT_CD"));
+                test.setSchoolCd(rs.getString("SCHOOL_CD"));
+                test.setNo(rs.getInt("NO"));
+                test.setPoint(rs.getInt("POINT"));
+                test.setClassNum(rs.getString("CLASS_NUM"));
+
+                list.add(test);
+            }
+            rs.close();
+            st.close();
+        } finally {
+            con.close();
         }
-
-        rs.close();
-        st.close();
-        con.close();
 
         return list;
     }
@@ -130,24 +182,22 @@ public class TestDAO extends DAO {
     // 削除
     // =========================================
     public boolean delete(TestBean test) throws Exception {
-
         Connection con = getConnection();
 
-        String sql =
-            "DELETE FROM TEST WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND NO = ? AND SCHOOL_CD = ?";
+        try {
+            String sql = "DELETE FROM TEST WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND SCHOOL_CD = ? AND NO = ?";
 
-        PreparedStatement st = con.prepareStatement(sql);
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, test.getStudentNo());
+            st.setString(2, test.getSubjectCd());
+            st.setString(3, test.getSchoolCd());
+            st.setInt(4, test.getNo());
 
-        st.setString(1, test.getStudentNo());
-        st.setString(2, test.getSubjectCd());
-        st.setInt(3, test.getNo());
-        st.setString(4, test.getSchoolCd());
-
-        int count = st.executeUpdate();
-
-        st.close();
-        con.close();
-
-        return count > 0;
+            int count = st.executeUpdate();
+            st.close();
+            return count > 0;
+        } finally {
+            con.close();
+        }
     }
 }

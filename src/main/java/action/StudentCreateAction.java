@@ -41,6 +41,6 @@ public class StudentCreateAction extends Action {
         req.setAttribute("classList", classList);
 
         // 4. 学生登録画面へ遷移
-        return "/WEB-INF/view/student/student-create.jsp";
+        return "/WEB-INF/view/student/student_create.jsp";
     }
 }

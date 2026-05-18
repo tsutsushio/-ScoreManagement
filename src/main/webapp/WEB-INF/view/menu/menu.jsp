@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -213,53 +212,43 @@
     </div>
 </header>
 
-
 <div class="container">
 
     <!-- サイドバー -->
     <div class="sidebar">
-    <ul>
-        <li>
-            メニュー
-        </li>
+        <ul>
+            <li>メニュー</li>
+            <li>
+                学生管理
+                <ul class="sub-menu">
+                    <li>
+                        <a href="${pageContext.request.contextPath}/action/StudentList.action">学生一覧</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                成績管理
+                <ul class="sub-menu">
+                    <li>
+                        <a href="${pageContext.request.contextPath}/action/TestRegist.action">成績登録</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/action/TestList.action">成績参照</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                科目管理
+                <ul class="sub-menu">
+                    <li>
+                        <a href="${pageContext.request.contextPath}/action/SubjectList.action">科目一覧</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 
-        <li>
-            学生管理
-            <ul class="sub-menu">
-                <li>
-                    <a href="${pageContext.request.contextPath}/action/StudentList.action">
-                        学生一覧
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li>
-            成績管理
-            <ul class="sub-menu">
-                <li>
-                    <a href="${pageContext.request.contextPath}/action/TestRegist.action">
-        成績登録
-    </a></li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/action/TestList.action">成績参照</a>
-                </li>
-            </ul>
-        </li>
-
-        <li>
-            科目管理
-            <ul class="sub-menu">
-                <li>
-                    <a href="${pageContext.request.contextPath}/action/StudentList.action">科目一覧</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-</div>
-    
-
-    <!-- メイン -->
+    <!-- メインコンテンツ -->
     <div class="main-content">
         <h2>メインメニュー</h2>
 
@@ -268,18 +257,14 @@
             <!-- 学生管理 -->
             <div class="menu-card card-student">
                 <h3>学生管理</h3>
-
                 <div class="menu-links">
-                    <a href="${pageContext.request.contextPath}/action/StudentList.action">
-                        学生一覧
-                    </a>
+                    <a href="${pageContext.request.contextPath}/action/StudentList.action">学生一覧</a>
                 </div>
             </div>
 
             <!-- 成績管理 -->
             <div class="menu-card card-score">
                 <h3>成績管理</h3>
-
                 <div class="menu-links">
                     <a href="${pageContext.request.contextPath}/action/TestRegist.action">成績登録</a>
                     <a href="${pageContext.request.contextPath}/action/TestList.action">成績参照</a>
@@ -289,7 +274,6 @@
             <!-- 科目管理 -->
             <div class="menu-card card-subject">
                 <h3>科目管理</h3>
-
                 <div class="menu-links">
                     <a href="${pageContext.request.contextPath}/action/SubjectList.action">科目一覧</a>
                 </div>

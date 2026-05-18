@@ -12,94 +12,186 @@ import bean.StudentBean;
 
 public class StudentDAO extends DAO {
 
-    private String baseSql = "select * from student where school_cd=?";
-
+    /**
+     * 【1件取得】学生番号(NO)をキーに学生データを1件取得するメソッド
+     */
     public StudentBean get(String no) throws Exception {
         StudentBean student = null;
-        Connection connection = getConnection();
-        PreparedStatement statement = null;
-
-        try {
-            statement = connection.prepareStatement("select * from student where no=?");
-            statement.setString(1, no);
-            ResultSet rSet = statement.executeQuery();
-
-            // 学校情報の取得（本来は該当する学校をセットすべきですが、型合わせのため生成）
-            SchoolBean school = new SchoolBean(); 
-
-            List<StudentBean> list = postFilter(rSet, school);
-            if (list.size() > 0) {
-                student = list.get(0);
+        String sql = "SELECT * FROM STUDENT WHERE NO = ?";
+        
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+            
+            st.setString(1, no);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    student = new StudentBean();
+                    student.setNo(rs.getString("NO"));
+                    student.setName(rs.getString("NAME"));
+                    student.setEntYear(rs.getInt("ENT_YEAR"));
+                    student.setClassNum(rs.getString("CLASS_NUM"));
+                    student.setIsAttend(rs.getBoolean("IS_ATTEND"));
+                    student.setPassword(rs.getString("PASSWORD")); 
+                    
+                    SchoolBean school = new SchoolBean();
+                    school.setCd(rs.getString("SCHOOL_CD"));
+                    student.setSchool(school);
+                }
             }
         } catch (Exception e) {
             throw e;
-        } finally {
-            if (statement != null) statement.close();
-            if (connection != null) connection.close();
         }
         return student;
     }
 
     /**
-     * 引数の型を School -> SchoolBean に修正しました
+     * 【一覧取得】指定された条件で学生リストを取得するメソッド
      */
-    private List<StudentBean> postFilter(ResultSet rSet, SchoolBean school) throws Exception {
+    public List<StudentBean> filter(SchoolBean school, int entYear, String classNum, boolean isAttend) throws Exception {
         List<StudentBean> list = new ArrayList<>();
-        try {
-            while (rSet.next()) {
-                StudentBean student = new StudentBean();
-                student.setNo(rSet.getString("no"));
-                student.setName(rSet.getString("name"));
-                student.setEntYear(rSet.getInt("ent_year"));
-                student.setClassNum(rSet.getString("class_num"));
-                student.setIsAttend(rSet.getBoolean("is_attend"));
-                student.setSchool(school);
-                list.add(student);
+        String sql = "SELECT * FROM STUDENT WHERE SCHOOL_CD = ?";
+
+        if (entYear > 0) {
+            sql += " AND ENT_YEAR = ?";
+        }
+        if (classNum != null && !classNum.equals("--------") && !classNum.isEmpty()) {
+            sql += " AND CLASS_NUM = ?";
+        }
+        if (isAttend) {
+            sql += " AND IS_ATTEND = TRUE";
+        }
+        sql += " ORDER BY NO ASC";
+
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+            
+            int parameterIndex = 1;
+            st.setString(parameterIndex++, school.getCd());
+            
+            if (entYear > 0) {
+                st.setInt(parameterIndex++, entYear);
             }
+            if (classNum != null && !classNum.equals("--------") && !classNum.isEmpty()) {
+                st.setString(parameterIndex++, classNum);
+            }
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    StudentBean student = new StudentBean();
+                    student.setNo(rs.getString("NO"));
+                    student.setName(rs.getString("NAME"));
+                    student.setEntYear(rs.getInt("ENT_YEAR"));
+                    student.setClassNum(rs.getString("CLASS_NUM"));
+                    student.setIsAttend(rs.getBoolean("IS_ATTEND"));
+                    
+                    student.setSchool(school);
+                    list.add(student);
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 【登録・更新】学生データを保存するメソッド
+     */
+    public boolean save(StudentBean student) throws Exception {
+        boolean isSuccess = false;
+        StudentBean existingStudent = get(student.getNo());
+        String sql = "";
+        
+        try (Connection con = getConnection()) {
+            PreparedStatement st = null;
+            
+            if (existingStudent == null) {
+                // 新規登録
+                sql = "INSERT INTO STUDENT (NO, NAME, ENT_YEAR, CLASS_NUM, IS_ATTEND, SCHOOL_CD, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                st = con.prepareStatement(sql);
+                st.setString(1, student.getNo());
+                st.setString(2, student.getName());
+                st.setInt(3, student.getEntYear());
+                st.setString(4, student.getClassNum());
+                st.setBoolean(5, student.getIsAttend());
+                st.setString(6, student.getSchool().getCd());
+                st.setString(7, student.getPassword());
+            } else {
+                // 更新
+                sql = "UPDATE STUDENT SET NAME = ?, ENT_YEAR = ?, CLASS_NUM = ?, IS_ATTEND = ?, SCHOOL_CD = ? WHERE NO = ?";
+                st = con.prepareStatement(sql);
+                st.setString(1, student.getName());
+                st.setInt(2, student.getEntYear());
+                st.setString(3, student.getClassNum());
+                st.setBoolean(4, student.getIsAttend());
+                st.setString(5, student.getSchool().getCd());
+                st.setString(6, student.getNo());
+            }
+
+            int result = st.executeUpdate();
+            if (result > 0) {
+                isSuccess = true;
+            }
+            st.close();
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
         }
-        return list;
-    }
-
-    public List<StudentBean> filter(SchoolBean school, int entYear, String classNum, boolean isAttend) throws Exception {
-        List<StudentBean> list = new ArrayList<>();
-        Connection connection = getConnection();
-        PreparedStatement statement = null;
-
-        String condition = " and ent_year=? and class_num=?";
-        String order = " order by no asc";
-        String attendCondition = isAttend ? " and is_attend=true" : "";
-
-        try {
-            statement = connection.prepareStatement(baseSql + condition + attendCondition + order);
-            statement.setString(1, school.getCd());
-            statement.setInt(2, entYear);
-            statement.setString(3, classNum);
-
-            ResultSet rSet = statement.executeQuery();
-            list = postFilter(rSet, school);
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            if (statement != null) statement.close();
-            if (connection != null) connection.close();
-        }
-        return list;
+        return isSuccess;
     }
 
     /**
-     * 引数の型を Student -> StudentBean に修正しました
-     */
-    public boolean save(StudentBean student) throws Exception {
-        return true; 
-    }
-
-    /**
-     * 引数の型を Student -> StudentBean に修正しました
+     * 【削除】学生データをデータベースから削除するメソッド
      */
     public boolean delete(StudentBean student) throws Exception {
-        return true;
+        boolean isSuccess = false;
+        String sql = "DELETE FROM STUDENT WHERE NO = ?";
+        
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+            
+            st.setString(1, student.getNo());
+            int result = st.executeUpdate();
+            if (result > 0) {
+                isSuccess = true;
+            }
+        }
+        return isSuccess;
     }
+
+    /**
+     * 【学生用】ログイン認証を行うメソッド
+     */
+    public StudentBean login(String no, String password) throws Exception {
+        StudentBean student = null;
+        String sql = "SELECT * FROM STUDENT WHERE NO = ? AND PASSWORD = ?";
+        
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+            
+            st.setString(1, no);
+            st.setString(2, password);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    student = new StudentBean();
+                    student.setNo(rs.getString("NO"));
+                    student.setName(rs.getString("NAME"));
+                    student.setEntYear(rs.getInt("ENT_YEAR"));
+                    student.setClassNum(rs.getString("CLASS_NUM"));
+                    student.setIsAttend(rs.getBoolean("IS_ATTEND"));
+                    student.setPassword(rs.getString("PASSWORD"));
+                    
+                    SchoolBean school = new SchoolBean();
+                    school.setCd(rs.getString("SCHOOL_CD"));
+                    student.setSchool(school);
+                }
+            }
+        }
+        return student;
+    }
+
+	public List<StudentBean> filter(String schoolCd, int entYear, String classNum, boolean isAttend) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
 }

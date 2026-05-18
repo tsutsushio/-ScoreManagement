@@ -9,7 +9,13 @@ public class StudentBean implements Serializable {
     private String classNum;
     private boolean isAttend;
     private SchoolBean school;
-    
+    private String password;
+    private int schoolYear; // getSchoolYearの無限ループを防止するためフィールドを追加
+
+    // =========================================
+    // ゲッター・セッター
+    // =========================================
+
     public String getNo() { return no; }
     public void setNo(String no) { this.no = no; }
     
@@ -20,13 +26,18 @@ public class StudentBean implements Serializable {
     public void setEntYear(int entYear) { this.entYear = entYear; }
     
     public String getClassNum() { return classNum; }
-    public void setClassNum(String classNum ) { this.classNum = classNum; }
+    public void setClassNum(String classNum) { this.classNum = classNum; }
     
     public boolean getIsAttend() { return isAttend; }
-    public void setIsAttend(boolean isAttend ) {this.isAttend = isAttend; }
+    public void setIsAttend(boolean isAttend) { this.isAttend = isAttend; }
     
     public SchoolBean getSchool() { return school; }
     public void setSchool(SchoolBean school) { this.school = school; }
     
-    public int getSchoolYear() { return getSchoolYear();}
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    // HEAD側にあったメソッドの無限ループバグを修正
+    public int getSchoolYear() { return schoolYear; }
+    public void setSchoolYear(int schoolYear) { this.schoolYear = schoolYear; }
 }

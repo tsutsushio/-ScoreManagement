@@ -31,6 +31,7 @@ public class StudentCreateExecuteAction extends Action {
         String no = req.getParameter("no");
         String name = req.getParameter("name");
         String classNum = req.getParameter("classNum");
+        String password = req.getParameter( "password");
 
         int entYear = 0;
         if (entYearStr != null && !entYearStr.isEmpty()) {
@@ -49,6 +50,9 @@ public class StudentCreateExecuteAction extends Action {
         }
         if (name == null || name.isEmpty()) {
             errors.put("name", "氏名を入力してください");
+        }
+        if (password == null || password.isEmpty()) {
+        	errors.put("password", "パスワードを入力してください");
         }
         
         StudentDAO dao = new StudentDAO();
@@ -70,11 +74,12 @@ public class StudentCreateExecuteAction extends Action {
             req.setAttribute("no", no);
             req.setAttribute("name", name);
             req.setAttribute("classNum", classNum);
+            req.setAttribute("password", password);
             
             // ドロップダウンのリストを再生成（StudentCreateActionと同じ処理）
             setDropdownLists(req);
             
-            return "/WEB-INF/view/student/student-create.jsp";
+            return "/WEB-INF/view/student/student_create.jsp";
         }
 
         // 5. エラーがない場合、StudentBeanにデータを詰めてDBに保存
@@ -85,12 +90,13 @@ public class StudentCreateExecuteAction extends Action {
         student.setClassNum(classNum);
         student.setIsAttend(true); // 新規登録なので在学中(true)にする
         student.setSchool(loginUser.getSchool()); // 先生の学校コードをセット
+        student.setPassword(password);
 
         // クラス図にある save メソッドを呼び出す
         dao.save(student);
 
         // 6. 登録完了画面へ遷移
-        return "/WEB-INF/view/student/student-create-done.jsp";
+        return "/WEB-INF/view/student/student_create_done.jsp";
     }
 
     /**
@@ -99,7 +105,7 @@ public class StudentCreateExecuteAction extends Action {
     private void setDropdownLists(HttpServletRequest req) {
         int currentYear = LocalDate.now().getYear();
         List<Integer> entYearList = new ArrayList<>();
-        for (int i = currentYear - 10; i <= currentYear + 1; i++) {
+        for (int i = currentYear - 3; i <= currentYear + 1; i++) {
             entYearList.add(i);
         }
         List<String> classList = new ArrayList<>();

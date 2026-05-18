@@ -9,7 +9,6 @@ import dao.TestDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import tool.Action;
-// 【修正】間違ったUtilインポートを削除し、自作のUtilをインポートする
 import util.Util;
 
 public class TestRegistAction extends Action {
@@ -28,30 +27,32 @@ public class TestRegistAction extends Action {
             return "/login/login.jsp";
         }
 
-        // 2. 画面表示に必要なデータをセット（シーケンス図の初期表示準備）
+        // 2. 画面表示に必要なデータをセット（入学年度・科目・回数・クラス番号）
         this.setRequestData(request, response);
 
         // パラメータ取得
         String studentNo = request.getParameter("student_no");
         String subjectCd = request.getParameter("subject_cd");
+        String classNum = request.getParameter("class_num"); // クラス番号を追加
         String noStr = request.getParameter("no");
         String pointStr = request.getParameter("point");
 
-        // 3. 初回表示（検索前）はチェックを行わずJSPへ
+        // 3. 初回表示（検索・入力前）はチェックを行わずJSPへ
         if (studentNo == null) {
-            return "/test/test_regist.jsp";
+            return "/WEB-INF/view/test/test-regist.jsp";
         }
 
-        // 入力値の保持（入力ミスで戻った時に消えないようにする）
+        // 入力値の保持（エラーで画面に戻った際、入力内容が消えないようにする）
         request.setAttribute("student_no", studentNo);
         request.setAttribute("subject_cd", subjectCd);
+        request.setAttribute("class_num", classNum);
         request.setAttribute("no", noStr);
         request.setAttribute("point", pointStr);
 
-        // 4. バリデーション
-        if (studentNo.isBlank() || subjectCd.isBlank() || noStr.isBlank() || pointStr.isBlank()) {
+        // 4. バリデーション（必須入力チェック）
+        if (studentNo.isBlank() || subjectCd.isBlank() || classNum == null || classNum.isBlank() || noStr.isBlank() || pointStr.isBlank()) {
             request.setAttribute("errorMessage", "未入力の項目があります。");
-            return "/test/test_regist.jsp";
+            return "/WEB-INF/view/test/test-regist.jsp";
         }
 
         int no;
@@ -60,14 +61,14 @@ public class TestRegistAction extends Action {
             no = Integer.parseInt(noStr);
             point = Integer.parseInt(pointStr);
             
-            // シーケンス図にある「0〜100の範囲チェック」
+            // 点数の範囲チェック
             if (point < 0 || point > 100) {
                 request.setAttribute("errorMessage", "点数は0〜100の範囲で入力してください。");
-                return "/test/test_regist.jsp";
+                return "/WEB-INF/view/test/test-regist.jsp";
             }
         } catch (NumberFormatException e) {
             request.setAttribute("errorMessage", "数字を正しく入力してください。");
-            return "/test/test_regist.jsp";
+            return "/WEB-INF/view/test/test-regist.jsp";
         }
 
         // 5. 登録処理
@@ -81,16 +82,17 @@ public class TestRegistAction extends Action {
         test.setSchoolCd(schoolCd);
         test.setNo(no);
         test.setPoint(point);
+        test.setClassNum(classNum); // データベース追加に伴うセットの追加
         
-        // 登録実行（戻り値がbooleanであることを確認してください）
+        // 登録実行
         boolean result = testDao.save(test);
 
         if (!result) {
             request.setAttribute("errorMessage", "登録に失敗しました。");
-            return "/test/test_regist.jsp";
+            return "/WEB-INF/view/test/test-regist.jsp";
         }
 
-        // 登録成功時は一覧へ
+        // 登録成功時は一覧へ遷移
         return "TestList.action";
     }
 
@@ -100,7 +102,7 @@ public class TestRegistAction extends Action {
     private void setRequestData(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Util util = new Util();
         
-        // 自作Utilのメソッドを呼び出す
+        // 自作Utilのメソッドを呼び出して選択肢をセット
         util.setEntYearSet(request);    // 入学年度セット
         util.setSubjects(request);      // 科目セット
         util.setNumSet(request);        // 回数セット
@@ -108,7 +110,8 @@ public class TestRegistAction extends Action {
         // クラス番号（ClassNum）のセット
         TeacherBean teacher = util.getUser(request);
         ClassNumDAO classNumDao = new ClassNumDAO();
-        // 学校(SchoolBean)を引数に渡す
+        
+        // 学校(SchoolBean)を引数に渡して取得
         List<String> classNumList = classNumDao.filter(teacher.getSchool());
         request.setAttribute("class_num_set", classNumList);
     }
