@@ -238,7 +238,10 @@
             成績管理
             <ul class="sub-menu">
                 <li>
-                    <a href="#">成績登録</a></li>
+                    <a href="${pageContext.request.contextPath}/action/TestRegist.action">
+					    成績登録
+					</a>
+				</li>
                 <li>
                     <a href="#">成績参照</a>
                 </li>
@@ -249,7 +252,7 @@
             科目管理
             <ul class="sub-menu">
                 <li>
-                    <a href="${pageContext.request.contextPath}/action/StudentList.action">科目一覧</a>
+                    <a href="${pageContext.request.contextPath}/action/SubjectList.action">科目一覧</a>
                 </li>
             </ul>
         </li>
