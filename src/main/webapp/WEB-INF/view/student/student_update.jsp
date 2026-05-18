@@ -165,6 +165,12 @@
             <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
             
         </form>
+        
+                <!--削除ボタン用のフォーム -->
+        <form action="${pageContext.request.contextPath}/action/StudentDelete.action" method="post" onsubmit="return confirm('本当にこの学生データを削除してよろしいですか？\n※この操作は取り消せません。');" style="text-align: right; margin-top: 20px;">
+            <input type="hidden" name="no" value="${student.no}">
+            <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">削除する</button>
+        </form>
     </div>
 
 </body>
