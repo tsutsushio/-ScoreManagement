@@ -74,7 +74,7 @@ public class StudentCreateExecuteAction extends Action {
             // ドロップダウンのリストを再生成（StudentCreateActionと同じ処理）
             setDropdownLists(req);
             
-            return "/WEB-INF/view/student/student-create.jsp";
+            return "/WEB-INF/view/student/student_create.jsp";
         }
 
         // 5. エラーがない場合、StudentBeanにデータを詰めてDBに保存
@@ -90,7 +90,7 @@ public class StudentCreateExecuteAction extends Action {
         dao.save(student);
 
         // 6. 登録完了画面へ遷移
-        return "/WEB-INF/view/student/student-create-done.jsp";
+        return "/WEB-INF/view/student/student_create_done.jsp";
     }
 
     /**

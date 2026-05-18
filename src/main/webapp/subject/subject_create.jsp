@@ -15,6 +15,7 @@ body {
     background-color: #f4f6f9;
 }
 
+/* ヘッダー */
 header {
     background-color: #2f4050;
     color: white;
@@ -43,10 +44,12 @@ header h1 {
     text-decoration: underline;
 }
 
+/* メイン */
 .main {
     padding: 30px;
 }
 
+/* 左上の戻るリンク */
 .back-link {
     margin-bottom: 20px;
 }
@@ -62,6 +65,7 @@ header h1 {
     text-decoration: underline;
 }
 
+/* タイトル */
 .title-area {
     background-color: #ffffff;
     border-left: 6px solid #4a90e2;
@@ -72,6 +76,7 @@ header h1 {
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
+/* フォーム */
 .form-area {
     width: 600px;
     margin: 0 auto;
@@ -101,16 +106,14 @@ header h1 {
     border-radius: 4px;
 }
 
+/* エラー */
 .error {
     color: #d9534f;
     font-weight: bold;
     margin-bottom: 20px;
-    padding: 10px;
-    background-color: #fff2f2;
-    border: 1px solid #f5c2c2;
-    border-radius: 4px;
 }
 
+/* ボタン */
 .button-area {
     text-align: center;
     margin-top: 30px;
@@ -152,7 +155,7 @@ header h1 {
 
 <div class="main">
 
-    <!-- 戻るリンク -->
+    <!-- 左上の戻るリンク -->
     <div class="back-link">
         <a href="${pageContext.request.contextPath}/action/SubjectList.action">
             ← 科目一覧へ戻る
@@ -178,24 +181,24 @@ header h1 {
         <form action="${pageContext.request.contextPath}/action/SubjectCreateExecute.action"
               method="post">
 
-            <!-- 科目コード -->
             <div class="form-row">
                 <label for="cd">科目コード</label>
                 <input type="text"
                        id="cd"
                        name="cd"
                        value="${cd}"
-                       maxlength="3">
+                       maxlength="3"
+                       required>
             </div>
 
-            <!-- 科目名 -->
             <div class="form-row">
                 <label for="name">科目名</label>
                 <input type="text"
                        id="name"
                        name="name"
                        value="${name}"
-                       maxlength="50">
+                       maxlength="50"
+                       required>
             </div>
 
             <!-- ボタン -->
