@@ -107,6 +107,14 @@
                     </c:forEach>
                 </select>
             </div>
+            
+            <div class="form-group">
+                <label>パスワード</label>
+                <input type="password" name="password" placeholder="パスワードを入力してください">
+                <c:if test="${not empty errors.password}">
+                    <span class="error-msg">${errors.password}</span>
+                </c:if>
+            </div>
 
             <button type="submit" class="btn-submit">登録</button>
         </form>
