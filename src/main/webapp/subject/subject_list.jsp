@@ -11,36 +11,69 @@
 <style>
 body {
     margin: 0;
-    font-family: "Yu Gothic", sans-serif;
-    background-color: #f4f6f9;
+    font-family: "Yu Gothic", "Meiryo", sans-serif;
+    background:
+        radial-gradient(circle at top right, rgba(0, 220, 255, 0.12), transparent 40%),
+        linear-gradient(135deg, #07111f 0%, #0a1f38 35%, #0f3b63 70%, #1ec8ff 100%);
+    color: #eafcff;
+    min-height: 100vh;
 }
 
 /* ヘッダー */
 header {
-    background-color: #2f4050;
-    color: white;
-    padding: 15px 30px;
+    background:
+        linear-gradient(90deg, rgba(0, 10, 25, 0.95), rgba(0, 80, 130, 0.85));
+    border-bottom: 2px solid #30d8ff;
+    box-shadow:
+        0 0 12px rgba(48, 216, 255, 0.45),
+        0 4px 20px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+    padding: 18px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+}
+
+header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            -45deg,
+            transparent 0 10px,
+            rgba(255, 255, 255, 0.03) 10px 12px
+        );
+    pointer-events: none;
 }
 
 header h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow:
+        0 0 6px rgba(48, 216, 255, 0.9),
+        0 0 18px rgba(48, 216, 255, 0.6);
 }
 
 .user-info {
     font-size: 14px;
+    position: relative;
+    z-index: 1;
 }
 
 .user-info a {
-    color: #fff;
+    color: #7ff6ff;
     margin-left: 15px;
     text-decoration: none;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(127, 246, 255, 0.8);
 }
 
 .user-info a:hover {
+    color: #ffffff;
     text-decoration: underline;
 }
 
@@ -55,33 +88,49 @@ header h1 {
 }
 
 .back-link a {
-    color: #4a90e2;
+    color: #8df8ff;
     text-decoration: none;
     font-weight: bold;
     font-size: 14px;
+    text-shadow: 0 0 8px rgba(141, 248, 255, 0.8);
 }
 
 .back-link a:hover {
+    color: #ffffff;
     text-decoration: underline;
 }
 
 /* タイトル */
 .title-area {
-    background-color: #ffffff;
-    border-left: 6px solid #4a90e2;
-    padding: 15px 20px;
-    font-size: 24px;
+    background:
+        linear-gradient(135deg, rgba(0, 25, 55, 0.95), rgba(0, 110, 180, 0.9));
+    border-left: 6px solid #4ef2ff;
+    border-right: 2px solid rgba(78, 242, 255, 0.6);
+    color: #ffffff;
+    padding: 18px 22px;
+    font-size: 28px;
     font-weight: bold;
     margin-bottom: 25px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 0 12px 12px 0;
+    box-shadow:
+        0 0 18px rgba(78, 242, 255, 0.35),
+        0 8px 24px rgba(0, 0, 0, 0.35);
+    text-shadow:
+        0 0 8px rgba(78, 242, 255, 0.8);
+    letter-spacing: 2px;
 }
 
 /* 一覧部分 */
 .table-area {
-    background-color: #fff;
+    background:
+        linear-gradient(180deg, rgba(5, 20, 40, 0.92), rgba(10, 35, 65, 0.9));
+    border: 1px solid rgba(78, 242, 255, 0.35);
     padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-radius: 14px;
+    box-shadow:
+        0 0 20px rgba(30, 200, 255, 0.18),
+        0 10px 30px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
 }
 
 /* 新規登録リンク */
@@ -92,16 +141,23 @@ header h1 {
 
 .new-link a {
     display: inline-block;
-    background-color: #4a90e2;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
+    background:
+        linear-gradient(135deg, #00b7ff, #6ef6ff);
+    color: #00111f;
+    padding: 10px 18px;
+    border-radius: 999px;
     text-decoration: none;
     font-size: 14px;
+    font-weight: bold;
+    box-shadow:
+        0 0 14px rgba(110, 246, 255, 0.6);
+    transition: 0.2s ease;
 }
 
 .new-link a:hover {
-    background-color: #357abd;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow:
+        0 0 20px rgba(110, 246, 255, 0.85);
 }
 
 /* テーブル */
@@ -111,39 +167,58 @@ table {
 }
 
 th {
-    background-color: #eef3f8;
-    color: #333;
+    background-color: #0d6fb8; /* 統一した青色 */
+    color: #ffffff;
     padding: 12px;
-    border-bottom: 2px solid #d5dce5;
+    border-bottom: 2px solid #5ff6ff;
+    border-right: 1px solid rgba(255, 255, 255, 0.25); /* 列の区切り線 */
     text-align: left;
+    text-shadow: 0 0 6px rgba(95, 246, 255, 0.7);
 }
 
 td {
     padding: 12px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid rgba(95, 246, 255, 0.15);
+    border-right: 1px solid rgba(95, 246, 255, 0.15); /* 科目コードと科目名の区切り線 */
+    color: #eafcff;
+}
+
+/* 一番右の列には右線を付けない */
+th:last-child,
+td:last-child {
+    border-right: none;
 }
 
 tr:hover {
-    background-color: #f8fbff;
+    background-color: rgba(95, 246, 255, 0.08);
 }
 
+/* 操作列 */
 .action {
     width: 80px;
     text-align: center;
 }
 
 .action a {
-    color: #4a90e2;
+    color: #7ff6ff;
     text-decoration: none;
     font-weight: bold;
+    text-shadow: 0 0 8px rgba(127, 246, 255, 0.7);
 }
 
 .action a:hover {
+    color: #ffffff;
     text-decoration: underline;
 }
 
+/* 削除リンク */
 .action:last-child a {
-    color: #d9534f;
+    color: #ff6fae;
+    text-shadow: 0 0 8px rgba(255, 111, 174, 0.7);
+}
+
+.action:last-child a:hover {
+    color: #ffd3e7;
 }
 </style>
 </head>
