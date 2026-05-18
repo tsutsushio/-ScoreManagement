@@ -87,6 +87,16 @@ button[type="submit"]:hover {
     background: #4d8cff;
 }
 
+
+/* ===== 検索結果エリア ===== */
+.result-box {
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
 /* 戻るリンク */
 .back-link {
     margin-bottom: 20px;
@@ -291,9 +301,7 @@ td input[type="number"] {
 <!-- 検索結果 -->
 <c:if test="${not empty testList}">
 
-    <div class="container"
-         style="margin-top:20px;
-                width:900px;">
+    <div class="result-box">
 
         <h2>検索結果</h2>
 
