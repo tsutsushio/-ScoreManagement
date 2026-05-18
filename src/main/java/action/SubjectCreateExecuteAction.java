@@ -13,62 +13,63 @@ public class SubjectCreateExecuteAction extends Action {
     @Override
     public String execute(
             HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+            HttpServletResponse response
+    ) throws Exception {
 
-        // 文字コード設定
-        request.setCharacterEncoding("UTF-8");
-
-        // ログイン情報取得
         HttpSession session = request.getSession();
         TeacherBean loginUser =
                 (TeacherBean) session.getAttribute("loginUser");
 
-        // 未ログインの場合
+        // 未ログイン
         if (loginUser == null) {
             return "/login/login.jsp";
         }
 
-        // フォームから入力値を取得
+        // 入力値取得
         String cd = request.getParameter("cd");
         String name = request.getParameter("name");
 
-        // 入力値を保持
+        // 入力値を再表示用に設定
         request.setAttribute("cd", cd);
         request.setAttribute("name", name);
 
-        // 未入力チェック
-        if (cd == null || cd.isBlank()
-                || name == null || name.isBlank()) {
+        // 必須チェック
+        if (cd == null || cd.isEmpty()
+                || name == null || name.isEmpty()) {
 
-            request.setAttribute("errorMessage",
-                    "科目コードと科目名を入力してください。");
+            request.setAttribute(
+                    "errorMessage",
+                    "科目コードと科目名を入力してください。"
+            );
 
             return "/subject/subject_create.jsp";
         }
 
-        // DAO生成
         SubjectDAO dao = new SubjectDAO();
 
         // 重複チェック
-        SubjectBean exists = dao.get(cd);
-
-        if (exists != null) {
-            request.setAttribute("errorMessage",
-                    "その科目コードは既に登録されています。");
+        SubjectBean existing = dao.get(cd);
+        if (existing != null) {
+            request.setAttribute(
+                    "errorMessage",
+                    "その科目コードはすでに登録されています。"
+            );
 
             return "/subject/subject_create.jsp";
         }
 
-        // SubjectBean作成
+        // 登録データ作成
         SubjectBean subject = new SubjectBean();
-        subject.setSchoolCd(loginUser.getSchool().getCd());
+        subject.setSchoolCd(
+                loginUser.getSchool().getCd()
+        );
         subject.setCd(cd);
         subject.setName(name);
 
-        // 登録実行
+        // DB登録
         dao.insert(subject);
 
-        // 一覧画面へ戻る
-        return "SubjectList.action";
+        // 完了画面へ
+        return "/subject/subject_create_done.jsp";
     }
 }
