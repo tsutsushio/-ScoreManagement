@@ -152,6 +152,29 @@ extends Action {
                 "testList",
                 testList
         );
+        
+     // 検索条件保持
+        req.setAttribute(
+                "fEntYear",
+                entYear
+        );
+
+        req.setAttribute(
+                "fClassNum",
+                classNum
+        );
+
+        req.setAttribute(
+                "fSubjectCd",
+                subjectCd
+        );
+
+        req.setAttribute(
+                "fNo",
+                no
+        );
+        
+        
 
         return
             "/WEB-INF/view/test/test-regist.jsp";
