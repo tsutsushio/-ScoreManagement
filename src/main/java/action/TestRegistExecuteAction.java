@@ -12,6 +12,7 @@ import tool.Action;
 
 public class TestRegistExecuteAction
 extends Action {
+//	✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️
 
     @Override
     public String execute(

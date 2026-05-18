@@ -1,7 +1,10 @@
 package action;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import bean.StudentBean;
 import bean.TeacherBean;
@@ -32,12 +35,19 @@ extends Action {
                         "loginUser"
                 );
 
+        if (loginUser == null) {
+
+            return
+                "/login/login.jsp";
+        }
+
         String schoolCd =
                 loginUser
                 .getSchool()
                 .getCd();
 
-        // 検索条件取得
+        // ========= 検索条件取得 =========
+//        ✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️
         int entYear =
                 Integer.parseInt(
                         req.getParameter(
@@ -68,7 +78,7 @@ extends Action {
         TestDAO testDAO =
                 new TestDAO();
 
-        // 学生一覧取得
+        // ========= 学生一覧取得 =========
         List<StudentBean>
             studentList =
                 studentDAO.filter(
@@ -82,7 +92,7 @@ extends Action {
             testList =
                 new ArrayList<>();
 
-        // 学生ごとに点数取得
+        // ========= 学生ごとに点数取得 =========
         for (
             StudentBean student
             : studentList
@@ -136,7 +146,7 @@ extends Action {
             );
         }
 
-        // 科目一覧再取得
+        // ========= 科目一覧 =========
         SubjectDAO subjectDAO =
                 new SubjectDAO();
 
@@ -147,10 +157,85 @@ extends Action {
                 )
         );
 
-        // 検索結果
+        // ========= 入学年度 =========
+        List<Integer>
+            entYearList =
+                new ArrayList<>();
+
+        int currentYear =
+                Year.now()
+                .getValue();
+
+        for (
+            int i = currentYear;
+            i >= 2020;
+            i--
+        ) {
+
+            entYearList.add(
+                    i
+            );
+        }
+
+        req.setAttribute(
+                "entYearList",
+                entYearList
+        );
+
+        // ========= クラス一覧 =========
+        List<StudentBean>
+            allStudentList =
+                studentDAO.filter(
+                        schoolCd,
+                        0,
+                        null,
+                        true
+                );
+
+        Set<String>
+            classSet =
+                new TreeSet<>();
+
+        for (
+            StudentBean student
+            : allStudentList
+        ) {
+
+            classSet.add(
+                    student.getClassNum()
+            );
+        }
+
+        req.setAttribute(
+                "classList",
+                classSet
+        );
+
+        // ========= 検索結果 =========
         req.setAttribute(
                 "testList",
                 testList
+        );
+
+        // ========= 検索条件保持 =========
+        req.setAttribute(
+                "fEntYear",
+                entYear
+        );
+
+        req.setAttribute(
+                "fClassNum",
+                classNum
+        );
+
+        req.setAttribute(
+                "fSubjectCd",
+                subjectCd
+        );
+
+        req.setAttribute(
+                "fNo",
+                no
         );
 
         return

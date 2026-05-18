@@ -1,35 +1,70 @@
 package action;
 
+<<<<<<< HEAD
 import java.util.List;
 
+=======
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import bean.StudentBean;
+>>>>>>> branch 'main' of https://github.com/tsutsushio/-ScoreManagement.git
 import bean.TeacherBean;
+<<<<<<< HEAD
 import bean.TestBean;
 import dao.ClassNumDAO;
 import dao.TestDAO;
+=======
+import dao.StudentDAO;
+import dao.SubjectDAO;
+>>>>>>> branch 'main' of https://github.com/tsutsushio/-ScoreManagement.git
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import tool.Action;
 import util.Util;
 
-public class TestRegistAction extends Action {
+public class TestRegistAction
+extends Action {
+//	✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️
 
     @Override
     public String execute(
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
+<<<<<<< HEAD
         // 1. 自作のUtilクラスを使用してログインユーザーを取得
         Util util = new Util();
         TeacherBean teacher = util.getUser(request);
+=======
+        HttpSession session =
+                req.getSession();
+>>>>>>> branch 'main' of https://github.com/tsutsushio/-ScoreManagement.git
 
+<<<<<<< HEAD
         // 未ログインチェック
         if (teacher == null) {
             return "/login/login.jsp";
         }
+=======
+        TeacherBean loginUser =
+                (TeacherBean)
+                session.getAttribute(
+                        "loginUser"
+                );
+>>>>>>> branch 'main' of https://github.com/tsutsushio/-ScoreManagement.git
 
+<<<<<<< HEAD
         // 2. 画面表示に必要なデータをセット（入学年度・科目・回数・クラス番号）
         this.setRequestData(request, response);
+=======
+        if (loginUser == null) {
+>>>>>>> branch 'main' of https://github.com/tsutsushio/-ScoreManagement.git
 
+<<<<<<< HEAD
         // パラメータ取得
         String studentNo = request.getParameter("student_no");
         String subjectCd = request.getParameter("subject_cd");
@@ -114,5 +149,83 @@ public class TestRegistAction extends Action {
         // 学校(SchoolBean)を引数に渡して取得
         List<String> classNumList = classNumDao.filter(teacher.getSchool());
         request.setAttribute("class_num_set", classNumList);
+=======
+            return
+                "/login/login.jsp";
+        }
+
+        String schoolCd =
+                loginUser
+                .getSchool()
+                .getCd();
+
+        // ========= 科目一覧 =========
+        SubjectDAO subjectDAO =
+                new SubjectDAO();
+
+        req.setAttribute(
+                "subjectList",
+                subjectDAO.filter(
+                        schoolCd
+                )
+        );
+
+        // ========= 入学年度 =========
+        List<Integer>
+            entYearList =
+                new ArrayList<>();
+
+        int currentYear =
+                Year.now()
+                .getValue();
+
+        for (
+            int i = currentYear;
+            i >= 2020;
+            i--
+        ) {
+            entYearList.add(i);
+        }
+
+        req.setAttribute(
+                "entYearList",
+                entYearList
+        );
+
+        // ========= クラス一覧 =========
+        StudentDAO studentDAO =
+                new StudentDAO();
+
+        List<StudentBean>
+        studentList =
+            studentDAO.filter(
+                    schoolCd,
+                    0,
+                    null,
+                    true
+            );
+
+        Set<String>
+            classSet =
+                new TreeSet<>();
+
+        for (
+            StudentBean student
+            : studentList
+        ) {
+
+            classSet.add(
+                student.getClassNum()
+            );
+        }
+
+        req.setAttribute(
+                "classList",
+                classSet
+        );
+
+        return
+            "/WEB-INF/view/test/test-regist.jsp";
+>>>>>>> branch 'main' of https://github.com/tsutsushio/-ScoreManagement.git
     }
 }
