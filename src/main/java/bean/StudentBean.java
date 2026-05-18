@@ -9,6 +9,7 @@ public class StudentBean implements Serializable {
     private String classNum;
     private boolean isAttend;
     private SchoolBean school;
+    private String password;
     
     public String getNo() { return no; }
     public void setNo(String no) { this.no = no; }
@@ -28,4 +29,6 @@ public class StudentBean implements Serializable {
     public SchoolBean getSchool() { return school; }
     public void setSchool(SchoolBean school) { this.school = school; }
     
+    public String getPassword() { return password; }
+    public void setPassword(String password ) { this.password = password; }    
 }

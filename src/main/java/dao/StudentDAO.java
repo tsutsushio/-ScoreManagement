@@ -13,56 +13,35 @@ public class StudentDAO extends DAO {
 
     // =========================================================
     // 【一覧取得】指定された条件で学生リストを取得するメソッド
-    // ※今回は画面の仕様に合わせて、すべての条件を受け取るこのメソッドをメインで使います
     // =========================================================
     public List<StudentBean> filter(String schoolCd, int entYear, String classNum, boolean isAttend) throws Exception {
-        
-        // 戻り値となるリストを準備
         List<StudentBean> list = new ArrayList<>();
-        
-        // 基本となるSQL文（WHERE句の1つ目は学校コードで固定）
         String sql = "SELECT * FROM STUDENT WHERE SCHOOL_CD = ?";
 
-        // 検索条件（entYear, classNum）が指定されている場合、SQLに条件を付け足す
-        // （※entYearが0の場合は「指定なし」、classNumが"--------"等の場合は「指定なし」とみなす設計）
         if (entYear > 0) {
             sql += " AND ENT_YEAR = ?";
         }
-        // classNumがnullではなく、かつ"--------"（指定なしを表す値）ではない場合
         if (classNum != null && !classNum.equals("--------") && !classNum.isEmpty()) {
             sql += " AND CLASS_NUM = ?";
         }
-        
-        // 在学中フラグの条件を付け足す（画面のチェックボックス用）
         if (isAttend == true) {
             sql += " AND IS_ATTEND = TRUE";
-        } else {
-            // もし「退学者も含める」ような仕様にしたい場合はここを書き換えますが、
-            // 今回は boolean のため、とりあえずそのままにしておきます（必要に応じて調整）
         }
 
-        // データベース接続
         try (Connection con = getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
             
-            // ？（プレースホルダ）に値をセットしていく
-            int parameterIndex = 1; // 何番目の？にセットするかを管理する変数
-            
-            // 1番目は必ず学校コード
+            int parameterIndex = 1;
             st.setString(parameterIndex++, schoolCd);
             
-            // もしSQLに ENT_YEAR を足していたら、その値をセット
             if (entYear > 0) {
                 st.setInt(parameterIndex++, entYear);
             }
-            // もしSQLに CLASS_NUM を足していたら、その値をセット
             if (classNum != null && !classNum.equals("--------") && !classNum.isEmpty()) {
                 st.setString(parameterIndex++, classNum);
             }
 
-            // SQL実行
             try (ResultSet rs = st.executeQuery()) {
-                // 結果が複数あるので、whileで回してリストに追加していく
                 while (rs.next()) {
                     StudentBean student = new StudentBean();
                     student.setNo(rs.getString("NO"));
@@ -71,26 +50,24 @@ public class StudentDAO extends DAO {
                     student.setClassNum(rs.getString("CLASS_NUM"));
                     student.setIsAttend(rs.getBoolean("IS_ATTEND"));
                     
+                    // ※一覧にはパスワードは不要なので取得していません
+                    
                     SchoolBean school = new SchoolBean();
                     school.setCd(rs.getString("SCHOOL_CD"));
                     student.setSchool(school);
                     
-                    // リストに追加
                     list.add(student);
                 }
             }
         }
-        
         return list;
     }
 
     // =========================================================
     // 【1件取得】学生番号(NO)をキーに学生データを1件取得するメソッド
-    // （※成績登録画面など、特定の学生を指定する際に使います）
     // =========================================================
     public StudentBean get(String no) throws Exception {
         StudentBean student = null;
-        
         String sql = "SELECT * FROM STUDENT WHERE NO = ?";
         
         try (Connection con = getConnection();
@@ -107,6 +84,9 @@ public class StudentDAO extends DAO {
                     student.setClassNum(rs.getString("CLASS_NUM"));
                     student.setIsAttend(rs.getBoolean("IS_ATTEND"));
                     
+                    // Beanにパスワードを持たせるようにしたので、ここでも一応取得しておきます
+                    student.setPassword(rs.getString("PASSWORD")); 
+                    
                     SchoolBean school = new SchoolBean();
                     school.setCd(rs.getString("SCHOOL_CD"));
                     student.setSchool(school);
@@ -116,27 +96,20 @@ public class StudentDAO extends DAO {
         return student;
     }
     
- // =========================================================
+    // =========================================================
     // 【登録・更新】学生データを保存するメソッド
-    // （※データがなければ新規登録(INSERT)、あれば更新(UPDATE)を行う）
     // =========================================================
     public boolean save(StudentBean student) throws Exception {
         boolean isSuccess = false;
-        
-        // 1. 渡された学生番号(NO)のデータが既に存在するかチェック
         StudentBean existingStudent = get(student.getNo());
-        
         String sql = "";
         
         try (Connection con = getConnection()) {
-            
             PreparedStatement st = null;
             
             if (existingStudent == null) {
-                // -------------------------------------------
-                // データが存在しない場合：新規登録（INSERT）
-                // -------------------------------------------
-                sql = "INSERT INTO STUDENT (NO, NAME, ENT_YEAR, CLASS_NUM, IS_ATTEND, SCHOOL_CD) VALUES (?, ?, ?, ?, ?, ?)";
+                // 【新規登録】パスワードも一緒に登録する
+                sql = "INSERT INTO STUDENT (NO, NAME, ENT_YEAR, CLASS_NUM, IS_ATTEND, SCHOOL_CD, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 st = con.prepareStatement(sql);
                 
                 st.setString(1, student.getNo());
@@ -145,11 +118,10 @@ public class StudentDAO extends DAO {
                 st.setString(4, student.getClassNum());
                 st.setBoolean(5, student.getIsAttend());
                 st.setString(6, student.getSchool().getCd());
+                st.setString(7, student.getPassword());
                 
             } else {
-                // -------------------------------------------
-                // データが存在する場合：情報の更新（UPDATE）
-                // -------------------------------------------
+                // 【更新】教員が編集する際は、パスワードは上書きしない（セキュリティ対策）
                 sql = "UPDATE STUDENT SET NAME = ?, ENT_YEAR = ?, CLASS_NUM = ?, IS_ATTEND = ?, SCHOOL_CD = ? WHERE NO = ?";
                 st = con.prepareStatement(sql);
                 
@@ -158,21 +130,15 @@ public class StudentDAO extends DAO {
                 st.setString(3, student.getClassNum());
                 st.setBoolean(4, student.getIsAttend());
                 st.setString(5, student.getSchool().getCd());
-                st.setString(6, student.getNo()); // WHERE句の条件
+                st.setString(6, student.getNo());
             }
             
-            // SQLを実行する
-            // executeUpdate() は、変更が成功した「行数」を返します
             int result = st.executeUpdate();
-            
-            // 1行以上変更されていれば成功
             if (result > 0) {
                 isSuccess = true;
             }
-            
             st.close();
         }
-        
         return isSuccess;
     }
     
@@ -181,28 +147,75 @@ public class StudentDAO extends DAO {
     // =========================================================
     public boolean delete(StudentBean student) throws Exception {
         boolean isSuccess = false;
-        
-        // 削除対象の学生番号を取得
         String no = student.getNo();
-        
-        // NO（学生番号）を条件にしてレコードを削除するSQL
         String sql = "DELETE FROM STUDENT WHERE NO = ?";
         
         try (Connection con = getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
             
-            // プレースホルダ（?）に学生番号をセット
             st.setString(1, no);
-            
-            // SQLを実行する。executeUpdate() は削除された「行数」を返す
             int result = st.executeUpdate();
-            
-            // 1行以上削除されていれば成功とみなす
             if (result > 0) {
                 isSuccess = true;
             }
         }
-        
         return isSuccess;
+    }
+
+    // =========================================================
+    // 【学生用】自分のパスワードだけを変更するメソッド
+    // =========================================================
+    public boolean updatePassword(String no, String newPassword) throws Exception {
+        boolean isSuccess = false;
+        // 指定された学籍番号のパスワードだけをピンポイントで書き換える
+        String sql = "UPDATE STUDENT SET PASSWORD = ? WHERE NO = ?";
+        
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+            
+            st.setString(1, newPassword);
+            st.setString(2, no);
+            
+            int result = st.executeUpdate();
+            if (result > 0) {
+                isSuccess = true;
+            }
+        }
+        return isSuccess;
+    }
+
+    // =========================================================
+    // 【学生用】ログイン認証を行うメソッド
+    // =========================================================
+    public StudentBean login(String no, String password) throws Exception {
+        StudentBean student = null;
+        // 学籍番号とパスワードの両方が完全に一致するユーザーを探す
+        String sql = "SELECT * FROM STUDENT WHERE NO = ? AND PASSWORD = ?";
+        
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+            
+            st.setString(1, no);
+            st.setString(2, password);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    // 一致するユーザーがいれば、データをBeanに詰めて返す
+                    student = new StudentBean();
+                    student.setNo(rs.getString("NO"));
+                    student.setName(rs.getString("NAME"));
+                    student.setEntYear(rs.getInt("ENT_YEAR"));
+                    student.setClassNum(rs.getString("CLASS_NUM"));
+                    student.setIsAttend(rs.getBoolean("IS_ATTEND"));
+                    student.setPassword(rs.getString("PASSWORD"));
+                    
+                    SchoolBean school = new SchoolBean();
+                    school.setCd(rs.getString("SCHOOL_CD"));
+                    student.setSchool(school);
+                }
+            }
+        }
+        // 一致するユーザーがいなければ null が返る（ログイン失敗）
+        return student;
     }
 }
