@@ -32,19 +32,29 @@ public class SubjectCreateExecuteAction extends Action {
         String cd = request.getParameter("cd");
         String name = request.getParameter("name");
 
-        // 入力値を保持
+        // 入力値を保持（エラー時に再表示するため）
         request.setAttribute("cd", cd);
         request.setAttribute("name", name);
 
         // 未入力チェック
-        if (cd == null || cd.isBlank()
-                || name == null || name.isBlank()) {
-
+        if (cd == null || cd.isBlank()) {
             request.setAttribute("errorMessage",
-                    "科目コードと科目名を入力してください。");
-
+                    "科目コードを入力してください。");
             return "/subject/subject-create.jsp";
         }
+
+        if (name == null || name.isBlank()) {
+            request.setAttribute("errorMessage",
+                    "科目名を入力してください。");
+            return "/subject/subject-create.jsp";
+        }
+        
+        if (cd.length() < 3 || cd.length() > 3) {
+            request.setAttribute("errorMessage",
+                    "科目コードは3文字で入力してください。");
+            return "/subject/subject_create.jsp";
+        }
+
 
         // DAO生成
         SubjectDAO dao = new SubjectDAO();
@@ -55,7 +65,6 @@ public class SubjectCreateExecuteAction extends Action {
         if (exists != null) {
             request.setAttribute("errorMessage",
                     "その科目コードは既に登録されています。");
-
             return "/subject/subject-create.jsp";
         }
 
