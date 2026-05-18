@@ -387,7 +387,6 @@ td input[type="number"] {
 
 </c:if>
 
-
 </body>
 
 </html>
