@@ -3,47 +3,50 @@ package bean;
 import java.io.Serializable;
 
 public class TestBean implements Serializable {
-    private StudentBean student;
-    private String classNum;
-    private SubjectBean subject;
-    private SchoolBean school;
+
+    private String studentNo;
+    private String subjectCd;
+    private String schoolCd;
     private int no;
     private int point;
-    
-    public StudentBean getStudent() {
-    	return student;
+
+    public String getStudentNo() {
+        return studentNo;
     }
-    public void setCd(String cd) {
-    	this.student = student;
+
+    public void setStudentNo(String studentNo) {
+        this.studentNo = studentNo;
     }
-    public String getClassNum() {
-    	return classNum;
+
+    public String getSubjectCd() {
+        return subjectCd;
     }
-    public void setClassNum(String classNum) {
-    	this.classNum = classNum;
+
+    public void setSubjectCd(String subjectCd) {
+        this.subjectCd = subjectCd;
     }
-    public SubjectBean getSubject() {
-    	return subject;
+
+    public String getSchoolCd() {
+        return schoolCd;
     }
-    public void setSubject(SubjectBean subject) {
-    	this.subject = subject;
+
+    public void setSchoolCd(String schoolCd) {
+        this.schoolCd = schoolCd;
     }
-    public SchoolBean getSchool() {
-    	return school;
-    }
-    public void setSchool(SchoolBean school) {
-    	this.school = school;
-    }
+
     public int getNo() {
-    	return no;
+        return no;
     }
+
     public void setNo(int no) {
-    	this.no = no;
+        this.no = no;
     }
+
     public int getPoint() {
-    	return point;
+        return point;
     }
+
     public void setPoint(int point) {
-    	this.point = point;
+        this.point = point;
     }
 }

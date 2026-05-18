@@ -1,11 +1,18 @@
 package action;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import bean.SchoolBean;
+import bean.StudentBean;
 import bean.SubjectBean;
-import bean.TeacherBean; // 追加
+import bean.TeacherBean;
+import bean.TestListStudentBean;
+import dao.ClassNumDAO; // クラス一覧取得用DAO（未作成なら適宜読み替え）
+import dao.StudentDAO;
 import dao.SubjectDAO;
+import dao.TestListStudentDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -15,36 +22,59 @@ public class TestListAction extends Action {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
-        // 1. セッションからログインユーザー情報を取得
         HttpSession session = req.getSession();
-        
-        // 注意：LoginActionで保存したのが "user" (TeacherBean) なら
-        TeacherBean teacher = (TeacherBean) session.getAttribute("user");
-        
-        // ぬるぽ対策：ログインしていなければログイン画面へ
-        if (teacher == null) {
-            return "/login/login.jsp";
-        }
-        
-        // 先生の所属する学校を取得
+        TeacherBean teacher = (TeacherBean) session.getAttribute("loginUser");
         SchoolBean school = teacher.getSchool();
 
-        // 2. SubjectDaoを使って、その学校の科目一覧を取得
+        // 1. パラメータの取得
+        String method = req.getParameter("method");
+
+        // 2. 検索処理の分岐
+        if ("subject".equals(method)) {
+            setTestListSubject(req, res);
+        } else if ("student".equals(method)) {
+            setTestListStudent(req, res);
+        }
+
+        // --- シーケンス図前半：初期表示のためのデータ準備 ---
+        
+        // 入学年度リスト（現在から10年前まで）
+        List<Integer> entYearSet = new ArrayList<>();
+        int year = LocalDate.now().getYear();
+        for (int i = year; i >= year - 10; i--) {
+            entYearSet.add(i);
+        }
+
+        // クラス番号リスト
+        ClassNumDAO cDao = new ClassNumDAO();
+        List<String> classNumSet = cDao.filter(school);
+
+        // 科目リスト
         SubjectDAO sDao = new SubjectDAO();
         List<SubjectBean> subjects = sDao.filter(school);
 
-        // 3. 取得したリストをリクエストにセット
+        // リクエスト属性にセットしてJSPへ送る
+        req.setAttribute("ent_year_set", entYearSet);
+        req.setAttribute("class_num_set", classNumSet);
         req.setAttribute("subjects", subjects);
+        // ------------------------------------------------
 
-        // 4. JSPのファイル名を返す (Actionクラスのルールに従う)
-        // ※ tool.Action クラスの戻り値型に合わせて String を返します
-        return "test_list.jsp";
+        return "/test/test_list.jsp";
     }
 
-    // クラス図にある残りのメソッド
-    private void setTestListSubject(HttpServletRequest req, HttpServletResponse res) throws Exception {
+    public void setTestListSubject(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        // 科目別成績の検索ロジックをここに実装
     }
 
-    private void setTestListStudent(HttpServletRequest req, HttpServletResponse res) throws Exception {
+    public void setTestListStudent(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        String studentNo = req.getParameter("f4");
+        StudentDAO sDao = new StudentDAO();
+        TestListStudentDAO tStudentDao = new TestListStudentDAO();
+        
+        StudentBean student = sDao.get(studentNo);
+        if (student != null) {
+            List<TestListStudentBean> list = tStudentDao.filter(student);
+            req.setAttribute("tests", list);
+        }
     }
 }

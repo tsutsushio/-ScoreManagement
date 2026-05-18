@@ -6,137 +6,148 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import bean.SchoolBean;
-import bean.StudentBean;
-import bean.SubjectBean;
-// Beanクラスのインポート
 import bean.TestBean;
 
-/**
- * TestDaoクラス
- * データベースのTestテーブルへのアクセスを担当します。
- */
 public class TestDAO extends DAO {
 
-    // クラス図にあるベースSQL
-    private String baseSql = "SELECT * FROM TEST WHERE school_cd = ?";
+    // =========================================
+    // 1件取得（重複チェック用）
+    // =========================================
+    public TestBean get(String studentNo, String subjectCd, int no, String schoolCd) throws Exception {
 
-    /**
-     * 特定の成績データを1件取得します。
-     */
-    public TestBean get(StudentBean student, SubjectBean subject, SchoolBean school, int no) throws Exception {
-        String sql = baseSql + " AND student_no = ? AND subject_cd = ? AND no = ?";
-        
-        // getConnection() が投げる例外を throws Exception で呼び出し元に丸投げします
-        try (Connection con = getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
-            
-            st.setString(1, school.getCd());
-            st.setString(2, student.getNo());
-            st.setString(3, subject.getCd());
-            st.setInt(4, no);
+        TestBean test = null;
 
-            try (ResultSet rs = st.executeQuery()) {
-                List<TestBean> list = postFilter(rs, school);
-                if (!list.isEmpty()) {
-                    return list.get(0);
-                }
-                return null;
-            }
+        Connection con = getConnection();
+
+        String sql =
+            "SELECT STUDENT_NO, SUBJECT_CD, NO, POINT, SCHOOL_CD " +
+            "FROM TEST " +
+            "WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND NO = ? AND SCHOOL_CD = ?";
+
+        PreparedStatement st = con.prepareStatement(sql);
+
+        st.setString(1, studentNo);
+        st.setString(2, subjectCd);
+        st.setInt(3, no);
+        st.setString(4, schoolCd);
+
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+
+            test = new TestBean();
+            test.setStudentNo(rs.getString("STUDENT_NO"));
+            test.setSubjectCd(rs.getString("SUBJECT_CD"));
+            test.setNo(rs.getInt("NO"));
+            test.setPoint(rs.getInt("POINT"));
+            test.setSchoolCd(rs.getString("SCHOOL_CD"));
         }
+
+        rs.close();
+        st.close();
+        con.close();
+
+        return test;
     }
 
-    /**
-     * ResultSetからTestBeanのリストを作成します。
-     */
-    private List<TestBean> postFilter(ResultSet rs, SchoolBean school) throws Exception {
+    // =========================================
+    // 登録
+    // =========================================
+    public boolean save(TestBean test) throws Exception {
+
+        Connection con = getConnection();
+
+        String sql =
+            "INSERT INTO TEST (STUDENT_NO, SUBJECT_CD, NO, POINT, SCHOOL_CD) " +
+            "VALUES (?, ?, ?, ?, ?)";
+
+        PreparedStatement st = con.prepareStatement(sql);
+
+        st.setString(1, test.getStudentNo());
+        st.setString(2, test.getSubjectCd());
+        st.setInt(3, test.getNo());
+        st.setInt(4, test.getPoint());
+        st.setString(5, test.getSchoolCd());
+
+        int count = st.executeUpdate();
+
+        st.close();
+        con.close();
+
+        return count > 0;
+    }
+
+    // =========================================
+    // 一覧取得（学校＋科目検索対応）
+    // =========================================
+    public List<TestBean> filter(String schoolCd, String subjectCd) throws Exception {
+
         List<TestBean> list = new ArrayList<>();
+
+        Connection con = getConnection();
+
+        String sql =
+            "SELECT STUDENT_NO, SUBJECT_CD, NO, POINT, SCHOOL_CD " +
+            "FROM TEST WHERE SCHOOL_CD = ? ";
+
+        if (subjectCd != null) {
+            sql += "AND SUBJECT_CD = ? ";
+        }
+
+        sql += "ORDER BY STUDENT_NO, SUBJECT_CD, NO";
+
+        PreparedStatement st = con.prepareStatement(sql);
+
+        st.setString(1, schoolCd);
+
+        if (subjectCd != null) {
+            st.setString(2, subjectCd);
+        }
+
+        ResultSet rs = st.executeQuery();
+
         while (rs.next()) {
+
             TestBean test = new TestBean();
-            test.setNo(rs.getInt("no"));
-            test.setPoint(rs.getInt("point"));
-            test.setSchool(school);
-            // 本来はここでstudent_no等を使ってStudentBeanをセットします
+
+            test.setStudentNo(rs.getString("STUDENT_NO"));
+            test.setSubjectCd(rs.getString("SUBJECT_CD"));
+            test.setNo(rs.getInt("NO"));
+            test.setPoint(rs.getInt("POINT"));
+            test.setSchoolCd(rs.getString("SCHOOL_CD"));
+
             list.add(test);
         }
+
+        rs.close();
+        st.close();
+        con.close();
+
         return list;
     }
 
-    /**
-     * 条件を指定して成績リストを取得します。
-     */
-    public List<TestBean> filter(int entYear, String classNum, SubjectBean subject, int num, SchoolBean school) throws Exception {
-        List<TestBean> list = new ArrayList<>();
-        // 検索ロジックの実装（SQLの組み立てなど）
-        return list;
-    }
+    // =========================================
+    // 削除
+    // =========================================
+    public boolean delete(TestBean test) throws Exception {
 
-    /**
-     * 複数の成績データを一括保存します（トランザクション管理付き）。
-     */
-    public boolean save(List<TestBean> list) throws Exception {
-        try (Connection con = getConnection()) {
-            con.setAutoCommit(false); // トランザクション開始
-            try {
-                for (TestBean test : list) {
-                    save(test, con);
-                }
-                con.commit();
-                return true;
-            } catch (Exception e) {
-                con.rollback(); // エラー時はロールバック
-                throw e; // エラー内容を呼び出し元に伝える
-            }
-        }
-    }
+        Connection con = getConnection();
 
-    /**
-     * 1件の成績データを保存または更新します。
-     */
-    public boolean save(TestBean test, Connection connection) throws Exception {
-        String sql = "INSERT INTO TEST (student_no, subject_cd, school_cd, no, point) " +
-                     "VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE point = VALUES(point)";
-        
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setString(1, test.getStudent().getNo());
-            st.setString(2, test.getSubject().getCd());
-            st.setString(3, test.getSchool().getCd());
-            st.setInt(4, test.getNo());
-            st.setInt(5, test.getPoint());
-            return st.executeUpdate() > 0;
-        }
-    }
+        String sql =
+            "DELETE FROM TEST WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND NO = ? AND SCHOOL_CD = ?";
 
-    /**
-     * 複数の成績データを一括削除します。
-     */
-    public boolean delete(List<TestBean> list) throws Exception {
-        try (Connection con = getConnection()) {
-            con.setAutoCommit(false);
-            try {
-                for (TestBean test : list) {
-                    delete(test, con);
-                }
-                con.commit();
-                return true;
-            } catch (Exception e) {
-                con.rollback();
-                throw e;
-            }
-        }
-    }
+        PreparedStatement st = con.prepareStatement(sql);
 
-    /**
-     * 1件の成績データを削除します。
-     */
-    public boolean delete(TestBean test, Connection connection) throws Exception {
-        String sql = "DELETE FROM TEST WHERE student_no = ? AND subject_cd = ? AND no = ?";
-        
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setString(1, test.getStudent().getNo());
-            st.setString(2, test.getSubject().getCd());
-            st.setInt(3, test.getNo());
-            return st.executeUpdate() > 0;
-        }
+        st.setString(1, test.getStudentNo());
+        st.setString(2, test.getSubjectCd());
+        st.setInt(3, test.getNo());
+        st.setString(4, test.getSchoolCd());
+
+        int count = st.executeUpdate();
+
+        st.close();
+        con.close();
+
+        return count > 0;
     }
 }

@@ -28,4 +28,5 @@ public class StudentBean implements Serializable {
     public SchoolBean getSchool() { return school; }
     public void setSchool(SchoolBean school) { this.school = school; }
     
+    public int getSchoolYear() { return getSchoolYear();}
 }

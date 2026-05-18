@@ -65,34 +65,42 @@
             <div class="search-container">
                 <div class="search-item">
                     <label>入学年度</label>
-                    <select name="f1">
-                        <option value="">-------</option>
-                        <option value="${year}">${year}</option>
-                    </select>
+                    <select name="userList">
+    <c:forEach var="user" items="${userList}">
+        <%-- userオブジェクトのidを値に、nameを表示名にする --%>
+        <option value="${year}">${year}</option>
+    </c:forEach>
+</select>
                 </div>
 
                 <div class="search-item">
                     <label>クラス</label>
-                    <select name="f2">
-                        <option value="">-------</option>
-                        <option value="${num}">${num}</option>
-                    </select>
+                    <select name="userList">
+    <c:forEach var="user" items="${userList}">
+        <%-- userオブジェクトのidを値に、nameを表示名にする --%>
+        <option value="${num}">${num}</option>
+    </c:forEach>
+</select>
                 </div>
 
                 <div class="search-item">
                     <label>科目</label>
-                    <select name="f3">
-                        <option value="">-------</option>
-                        <option value="${subject_cd}">${subject_cd}</option>
-                    </select>
+                    <select name="userList">
+    <c:forEach var="user" items="${userList}">
+        <%-- userオブジェクトのidを値に、nameを表示名にする --%>
+        <option value="${subject_cd}">${subject_cd}</option>
+    </c:forEach>
+</select>
                 </div>
 
                 <div class="search-item">
                     <label>回数</label>
-                    <select name="f4">
-                        <option value="">-------</option>
-                        <option value="${num}">${num}</option>
-                    </select>
+                    <select name="userList">
+    <c:forEach var="user" items="${userList}">
+        <%-- userオブジェクトのidを値に、nameを表示名にする --%>
+        <option value="${num}">${num}</option>
+    </c:forEach>
+</select>
                 </div>
 
                 <button class="search-btn" type="submit">検索</button>
