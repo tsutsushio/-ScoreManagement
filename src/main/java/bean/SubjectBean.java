@@ -4,34 +4,18 @@ import java.io.Serializable;
 
 public class SubjectBean implements Serializable {
 
-    private String schoolCd;
     private String cd;
     private String name;
+    private SchoolBean school; 
 
-    public SubjectBean() {
-    }
+    public SubjectBean() {}
 
-    public String getSchoolCd() {
-        return schoolCd;
-    }
+    public String getCd() { return cd; }
+    public void setCd(String cd) { this.cd = cd; }
 
-    public void setSchoolCd(String schoolCd) {
-        this.schoolCd = schoolCd;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getCd() {
-        return cd;
-    }
-
-    public void setCd(String cd) {
-        this.cd = cd;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public SchoolBean getSchool() { return school; }
+    public void setSchool(SchoolBean school) { this.school = school; }
 }

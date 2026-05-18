@@ -40,7 +40,7 @@ public class LoginExecuteAction extends Action {
             
             // 学生用のメニュー画面（または成績参照用のAction）へ飛ばす
             // ※とりあえず仮のパスを書いています。後で正式なファイル名に合わせましょう。
-            return "/WEB-INF/view/student/student_menu.jsp"; 
+            return "/action/StudentMenu.action";
             
         } else {
             // 【ログイン失敗】
