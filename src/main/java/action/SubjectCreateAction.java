@@ -11,6 +11,6 @@ public class SubjectCreateAction extends Action {
 			HttpServletRequest request,
 			HttpServletResponse response)throws Exception {
 		
-		return "/subject/subject-create.jsp";
+		return "/subject/subject_create.jsp";
 	}
 }

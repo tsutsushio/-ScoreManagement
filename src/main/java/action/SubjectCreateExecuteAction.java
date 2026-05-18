@@ -43,7 +43,7 @@ public class SubjectCreateExecuteAction extends Action {
             request.setAttribute("errorMessage",
                     "科目コードと科目名を入力してください。");
 
-            return "/subject/subject-create.jsp";
+            return "/subject/subject_create.jsp";
         }
 
         // DAO生成
@@ -56,7 +56,7 @@ public class SubjectCreateExecuteAction extends Action {
             request.setAttribute("errorMessage",
                     "その科目コードは既に登録されています。");
 
-            return "/subject/subject-create.jsp";
+            return "/subject/subject_create.jsp";
         }
 
         // SubjectBean作成

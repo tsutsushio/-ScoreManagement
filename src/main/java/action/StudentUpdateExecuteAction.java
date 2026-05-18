@@ -44,6 +44,6 @@ public class StudentUpdateExecuteAction extends Action {
         dao.save(student); 
 
         // 5. 完了画面へ遷移する
-        return "/WEB-INF/view/student/student-update-done.jsp";
+        return "/WEB-INF/view/student/student_update_done.jsp";
     }
 }

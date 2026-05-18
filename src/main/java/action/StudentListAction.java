@@ -49,6 +49,6 @@ public class StudentListAction extends Action {
         // 5. 検索結果をリクエストスコープに保存する
         req.setAttribute("studentList", studentList);
 
-        return "/WEB-INF/view/student/student-list.jsp";
+        return "/WEB-INF/view/student/student_list.jsp";
     }
 }
