@@ -285,7 +285,9 @@
                  	<a href="${pageContext.request.contextPath}/action/TestRegist.action">
 					    成績登録
 					</a>
-                    <a href="#">成績参照</a>
+					<a href="${pageContext.request.contextPath}/action/TestList.action">
+					    成績参照
+					</a>
                 </div>
             </div>
 
