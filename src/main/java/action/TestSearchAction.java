@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import bean.SchoolBean;
 import bean.StudentBean;
+import bean.SubjectBean;
 import bean.TeacherBean;
 import bean.TestBean;
 import dao.StudentDAO;
@@ -17,8 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
-public class TestSearchAction
-extends Action {
+public class TestSearchAction extends Action {
 
     @Override
     public String execute(
@@ -35,6 +36,7 @@ extends Action {
                         "loginUser"
                 );
 
+        // ログイン確認
         if (loginUser == null) {
 
             return
@@ -47,7 +49,6 @@ extends Action {
                 .getCd();
 
         // ========= 検索条件取得 =========
-//        ✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️✌️
         int entYear =
                 Integer.parseInt(
                         req.getParameter(
@@ -92,6 +93,19 @@ extends Action {
             testList =
                 new ArrayList<>();
 
+        // ========= 科目作成 =========
+        SubjectBean subject =
+                new SubjectBean();
+
+        subject.setCd(
+                subjectCd
+        );
+
+        // ========= 学校情報 =========
+        SchoolBean school =
+                loginUser
+                .getSchool();
+
         // ========= 学生ごとに点数取得 =========
         for (
             StudentBean student
@@ -100,9 +114,9 @@ extends Action {
 
             TestBean test =
                     testDAO.get(
-                            student.getNo(),
-                            subjectCd,
-                            schoolCd,
+                            student,
+                            subject,
+                            school,
                             no
                     );
 
@@ -115,31 +129,26 @@ extends Action {
                 test.setPoint(0);
             }
 
-            test.setStudentNo(
-                    student.getNo()
+            // Beanセット
+            test.setStudent(
+                    student
             );
 
-            test.setStudentName(
-                    student.getName()
+            test.setSubject(
+                    subject
             );
 
-            test.setEntYear(
-                    student.getEntYear()
+            test.setSchool(
+                    school
             );
 
             test.setClassNum(
                     student.getClassNum()
             );
 
-            test.setSubjectCd(
-                    subjectCd
+            test.setNo(
+                    no
             );
-
-            test.setSchoolCd(
-                    schoolCd
-            );
-
-            test.setNo(no);
 
             testList.add(
                     test

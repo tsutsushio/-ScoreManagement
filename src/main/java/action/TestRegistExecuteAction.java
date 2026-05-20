@@ -1,7 +1,12 @@
 package action;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
+import bean.SchoolBean;
+import bean.StudentBean;
+import bean.SubjectBean;
 import bean.TeacherBean;
 import bean.TestBean;
 import dao.TestDAO;
@@ -19,7 +24,6 @@ extends Action {
             HttpServletResponse res
     ) throws Exception {
 
-        // ログイン情報
         HttpSession session =
                 req.getSession();
 
@@ -35,15 +39,15 @@ extends Action {
                 "/login/login.jsp";
         }
 
-        String schoolCd =
-                loginUser
-                .getSchool()
-                .getCd();
+        SchoolBean school =
+                loginUser.getSchool();
 
         TestDAO dao =
                 new TestDAO();
 
-        // フォーム全体取得
+        List<TestBean> list =
+                new ArrayList<>();
+
         Enumeration<String>
             parameterNames =
                 req.getParameterNames();
@@ -57,14 +61,12 @@ extends Action {
                     parameterNames
                     .nextElement();
 
-            // point_で始まるものだけ対象
             if (
                 paramName.startsWith(
                     "point_"
                 )
             ) {
 
-                // 学生番号取得
                 String studentNo =
                     paramName.replace(
                         "point_",
@@ -76,7 +78,6 @@ extends Action {
                         paramName
                     );
 
-                // 空欄ならスキップ
                 if (
                     pointStr == null
                     ||
@@ -90,7 +91,6 @@ extends Action {
                         pointStr
                     );
 
-                // hidden値取得
                 String subjectCd =
                     req.getParameter(
                         "subjectCd"
@@ -108,55 +108,56 @@ extends Action {
                         "classNum"
                     );
 
-                // Bean作成
+                // ===== Bean生成 =====
+
+                StudentBean student =
+                        new StudentBean();
+
+                student.setNo(
+                        studentNo
+                );
+
+                SubjectBean subject =
+                        new SubjectBean();
+
+                subject.setCd(
+                        subjectCd
+                );
+
                 TestBean test =
-                    new TestBean();
+                        new TestBean();
 
-                test.setStudentNo(
-                    studentNo
+                test.setStudent(
+                        student
                 );
 
-                test.setSubjectCd(
-                    subjectCd
+                test.setSubject(
+                        subject
                 );
 
-                test.setSchoolCd(
-                    schoolCd
+                test.setSchool(
+                        school
                 );
 
-                test.setNo(no);
+                test.setNo(
+                        no
+                );
 
                 test.setPoint(
-                    point
+                        point
                 );
 
                 test.setClassNum(
-                    classNum
+                        classNum
                 );
 
-                // 既存なら更新
-                boolean exists =
-                    dao.exists(
-                        studentNo,
-                        subjectCd,
-                        schoolCd,
-                        no
-                    );
-
-                if (exists) {
-
-                    dao.update(
+                list.add(
                         test
-                    );
-
-                } else {
-
-                    dao.save(
-                        test
-                    );
-                }
+                );
             }
         }
+
+        dao.save(list);
 
         return
             "/WEB-INF/view/test/test-regist-done.jsp";

@@ -169,6 +169,16 @@ td input[type="number"] {
 .register-btn button {
     width: 250px;
 }
+
+.search-form{
+    position: relative;
+    z-index: 10;
+}
+
+.result-box{
+    position: relative;
+    z-index: 1;
+}
 </style>
 
 
@@ -323,33 +333,32 @@ td input[type="number"] {
                     items="${testList}">
 
                     <tr>
-
-                        <td>
-                            ${test.entYear}
-                        </td>
-
-                        <td>
-                            ${test.classNum}
-                        </td>
-
-                        <td>
-                            ${test.studentNo}
-                        </td>
-
-                        <td>
-                            ${test.studentName}
-                        </td>
-
-                        <td>
-
-                            <input
-                                type="number"
-                                name="point_${test.studentNo}"
-                                value="${test.point}"
-                                min="0"
-                                max="100">
-
-                        </td>
+						<td>
+						    ${test.student.entYear}
+						</td>
+						
+						<td>
+						    ${test.classNum}
+						</td>
+						
+						<td>
+						    ${test.student.no}
+						</td>
+						
+						<td>
+						    ${test.student.name}
+						</td>
+						
+						<td>
+						
+						    <input
+						        type="number"
+						        name="point_${test.student.no}"
+						        value="${test.point}"
+						        min="0"
+						        max="100">
+						
+						</td>
 
                     </tr>
 
