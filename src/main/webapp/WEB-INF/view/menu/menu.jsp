@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,6 +39,15 @@
     .user-info {
         font-size: 14px;
         color: #555;
+        text-align: right;
+        line-height: 1.6;
+    }
+
+    /* 日付表示 */
+    .date-display {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 4px;
     }
 
     .user-info a {
@@ -206,6 +218,12 @@
     <h1>得点管理システム</h1>
 
     <div class="user-info">
+        <div class="date-display">
+            <fmt:formatDate value="<%= new java.util.Date() %>"
+                            pattern="yyyy年M月d日（E）"
+                            timeZone="Asia/Tokyo" />
+        </div>
+
         ${loginUser.name} 様
         <a href="${pageContext.request.contextPath}/action/Logout.action">
             ログアウト
@@ -213,52 +231,50 @@
     </div>
 </header>
 
-
 <div class="container">
 
     <!-- サイドバー -->
     <div class="sidebar">
-    <ul>
-        <li>
-            メニュー
-        </li>
+        <ul>
+            <li>メニュー</li>
 
-        <li>
-            学生管理
-            <ul class="sub-menu">
-                <li>
-                    <a href="${pageContext.request.contextPath}/action/StudentList.action">
-                        学生一覧
-                    </a>
-                </li>
-            </ul>
-        </li>
+            <li>
+                学生管理
+                <ul class="sub-menu">
+                    <li>
+                        <a href="${pageContext.request.contextPath}/action/StudentList.action">
+                            学生一覧
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
-        <li>
-            成績管理
-            <ul class="sub-menu">
-                <li>
-                    <a href="${pageContext.request.contextPath}/action/TestRegist.action">
-					    成績登録
-					</a>
-				</li>
-                <li>
-                    <a href="#">成績参照</a>
-                </li>
-            </ul>
-        </li>
+            <li>
+                成績管理
+                <ul class="sub-menu">
+                    <li>
+                        <a href="${pageContext.request.contextPath}/action/TestRegist.action">
+                            成績登録
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">成績参照</a>
+                    </li>
+                </ul>
+            </li>
 
-        <li>
-            科目管理
-            <ul class="sub-menu">
-                <li>
-                    <a href="${pageContext.request.contextPath}/action/SubjectList.action">科目一覧</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-</div>
-    
+            <li>
+                科目管理
+                <ul class="sub-menu">
+                    <li>
+                        <a href="${pageContext.request.contextPath}/action/SubjectList.action">
+                            科目一覧
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 
     <!-- メイン -->
     <div class="main-content">
@@ -282,9 +298,9 @@
                 <h3>成績管理</h3>
 
                 <div class="menu-links">
-                 	<a href="${pageContext.request.contextPath}/action/TestRegist.action">
-					    成績登録
-					</a>
+                    <a href="${pageContext.request.contextPath}/action/TestRegist.action">
+                        成績登録
+                    </a>
                     <a href="#">成績参照</a>
                 </div>
             </div>
@@ -294,7 +310,9 @@
                 <h3>科目管理</h3>
 
                 <div class="menu-links">
-                    <a href="${pageContext.request.contextPath}/action/SubjectList.action">科目一覧</a>
+                    <a href="${pageContext.request.contextPath}/action/SubjectList.action">
+                        科目一覧
+                    </a>
                 </div>
             </div>
 
