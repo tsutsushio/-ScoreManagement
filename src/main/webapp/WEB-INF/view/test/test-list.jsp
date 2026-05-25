@@ -9,161 +9,267 @@
 <title>成績参照</title>
 
 <style>
-<style>
 
 /* ===== 全体 ===== */
+/* ===== 全体 ===== */
 body{
-    font-family: "Yu Gothic","Meiryo",sans-serif;
-    background-color:#f5f7fb;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    min-height:100vh;
+    font-family:"Yu Gothic","Meiryo",sans-serif;
+    background:
+        radial-gradient(circle at top,#ffffff,#eef4ff 60%);
     margin:0;
-    padding:30px 0;
+    padding:40px 20px;
+    color:#333;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
 }
 
 /* 戻るリンク */
 .back-link{
-    margin-bottom:20px;
+    position:absolute;
+    top:25px;
+    left:30px;
     text-decoration:none;
     color:#4a90e2;
     font-size:14px;
+    font-weight:bold;
+    transition:0.2s;
 }
 
 .back-link:hover{
-    text-decoration:underline;
+    color:#256fd1;
+    transform:translateX(-2px);
 }
 
-/* 白カード */
+/* ===== カード ===== */
 .container{
+    width:1000px;
+    max-width:100%;
     background:white;
-    padding:40px;
-    border-radius:16px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
-    width:900px;
+    border-radius:24px;
+    padding:45px;
     box-sizing:border-box;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.08),
+        0 3px 10px rgba(0,0,0,0.05);
+
+    animation:fadeIn 0.4s ease;
 }
 
 /* タイトル */
 h2{
-    color:#4a90e2;
+    margin:0 0 40px;
     text-align:center;
-    margin-top:0;
-    margin-bottom:30px;
-    font-size:26px;
+    color:#4a90e2;
+    font-size:32px;
+    font-weight:bold;
+    letter-spacing:2px;
 }
 
-/* 検索エリア */
+/* ===== 検索エリア ===== */
 .search-box{
-    background:#fff;
+    background:#f8fbff;
+    border:1px solid #dce7f7;
+    border-radius:20px;
+    padding:28px;
+    margin-bottom:35px;
 }
 
 /* 小タイトル */
 .search-box h3{
     margin-top:0;
-    margin-bottom:20px;
+    margin-bottom:25px;
     color:#555;
-    font-size:18px;
+    font-size:20px;
+    border-left:5px solid #66a3ff;
+    padding-left:12px;
 }
 
-/* ===== 検索フォーム横並び ===== */
+/* ===== フォーム ===== */
 form{
     display:flex;
-    align-items:flex-end;
-    gap:16px;
-    flex-wrap:wrap;
+    align-items:center;
+    gap:18px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding-bottom:5px;
 }
 
-/* ラベル風 */
-form::before{
-    content:"";
-}
-
-/* テキスト */
-.search-label{
+/* ラベル */
+form{
     font-size:14px;
-    color:#555;
     font-weight:bold;
+    color:#555;
+    white-space:nowrap;
 }
 
 /* select */
 select{
-    padding:10px;
-    border:1px solid #dce4ec;
-    border-radius:8px;
-    font-size:15px;
+    min-width:170px;
+    padding:12px 14px;
+    border:1px solid #d6dfeb;
+    border-radius:12px;
     background:white;
-    min-width:150px;
+    font-size:15px;
     transition:0.2s;
+    box-shadow:0 1px 4px rgba(0,0,0,0.05);
+}
+
+select:hover{
+    border-color:#66a3ff;
 }
 
 select:focus{
     outline:none;
     border-color:#66a3ff;
+    box-shadow:0 0 0 4px rgba(102,163,255,0.15);
 }
 
-/* 検索ボタン */
+/* ボタン */
 button[type="submit"]{
-    padding:12px 24px;
-    background:#66a3ff;
-    color:white;
+    padding:12px 30px;
     border:none;
-    border-radius:10px;
-    font-size:16px;
+    border-radius:14px;
+    background:linear-gradient(to right,#66a3ff,#4d8cff);
+    color:white;
+    font-size:15px;
     font-weight:bold;
     cursor:pointer;
-    transition:0.2s;
+    transition:0.25s;
+
+    box-shadow:
+        0 5px 12px rgba(77,140,255,0.25);
 }
 
 button[type="submit"]:hover{
-    background:#4d8cff;
+    transform:translateY(-2px);
+    box-shadow:
+        0 8px 18px rgba(77,140,255,0.35);
 }
 
-/* エラーメッセージ */
+button[type="submit"]:active{
+    transform:scale(0.98);
+}
+
+/* ===== エラー ===== */
 .error{
-    color:#ff5c5c;
-    margin-top:15px;
-    font-size:14px;
+    margin-top:18px;
+    padding:14px 18px;
+    border-radius:12px;
+    background:#fff1f1;
+    border:1px solid #ffcaca;
+    color:#e14d4d;
     font-weight:bold;
 }
 
 /* ===== テーブル ===== */
 table{
     width:100%;
-    border-collapse:collapse;
-    margin-top:30px;
-    background:white;
+    border-collapse:separate;
+    border-spacing:0;
     overflow:hidden;
-    border-radius:12px;
+    border-radius:18px;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,0.06);
 }
 
 /* ヘッダー */
 th{
-    background:#66a3ff;
+    background:
+        linear-gradient(to right,#66a3ff,#4d8cff);
+
     color:white;
-    padding:14px;
+    padding:16px;
     font-size:14px;
+    font-weight:bold;
+    letter-spacing:0.5px;
 }
 
 /* データ */
 td{
-    border:1px solid #dce4ec;
-    padding:12px;
+    background:white;
+    padding:15px;
+    border-bottom:1px solid #edf2f7;
     text-align:center;
     font-size:14px;
+    transition:0.2s;
 }
 
-/* 偶数行を少し色付け */
-tr:nth-child(even){
+/* 偶数行 */
+tbody tr:nth-child(even) td{
     background:#f8fbff;
 }
 
-/* ホバー */
-tr:hover{
+/* hover */
+tbody tr:hover td{
     background:#eef5ff;
 }
 
+/* 角丸 */
+th:first-child{
+    border-top-left-radius:18px;
+}
+
+th:last-child{
+    border-top-right-radius:18px;
+}
+
+tbody tr:last-child td:first-child{
+    border-bottom-left-radius:18px;
+}
+
+tbody tr:last-child td:last-child{
+    border-bottom-right-radius:18px;
+}
+
+/* ===== アニメーション ===== */
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===== スマホ ===== */
+@media(max-width:768px){
+
+    body{
+        padding:20px 10px;
+    }
+
+    .container{
+        padding:25px;
+    }
+
+    h2{
+        font-size:26px;
+    }
+
+    .search-box{
+        padding:20px;
+    }
+
+    form{
+        gap:12px;
+    }
+
+    select{
+        min-width:140px;
+    }
+
+    th,
+    td{
+        font-size:13px;
+        padding:12px;
+    }
+}
 </style>
 </style>
 </head>
