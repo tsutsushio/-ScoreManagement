@@ -1,11 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
 <title>成績登録</title>
 
@@ -86,7 +84,6 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background: #4d8cff;
 }
-
 
 /* ===== 検索結果エリア ===== */
 .result-box {
@@ -170,18 +167,25 @@ td input[type="number"] {
     width: 250px;
 }
 
-.search-form{
+/* 0件メッセージ */
+.no-result {
+    text-align: center;
+    color: #666;
+    font-size: 25px;
+    padding: 24px 0;
+    margin: 0;
+}
+
+.search-form {
     position: relative;
     z-index: 10;
 }
 
-.result-box{
+.result-box {
     position: relative;
     z-index: 1;
 }
 </style>
-
-
 </head>
 
 <body>
@@ -195,207 +199,160 @@ td input[type="number"] {
 
     <h2>成績登録</h2>
 
-<!-- 検索フォーム -->
-<form action="TestSearch.action"
-      method="post"
-      class="search-form">
+    <!-- 検索フォーム -->
+    <form action="TestSearch.action"
+          method="post"
+          class="search-form">
 
-    <!-- 入学年度 -->
-    <div class="search-item">
-        <label>入学年度</label>
+        <!-- 入学年度 -->
+        <div class="search-item">
+            <label>入学年度</label>
 
-        <select name="entYear" required>
+            <select name="entYear" required>
+                <option value="">--選択--</option>
 
-            <option value="">
-                --選択--
-            </option>
+                <c:forEach var="year" items="${entYearList}">
+                    <option value="${year}"
+                        <c:if test="${year == fEntYear}">
+                            selected
+                        </c:if>>
+                        ${year}
+                    </option>
+                </c:forEach>
+            </select>
+        </div>
 
-            <c:forEach
-                var="year"
-                items="${entYearList}">
+        <!-- クラス -->
+        <div class="search-item">
+            <label>クラス</label>
 
-                <option
-                    value="${year}"
+            <select name="classNum" required>
+                <option value="">--選択--</option>
 
-                    <c:if test="${year == fEntYear}">
-                        selected
-                    </c:if>
-                >
-                    ${year}
-                </option>
+                <c:forEach var="cNum" items="${classList}">
+                    <option value="${cNum}"
+                        <c:if test="${cNum == fClassNum}">
+                            selected
+                        </c:if>>
+                        ${cNum}
+                    </option>
+                </c:forEach>
+            </select>
+        </div>
 
-            </c:forEach>
+        <!-- 科目 -->
+        <div class="search-item">
+            <label>科目</label>
 
-        </select>
-    </div>
+            <select name="subjectCd" required>
+                <option value="">--選択--</option>
 
-    <!-- クラス -->
-    <div class="search-item">
-        <label>クラス</label>
+                <c:forEach var="subject" items="${subjectList}">
+                    <option value="${subject.cd}"
+                        <c:if test="${subject.cd == fSubjectCd}">
+                            selected
+                        </c:if>>
+                        ${subject.name}
+                    </option>
+                </c:forEach>
+            </select>
+        </div>
 
-        <select name="classNum" required>
+        <!-- 回数 -->
+        <div class="search-item">
+            <label>回数</label>
 
-            <option value="">
-                --選択--
-            </option>
+            <input
+                type="number"
+                name="no"
+                min="1"
+                required
+                value="${fNo}">
+        </div>
 
-            <c:forEach
-                var="cNum"
-                items="${classList}">
+        <!-- 検索ボタン -->
+        <div class="search-button">
+            <button type="submit">
+                検索
+            </button>
+        </div>
 
-                <option
-                    value="${cNum}"
+    </form>
 
-                    <c:if test="${cNum == fClassNum}">
-                        selected
-                    </c:if>
-                >
-                    ${cNum}
-                </option>
+    <!-- 検索結果（1件以上） -->
+    <c:if test="${not empty testList}">
 
-            </c:forEach>
+        <div class="result-box">
 
-        </select>
-    </div>
+            <h2>検索結果</h2>
 
-    <!-- 科目 -->
-    <div class="search-item">
-        <label>科目</label>
+            <form action="TestRegistExecute.action"
+                  method="post">
 
-        <select name="subjectCd" required>
-
-            <option value="">
-                --選択--
-            </option>
-
-            <c:forEach
-                var="subject"
-                items="${subjectList}">
-
-                <option
-                    value="${subject.cd}"
-
-                    <c:if test="${subject.cd == fSubjectCd}">
-                        selected
-                    </c:if>
-                >
-                    ${subject.name}
-                </option>
-
-            </c:forEach>
-
-        </select>
-    </div>
-
-    <!-- 回数 -->
-    <div class="search-item">
-        <label>回数</label>
-
-        <input
-            type="number"
-            name="no"
-            min="1"
-            required
-            value="${fNo}">
-    </div>
-
-    <!-- 検索ボタン -->
-    <div class="search-button">
-        <button type="submit">
-            検索
-        </button>
-    </div>
-
-</form>
-
-<!-- 検索結果 -->
-<c:if test="${not empty testList}">
-
-    <div class="result-box">
-
-        <h2>検索結果</h2>
-
-        <form action="TestRegistExecute.action"
-              method="post">
-
-            <table>
-
-                <tr>
-                    <th>入学年度</th>
-                    <th>クラス</th>
-                    <th>学生番号</th>
-                    <th>氏名</th>
-                    <th>点数</th>
-                </tr>
-
-                <c:forEach
-                    var="test"
-                    items="${testList}">
-
+                <table>
                     <tr>
-						<td>
-						    ${test.student.entYear}
-						</td>
-						
-						<td>
-						    ${test.classNum}
-						</td>
-						
-						<td>
-						    ${test.student.no}
-						</td>
-						
-						<td>
-						    ${test.student.name}
-						</td>
-						
-						<td>
-						
-						    <input
-						        type="number"
-						        name="point_${test.student.no}"
-						        value="${test.point}"
-						        min="0"
-						        max="100">
-						
-						</td>
-
+                        <th>入学年度</th>
+                        <th>クラス</th>
+                        <th>学生番号</th>
+                        <th>氏名</th>
+                        <th>点数</th>
                     </tr>
 
-                </c:forEach>
+                    <c:forEach var="test" items="${testList}">
+                        <tr>
+                            <td>${test.student.entYear}</td>
+                            <td>${test.classNum}</td>
+                            <td>${test.student.no}</td>
+                            <td>${test.student.name}</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="point_${test.student.no}"
+                                    value="${test.point}"
+                                    min="0"
+                                    max="100">
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
 
-            </table>
+                <!-- hidden -->
+                <input
+                    type="hidden"
+                    name="subjectCd"
+                    value="${fSubjectCd}">
 
-            <!-- hidden -->
-            <input
-                type="hidden"
-                name="subjectCd"
-                value="${fSubjectCd}">
+                <input
+                    type="hidden"
+                    name="no"
+                    value="${fNo}">
 
-            <input
-                type="hidden"
-                name="no"
-                value="${fNo}">
+                <input
+                    type="hidden"
+                    name="classNum"
+                    value="${fClassNum}">
 
-            <input
-                type="hidden"
-                name="classNum"
-                value="${fClassNum}">
+                <div class="register-btn">
+                    <button type="submit">
+                        登録して終了
+                    </button>
+                </div>
 
-            <div class="register-btn">
+            </form>
 
-                <button type="submit">
-                    登録して終了
-                </button>
+        </div>
 
-            </div>
+    </c:if>
 
-        </form>
+    <!-- 検索結果（0件） -->
+    <c:if test="${testList != null and empty testList}">
+        <div class="result-box">
+            <h2>検索結果</h2>
+            <p class="no-result">該当者がいません</p>
+        </div>
+    </c:if>
 
-    </div>
-
-</c:if>
+</div>
 
 </body>
-
 </html>
