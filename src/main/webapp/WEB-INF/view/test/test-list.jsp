@@ -237,39 +237,6 @@ tbody tr:last-child td:last-child{
     }
 }
 
-/* ===== スマホ ===== */
-@media(max-width:768px){
-
-    body{
-        padding:20px 10px;
-    }
-
-    .container{
-        padding:25px;
-    }
-
-    h2{
-        font-size:26px;
-    }
-
-    .search-box{
-        padding:20px;
-    }
-
-    form{
-        gap:12px;
-    }
-
-    select{
-        min-width:140px;
-    }
-
-    th,
-    td{
-        font-size:13px;
-        padding:12px;
-    }
-}
 </style>
 </style>
 </head>
