@@ -258,7 +258,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">成績参照</a>
+                        <a href="${pageContext.request.contextPath}/action/TestList.action">
+					    成績参照
+					</a>
                     </li>
                 </ul>
             </li>
@@ -298,10 +300,13 @@
                 <h3>成績管理</h3>
 
                 <div class="menu-links">
-                    <a href="${pageContext.request.contextPath}/action/TestRegist.action">
-                        成績登録
-                    </a>
-                    <a href="#">成績参照</a>
+
+                 	<a href="${pageContext.request.contextPath}/action/TestRegist.action">
+					    成績登録
+					</a>
+					<a href="${pageContext.request.contextPath}/action/TestList.action">
+					    成績参照
+					</a>
                 </div>
             </div>
 
