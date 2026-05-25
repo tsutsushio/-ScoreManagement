@@ -9,46 +9,162 @@
 <title>成績参照</title>
 
 <style>
+<style>
 
+/* ===== 全体 ===== */
 body{
-    font-family:
-    "Yu Gothic",sans-serif;
-    background:#f5f7fa;
+    font-family: "Yu Gothic","Meiryo",sans-serif;
+    background-color:#f5f7fb;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+    padding:30px 0;
 }
 
+/* 戻るリンク */
+.back-link{
+    margin-bottom:20px;
+    text-decoration:none;
+    color:#4a90e2;
+    font-size:14px;
+}
+
+.back-link:hover{
+    text-decoration:underline;
+}
+
+/* 白カード */
 .container{
-    width:900px;
-    margin:auto;
-}
-
-.search-box{
     background:white;
-    padding:20px;
-    border-radius:10px;
-    margin-top:20px;
+    padding:40px;
+    border-radius:16px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    width:900px;
+    box-sizing:border-box;
 }
 
+/* タイトル */
+h2{
+    color:#4a90e2;
+    text-align:center;
+    margin-top:0;
+    margin-bottom:30px;
+    font-size:26px;
+}
+
+/* 検索エリア */
+.search-box{
+    background:#fff;
+}
+
+/* 小タイトル */
+.search-box h3{
+    margin-top:0;
+    margin-bottom:20px;
+    color:#555;
+    font-size:18px;
+}
+
+/* ===== 検索フォーム横並び ===== */
+form{
+    display:flex;
+    align-items:flex-end;
+    gap:16px;
+    flex-wrap:wrap;
+}
+
+/* ラベル風 */
+form::before{
+    content:"";
+}
+
+/* テキスト */
+.search-label{
+    font-size:14px;
+    color:#555;
+    font-weight:bold;
+}
+
+/* select */
+select{
+    padding:10px;
+    border:1px solid #dce4ec;
+    border-radius:8px;
+    font-size:15px;
+    background:white;
+    min-width:150px;
+    transition:0.2s;
+}
+
+select:focus{
+    outline:none;
+    border-color:#66a3ff;
+}
+
+/* 検索ボタン */
+button[type="submit"]{
+    padding:12px 24px;
+    background:#66a3ff;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button[type="submit"]:hover{
+    background:#4d8cff;
+}
+
+/* エラーメッセージ */
+.error{
+    color:#ff5c5c;
+    margin-top:15px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+/* ===== テーブル ===== */
 table{
     width:100%;
     border-collapse:collapse;
-    margin-top:20px;
+    margin-top:30px;
+    background:white;
+    overflow:hidden;
+    border-radius:12px;
 }
 
-th,td{
-    border:1px solid #ccc;
-    padding:10px;
-    text-align:center;
-}
-
+/* ヘッダー */
 th{
-    background:#e8eef5;
+    background:#66a3ff;
+    color:white;
+    padding:14px;
+    font-size:14px;
 }
 
-.error{
-    color:#0099ff;
-    margin-top:10px;
+/* データ */
+td{
+    border:1px solid #dce4ec;
+    padding:12px;
+    text-align:center;
+    font-size:14px;
 }
 
+/* 偶数行を少し色付け */
+tr:nth-child(even){
+    background:#f8fbff;
+}
+
+/* ホバー */
+tr:hover{
+    background:#eef5ff;
+}
+
+</style>
 </style>
 </head>
 
