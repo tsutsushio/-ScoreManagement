@@ -351,6 +351,7 @@ td input[type="number"] {
             <p class="no-result">該当者がいません</p>
         </div>
     </c:if>
+    
 
 </div>
 
