@@ -9,8 +9,6 @@
 <title>成績参照</title>
 
 <style>
-
-/* ===== 全体 ===== */
 /* ===== 全体 ===== */
 body{
     font-family:"Yu Gothic","Meiryo",sans-serif;
@@ -271,151 +269,81 @@ tbody tr:last-child td:last-child{
     }
 }
 </style>
-</style>
+
 </head>
 
 <body>
-<a href="${pageContext.request.contextPath}/action/Menu.action"
-   class="back-link">
-    ← メニューへ戻る
-</a>
+    <a href="${pageContext.request.contextPath}/action/Menu.action" class="back-link">
+        ← メニューへ戻る
+    </a>
 
-<div class="container">
+    <div class="container">
+        <h2>成績参照</h2>
 
-<h2>成績参照</h2>
+        <div class="search-box">
+            <h3>科目情報</h3>
 
-<div class="search-box">
+            <form action="TestList.action" method="post">
+                <input type="hidden" name="f" value="sj">
 
-<h3>科目情報</h3>
+                入学年度
+                <select name="f1">
+                    <option value="">--------</option>
+                    <c:forEach items="${yearList}" var="year">
+                        <option value="${year}">${year}</option>
+                    </c:forEach>
+                </select>
 
-<form action="TestList.action"
-      method="post">
+                クラス
+                <select name="f2">
+                    <option value="">--------</option>
+                    <c:forEach items="${classList}" var="cls">
+                        <option value="${cls}">${cls}</option>
+                    </c:forEach>
+                </select>
 
-<input type="hidden"
-       name="f"
-       value="sj">
+                科目
+                <select name="f3">
+                    <option value="">--------</option>
+                    <c:forEach items="${subjectList}" var="sub">
+                        <option value="${sub.cd}">${sub.name}</option>
+                    </c:forEach>
+                </select>
 
-入学年度
+                <button type="submit">検索</button>
+            </form>
 
-<select name="f1">
-<option value="">--------</option>
+            <c:if test="${not empty error}">
+                <p class="error">${error}</p>
+            </c:if>
 
-<c:forEach
-items="${yearList}"
-var="year">
-
-<option value="${year}">
-${year}
-</option>
-
-</c:forEach>
-</select>
-
-クラス
-
-<select name="f2">
-
-<option value="">
---------
-</option>
-
-<c:forEach
-items="${classList}"
-var="cls">
-
-<option value="${cls}">
-${cls}
-</option>
-
-</c:forEach>
-
-</select>
-
-科目
-
-<select name="f3">
-
-<option value="">
---------
-</option>
-
-<c:forEach
-items="${subjectList}"
-var="sub">
-
-<option value="${sub.cd}">
-${sub.name}
-</option>
-
-</c:forEach>
-
-</select>
-
-<button type="submit">
-検索
-</button>
-
-</form>
-
-<c:if test="${not empty error}">
-<p class="error">
-${error}
-</p>
-</c:if>
-
-<c:if test="${not empty testList}">
-
-<table>
-
-<tr>
-<th>入学年度</th>
-<th>クラス</th>
-<th>学生番号</th>
-<th>氏名</th>
-<th>回数</th>
-<th>点数</th>
-</tr>
-
-<c:forEach
-items="${testList}"
-var="test">
-
-<tr>
-
-<td>
-${test.student.entYear}
-</td>
-
-<td>
-${test.classNum}
-</td>
-
-<td>
-${test.student.no}
-</td>
-
-<td>
-${test.student.name}
-</td>
-
-<td>
-${test.no}
-</td>
-
-<td>
-${test.point}
-</td>
-
-</tr>
-
-</c:forEach>
-
-</table>
-
-</c:if>
-
-</div>
-</div>
-
+            <c:if test="${not empty testList}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>入学年度</th>
+                            <th>クラス</th>
+                            <th>学生番号</th>
+                            <th>氏名</th>
+                            <th>回数</th>
+                            <th>点数</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${testList}" var="test">
+                            <tr>
+                                <td>${test.student.entYear}</td>
+                                <td>${test.classNum}</td>
+                                <td>${test.student.no}</td>
+                                <td>${test.student.name}</td>
+                                <td>${test.no}</td>
+                                <td>${test.point}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </c:if>
+        </div>
+    </div>
 </body>
 </html>
