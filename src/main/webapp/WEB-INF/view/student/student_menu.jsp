@@ -95,7 +95,7 @@
 
     <h2>メニュー</h2>
     <ul>
-        <li><a href="#">パスワードを変更する（準備中）</a></li>
+        <li><a href="../action/StudentPasswordEdit.action">パスワードを変更する（準備中）</a></li>
     </ul>
 
     <br>
