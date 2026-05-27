@@ -105,6 +105,10 @@ extends Action {
                     req.getParameter(
                         "f3"
                     );
+            String studentNo =
+                    req.getParameter(
+                        "f4"
+                    );
 
             // 必須チェック
             if (
@@ -128,14 +132,15 @@ extends Action {
 
                 List<TestBean>
                     testList =
-                        dao.searchBySubject(
-                            Integer.parseInt(
-                                entYear
-                            ),
-                            classNum,
-                            subjectCd,
-                            school
-                        );
+                    		dao.searchBySubject(
+                    			    Integer.parseInt(
+                    			        entYear
+                    			    ),
+                    			    classNum,
+                    			    subjectCd,
+                    			    studentNo,
+                    			    school
+                    			);
 
                 if (
                     testList

@@ -257,6 +257,7 @@ public class TestDAO extends DAO {
             int entYear,
             String classNum,
             String subjectCd,
+            String studentNo,
             SchoolBean school)
             throws Exception {
 
@@ -264,22 +265,33 @@ public class TestDAO extends DAO {
             new ArrayList<>();
 
         String sql =
-            "SELECT " +
-            "ST.NO AS STUDENT_NO, " +
-            "ST.NAME AS STUDENT_NAME, " +
-            "ST.ENT_YEAR, " +
-            "ST.CLASS_NUM, " +
-            "T.NO, " +
-            "T.POINT " +
-            "FROM TEST T " +
-            "JOIN STUDENT ST " +
-            "ON T.STUDENT_NO = ST.NO " +
-            "AND T.SCHOOL_CD = ST.SCHOOL_CD " +
-            "WHERE ST.ENT_YEAR = ? " +
-            "AND ST.CLASS_NUM = ? " +
-            "AND T.SUBJECT_CD = ? " +
-            "AND T.SCHOOL_CD = ? " +
-            "ORDER BY ST.NO, T.NO";
+        	    "SELECT " +
+        	    "ST.NO AS STUDENT_NO, " +
+        	    "ST.NAME AS STUDENT_NAME, " +
+        	    "ST.ENT_YEAR, " +
+        	    "ST.CLASS_NUM, " +
+        	    "T.NO, " +
+        	    "T.POINT " +
+        	    "FROM TEST T " +
+        	    "JOIN STUDENT ST " +
+        	    "ON T.STUDENT_NO = ST.NO " +
+        	    "AND T.SCHOOL_CD = ST.SCHOOL_CD " +
+        	    "WHERE ST.ENT_YEAR = ? " +
+        	    "AND ST.CLASS_NUM = ? " +
+        	    "AND T.SUBJECT_CD = ? " +
+        	    "AND T.SCHOOL_CD = ? ";
+
+        	if (
+        	    studentNo != null
+        	    && !studentNo.isEmpty()
+        	) {
+
+        	    sql +=
+        	        " AND ST.NO = ?";
+        	}
+
+        	sql +=
+        	    " ORDER BY ST.NO, T.NO";
 
         try (
             Connection con =
@@ -289,10 +301,18 @@ public class TestDAO extends DAO {
                 con.prepareStatement(sql)
         ) {
 
-            st.setInt(1, entYear);
-            st.setString(2, classNum);
-            st.setString(3, subjectCd);
-            st.setString(4, school.getCd());
+        	st.setInt(1, entYear);
+        	st.setString(2, classNum);
+        	st.setString(3, subjectCd);
+        	st.setString(4, school.getCd());
+
+        	if (
+        	    studentNo != null
+        	    && !studentNo.isEmpty()
+        	) {
+
+        	    st.setString(5, studentNo);
+        	}
 
             try (
                 ResultSet rs =
