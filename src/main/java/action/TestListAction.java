@@ -59,7 +59,7 @@ public class TestListAction extends Action {
         req.setAttribute("subjects", subjects);
         // ------------------------------------------------
 
-        return "/test/test_list.jsp";
+        return "/WEB-INF/view/test/test_list.jsp";
     }
 
     public void setTestListSubject(HttpServletRequest req, HttpServletResponse res) throws Exception {

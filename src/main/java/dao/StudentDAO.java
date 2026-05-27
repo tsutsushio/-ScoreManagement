@@ -190,8 +190,10 @@ public class StudentDAO extends DAO {
         return student;
     }
 
-	public List<StudentBean> filter(String schoolCd, int entYear, String classNum, boolean isAttend) {
+	public List<StudentBean> filter(String schoolCd, int entYear, String classNum, boolean isAttend) throws Exception {
+		SchoolBean school = new SchoolBean();
+		school.setCd(schoolCd);
 		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		return filter(school, entYear, classNum, isAttend);
 	}
 }

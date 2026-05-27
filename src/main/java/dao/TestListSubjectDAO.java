@@ -18,7 +18,11 @@ import bean.TestListSubjectBean;
 public class TestListSubjectDAO extends DAO {
 
     // 図の「- baseSql: String」
-    private String baseSql = "SELECT * FROM test WHERE ent_year=? AND class_num=? AND subject_cd=? AND school_cd=?";
+	private String baseSql = 
+		    "SELECT s.ent_year, t.student_no, s.name AS student_name, t.class_num, t.no, t.point " +
+		    "FROM test t " +
+		    "JOIN student s ON t.student_no = s.no " +
+		    "WHERE t.ent_year=? AND t.class_num=? AND t.subject_cd=? AND t.school_cd=?";
 
     /**
      * ResultSetをTestListSubjectBeanのリストに変換します。
