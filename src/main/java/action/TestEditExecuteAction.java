@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bean.StudentBean;
+import bean.SubjectBean;
 import bean.TeacherBean;
 import bean.TestBean;
 import dao.StudentDAO;
-import dao.TestDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -122,21 +122,46 @@ public class TestEditExecuteAction extends Action {
         }
 
         // Beanに詰める
-        TestBean test = new TestBean();
+        StudentBean student =
+                new StudentBean();
 
-        test.setStudentNo(studentNo);
-        test.setSubjectCd(subjectCd);
-        test.setSchoolCd(
-            loginUser.getSchool().getCd()
+        student.setNo(
+                studentNo
         );
-        test.setNo(no);
-        test.setPoint(point);
-        test.setClassNum(classNum);
 
-        // 保存
-        TestDAO dao = new TestDAO();
-        dao.update(test);
+        SubjectBean subject =
+                new SubjectBean();
 
+        subject.setCd(
+                subjectCd
+        );
+
+        TestBean test =
+                new TestBean();
+
+        test.setStudent(
+                student
+        );
+
+        test.setSubject(
+                subject
+        );
+
+        test.setSchool(
+                loginUser.getSchool()
+        );
+
+        test.setNo(
+                no
+        );
+
+        test.setPoint(
+                point
+        );
+
+        test.setClassNum(
+                classNum
+        );
         // 完了画面へ
         return "/WEB-INF/view/test/test-regist-done.jsp";
     }

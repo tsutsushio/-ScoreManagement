@@ -1,4 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,10 +35,19 @@ header h1 {
     color: #333;
 }
 
-.user-info {
-    font-size: 14px;
-    color: #555;
-}
+    .user-info {
+        font-size: 14px;
+        color: #555;
+        text-align: right;
+        line-height: 1.6;
+    }
+
+    /* 日付表示 */
+    .date-display {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 4px;
+    }
 
 .user-info a {
     margin-left: 16px;
@@ -206,6 +218,12 @@ footer {
     <h1>得点管理システム</h1>
 
     <div class="user-info">
+        <div class="date-display">
+            <fmt:formatDate value="<%= new java.util.Date() %>"
+                            pattern="yyyy年M月d日（E）"
+                            timeZone="Asia/Tokyo" />
+        </div>
+
         ${loginUser.name} 様
         <a href="${pageContext.request.contextPath}/action/Logout.action">
             ログアウト
@@ -240,9 +258,6 @@ footer {
                         </a>
                     </li>
                     <li>
-                        <a href="${pageContext.request.contextPath}/action/TestList.action">
-                            成績参照
-                        </a>
                     </li>
                 </ul>
             </li>
@@ -278,12 +293,13 @@ footer {
             <div class="menu-card card-score">
                 <h3>成績管理</h3>
                 <div class="menu-links">
-                    <a href="${pageContext.request.contextPath}/action/TestRegist.action">
-                        成績登録
-                    </a>
-                    <a href="${pageContext.request.contextPath}/action/TestList.action">
-                        成績参照
-                    </a>
+
+                 	<a href="${pageContext.request.contextPath}/action/TestRegist.action">
+					    成績登録
+					</a>
+					<a href="${pageContext.request.contextPath}/action/TestList.action">
+					    成績参照
+					</a>
                 </div>
             </div>
 

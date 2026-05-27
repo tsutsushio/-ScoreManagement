@@ -18,7 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import tool.Action;
 import util.Util;
 
-public class TestRegistAction extends Action {
+public class TestRegistAction
+extends Action {
 
     @Override
     public String execute(

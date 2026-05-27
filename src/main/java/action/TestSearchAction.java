@@ -34,6 +34,7 @@ public class TestSearchAction extends Action {
                 (TeacherBean)
                 session.getAttribute("loginUser");
 
+        // ログイン確認
         if (loginUser == null) {
             return "/login/login.jsp";
         }
@@ -72,6 +73,19 @@ public class TestSearchAction extends Action {
         List<TestBean> testList =
                 new ArrayList<>();
 
+        // ========= 科目作成 =========
+        SubjectBean subject =
+                new SubjectBean();
+
+        subject.setCd(
+                subjectCd
+        );
+
+        // ========= 学校情報 =========
+        SchoolBean school =
+                loginUser
+                .getSchool();
+
         // ========= 学生ごとに点数取得 =========
         for (StudentBean student : studentList) {
 
@@ -87,7 +101,6 @@ public class TestSearchAction extends Action {
 
             TestBean test =
                     testDAO.get(
-                            sBean,
                             subject,
                             school,
                             no
@@ -98,16 +111,30 @@ public class TestSearchAction extends Action {
                 test = new TestBean();
                 test.setPoint(0);
             }
+            // Beanセット
+            test.setStudent(
+                    student
+            );
 
-            test.setStudentNo(student.getNo());
-            test.setStudentName(student.getName());
-            test.setEntYear(student.getEntYear());
-            test.setClassNum(student.getClassNum());
-            test.setSubjectCd(subjectCd);
-            test.setSchoolCd(schoolCd);
-            test.setNo(no);
+            test.setSubject(
+                    subject
+            );
 
-            testList.add(test);
+            test.setSchool(
+                    school
+            );
+
+            test.setClassNum(
+                    student.getClassNum()
+            );
+
+            test.setNo(
+                    no
+            );
+
+            testList.add(
+                    test
+            );
         }
 
         // ========= 科目一覧 =========

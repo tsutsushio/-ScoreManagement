@@ -346,78 +346,89 @@ public class TestDAO extends DAO {
 
         return list;
     }
-    public boolean update(TestBean test)
+    
+    public List<TestBean> searchBySubject(
+            int entYear,
+            String classNum,
+            String subjectCd,
+            SchoolBean school)
             throws Exception {
 
-        Connection con =
-            getConnection();
+        List<TestBean> list =
+            new ArrayList<>();
 
         String sql =
-            "UPDATE TEST " +
-            "SET POINT = ?, CLASS_NUM = ? " +
-            "WHERE STUDENT_NO = ? " +
-            "AND SUBJECT_CD = ? " +
-            "AND SCHOOL_CD = ? " +
-            "AND NO = ?";
+            "SELECT " +
+            "ST.NO AS STUDENT_NO, " +
+            "ST.NAME AS STUDENT_NAME, " +
+            "ST.ENT_YEAR, " +
+            "ST.CLASS_NUM, " +
+            "T.NO, " +
+            "T.POINT " +
+            "FROM TEST T " +
+            "JOIN STUDENT ST " +
+            "ON T.STUDENT_NO = ST.NO " +
+            "AND T.SCHOOL_CD = ST.SCHOOL_CD " +
+            "WHERE ST.ENT_YEAR = ? " +
+            "AND ST.CLASS_NUM = ? " +
+            "AND T.SUBJECT_CD = ? " +
+            "AND T.SCHOOL_CD = ? " +
+            "ORDER BY ST.NO, T.NO";
 
-        PreparedStatement st =
-            con.prepareStatement(sql);
+        try (
+            Connection con =
+                getConnection();
 
-        st.setInt(1, test.getPoint());
-        st.setString(2, test.getClassNum());
-        st.setString(3, test.getStudentNo());
-        st.setString(4, test.getSubjectCd());
-        st.setString(5, test.getSchoolCd());
-        st.setInt(6, test.getNo());
+            PreparedStatement st =
+                con.prepareStatement(sql)
+        ) {
 
-        int count =
-            st.executeUpdate();
+            st.setInt(1, entYear);
+            st.setString(2, classNum);
+            st.setString(3, subjectCd);
+            st.setString(4, school.getCd());
 
-        st.close();
-        con.close();
+            try (
+                ResultSet rs =
+                    st.executeQuery()
+            ) {
 
-        return count > 0;
-    }
-    public boolean exists(
-            String studentNo,
-            String subjectCd,
-            String schoolCd,
-            int no
-    ) throws Exception {
+                while (rs.next()) {
 
-        Connection con =
-            getConnection();
+                    TestBean test =
+                        new TestBean();
 
-        String sql =
-            "SELECT COUNT(*) " +
-            "FROM TEST " +
-            "WHERE STUDENT_NO = ? " +
-            "AND SUBJECT_CD = ? " +
-            "AND SCHOOL_CD = ? " +
-            "AND NO = ?";
+                    test.setNo(
+                        rs.getInt("NO"));
 
-        PreparedStatement st =
-            con.prepareStatement(sql);
+                    test.setPoint(
+                        rs.getInt("POINT"));
 
-        st.setString(1, studentNo);
-        st.setString(2, subjectCd);
-        st.setString(3, schoolCd);
-        st.setInt(4, no);
+                    StudentBean student =
+                        new StudentBean();
 
-        ResultSet rs =
-            st.executeQuery();
+                    student.setNo(
+                        rs.getString(
+                            "STUDENT_NO"));
 
-        boolean exists = false;
+                    student.setName(
+                        rs.getString(
+                            "STUDENT_NAME"));
 
-        if (rs.next()) {
-            exists =
-                rs.getInt(1) > 0;
+                    student.setEntYear(
+                        rs.getInt(
+                            "ENT_YEAR"));
+
+                    test.setStudent(
+                        student);
+
+                    list.add(test);
+                }
+            }
         }
 
-        rs.close();
-        st.close();
-        con.close();
-
-        return exists;
+        return list;
     }
 }
+
+>>>>>
