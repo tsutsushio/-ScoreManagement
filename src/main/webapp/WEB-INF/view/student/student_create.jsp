@@ -6,59 +6,132 @@
 <meta charset="UTF-8">
 <title>得点管理システム - 学生情報登録</title>
 <style>
-    /* 画面設計書に近いシンプルなレイアウト */
-    body { font-family: sans-serif; margin: 20px; background-color: #f9f9f9; }
-    h2 { border-bottom: 2px solid #ccc; padding-bottom: 5px; }
-    
-    .form-container {
-        background-color: white;
-        padding: 30px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        max-width: 450px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
-    
-    .form-group input[type="text"], 
-    .form-group select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box; /* 枠線を幅に含める */
-        font-size: 14px;
-    }
-    
-    /* エラーメッセージ（赤文字） */
-    .error-msg {
-        color: #dc3545;
-        font-size: 12px;
-        margin-top: 5px;
-        display: block;
-    }
-    
-    .btn-submit {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        width: 100%;
-        font-weight: bold;
-    }
-    .btn-submit:hover { background-color: #0056b3; }
-    
-    .back-link { 
-        display: inline-block; 
-        margin-bottom: 20px; 
-        text-decoration: none; 
-        color: #0066cc; 
-    }
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    background-color: #f4f7f9;
+    color: #333;
+    margin: 0;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 戻るリンクをカードの幅（450px）に合わせて左側に配置 */
+.back-link { 
+    display: inline-block;
+    margin-bottom: 15px; 
+    text-decoration: none; 
+    color: #3498db; 
+    font-size: 14px;
+    font-weight: bold;
+    transition: color 0.2s;
+    align-self: flex-start; /* 左端に揃えるための設定 */
+    max-width: 450px;
+    width: 100%;
+}
+
+.back-link:hover { 
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* タイトルをカードの中に収まるように一旦非表示に */
+h2 {
+    display: none;
+}
+
+/* フォーム全体を包むカード（中央揃えのメイン枠） */
+.form-container {
+    background: #ffffff;
+    padding: 35px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 450px; /* 変更画面と同じ幅に統一 */
+    box-sizing: border-box;
+}
+
+/* カードの先頭にタイトルを美しく配置するための疑似要素 */
+.form-container::before {
+    content: "学生情報登録";
+    display: block;
+    font-size: 22px;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #f4f7f9;
+}
+
+.form-group { 
+    margin-bottom: 20px; 
+}
+
+.form-group label { 
+    display: inline-block; 
+    font-size: 14px;
+    font-weight: bold; 
+    margin-bottom: 8px; 
+    color: #34495e; 
+}
+
+/* テキスト入力・パスワード・セレクトボックスをすべて統一 */
+.form-group input[type="text"], 
+.form-group input[type="password"], 
+.form-group select {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* プレースホルダーの文字色を少し薄くして見やすく */
+.form-group input::placeholder {
+    color: #b0bec5;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+/* エラーメッセージ（赤文字） */
+.error-msg {
+    color: #e74c3c;
+    font-size: 13px;
+    display: block;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+/* 登録ボタン */
+.btn-submit {
+    width: 100%;
+    height: 45px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    margin-top: 10px;
+}
+
+.btn-submit:hover { 
+    background-color: #2980b9; 
+}
+
 </style>
 </head>
 <body>

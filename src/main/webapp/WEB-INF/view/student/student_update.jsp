@@ -7,107 +7,182 @@
 <meta charset="UTF-8">
 <title>得点管理システム - 学生情報変更</title>
 <style>
-    /* 画面設計書に合わせたシンプルなデザイン */
-    body { 
-        font-family: sans-serif; 
-        margin: 20px; 
-        background-color: #f9f9f9; 
-    }
-    
-    .form-container {
-        background-color: white;
-        padding: 30px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        max-width: 500px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    
-    /* ヘッダー風のタイトルバー */
-    h2 { 
-        background-color: #f0f0f0;
-        padding: 10px 15px;
-        margin-top: 0;
-        margin-bottom: 25px;
-        border-radius: 4px;
-        font-size: 18px;
-        color: #333;
-    }
-    
-    .form-group { 
-        margin-bottom: 20px; 
-    }
-    
-    .form-group label { 
-        display: block; 
-        font-size: 14px;
-        color: #555;
-        margin-bottom: 5px; 
-    }
-    
-    /* 変更不可の項目（入学年度・学生番号）のテキストスタイル */
-    .readonly-text {
-        font-size: 16px;
-        color: #333;
-        margin: 0 0 10px 10px;
-    }
-    
-    .form-group input[type="text"], 
-    .form-group select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        font-size: 14px;
-    }
-    
-    .checkbox-group {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        margin-bottom: 25px;
-    }
-    
-    .checkbox-group label {
-        margin-bottom: 0;
-        font-size: 14px;
-        color: #333;
-    }
-    
-    /* エラーメッセージ（サーバー側バリデーション用） */
-    .error-msg {
-        color: #dc3545;
-        font-size: 12px;
-        margin-top: 5px;
-        display: block;
-    }
-    
-    .btn-submit {
-        background-color: #0d6efd; /* 設計書通りの鮮やかな青 */
-        color: white;
-        border: none;
-        padding: 10px 25px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: bold;
-    }
-    
-    .btn-submit:hover { 
-        background-color: #0b5ed7; 
-    }
-    
-    .back-link { 
-        display: block; 
-        margin-top: 15px; 
-        text-decoration: none; 
-        color: #0d6efd; 
-        font-size: 14px;
-    }
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    background-color: #f4f7f9;
+    color: #333;
+    margin: 0;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* フォーム全体を包むカード */
+.form-container {
+    background: #ffffff;
+    padding: 35px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 450px; /* 少しゆったりめの幅に変更 */
+    box-sizing: border-box;
+}
+
+/* タイトルヘッダー */
+h2 { 
+    font-size: 22px;
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-align: center;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f4f7f9; /* 野暮ったい背景を消し、下線でスマートに */
+}
+
+.form-group { 
+    margin-bottom: 20px; 
+}
+
+label { 
+    font-size: 14px;
+    font-weight: bold;
+    color: #34495e;
+    display: inline-block;
+    margin-bottom: 8px; 
+}
+
+/* 変更不可の項目（入学年度・学生番号） */
+.readonly-text {
+    font-size: 16px;
+    color: #7f8c8d;
+    margin: 0;
+    padding: 8px 12px;
+    background-color: #f8f9fa; /* 入力できないことが直感でわかる背景色 */
+    border-radius: 6px;
+    border: 1px dashed #cfd8dc;
+}
+
+/* 入力フォーム・セレクトボックス */
+.form-group input[type="text"], 
+.form-group select {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+/* 在学中チェックボックス */
+.checkbox-group {
+    display: flex;
+    flex-direction: row-reverse; /* ラベルの右側にチェックボックスを配置 */
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding: 5px 0;
+}
+
+.checkbox-group label {
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #3498db; /* チェック時の色をテーマカラーに統一 */
+}
+
+/* エラーメッセージ */
+.error-msg {
+    color: #e74c3c;
+    font-size: 13px;
+    display: block;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+/* 変更ボタン */
+.btn-submit {
+    width: 100%;
+    height: 45px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover { 
+    background-color: #2980b9; 
+}
+
+/* 削除ボタン用フォームの調整 */
+form[action*="StudentDelete.action"] {
+    border-top: 1px dashed #e2e8f0;
+    margin-top: 25px !important;
+    padding-top: 20px;
+}
+
+/* 削除ボタン本体 */
+form[action*="StudentDelete.action"] button {
+    width: 100%; /* 横いっぱいに広げて押しやすく */
+    height: 40px;
+    background-color: #fff !important; /* 初期状態は白背景で主張を抑える */
+    color: #e74c3c !important;
+    border: 1px solid #e74c3c !important;
+    border-radius: 6px !important;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+form[action*="StudentDelete.action"] button:hover {
+    background-color: #e74c3c !important; /* ホバー時だけ警告の赤色に */
+    color: #fff !important;
+}
+
+/* 戻るリンク */
+.back-link { 
+    display: inline-block;
+    margin-bottom: 15px; 
+    text-decoration: none; 
+    color: #3498db; 
+    font-size: 14px;
+    font-weight: bold;
+    transition: color 0.2s;
+    align-self: flex-start; /* カードの左端のラインに揃えます */
+    max-width: 450px;
+    width: 100%;
+}
+
+.back-link:hover { 
+    color: #2980b9;
+    text-decoration: underline;
+}
+
 </style>
 </head>
 <body>
+            <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">←ホームに戻る</a>
 
     <div class="form-container">
         <h2>学生情報変更</h2>
@@ -162,7 +237,7 @@
 
             <!-- ボタンエリア -->
             <button type="submit" class="btn-submit">変更</button>
-            <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
+
             
         </form>
         
