@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class TestBean implements Serializable {
 
+    // クラス図準拠の基本フィールド
     private StudentBean student;
     private String classNum;
     private SubjectBean subject;
@@ -11,6 +12,12 @@ public class TestBean implements Serializable {
     private int no;
     private int point;
 
+    // 🌟画面表示用の集計データ（追加フィールド）
+    private int rank;           // 順位
+    private int maxPoint;       // 最高点
+    private double averagePoint;// 平均点
+
+    // --- 基本のゲッター・セッター ---
     public StudentBean getStudent() { return student; }
     public void setStudent(StudentBean student) { this.student = student; }
 
@@ -28,4 +35,13 @@ public class TestBean implements Serializable {
 
     public int getPoint() { return point; }
     public void setPoint(int point) { this.point = point; }
+
+    public int getRank() { return rank; }
+    public void setRank(int rank) { this.rank = rank; }
+
+    public int getMaxPoint() { return maxPoint; }
+    public void setMaxPoint(int maxPoint) { this.maxPoint = maxPoint; }
+
+    public double getAveragePoint() { return averagePoint; }
+    public void setAveragePoint(double averagePoint) { this.averagePoint = averagePoint; }
 }
