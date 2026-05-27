@@ -11,193 +11,318 @@
 <style>
 /* ===== 全体 ===== */
 body{
-    font-family:"Yu Gothic","Meiryo",sans-serif;
+    font-family:
+    "Yu Gothic","Meiryo",sans-serif;
+
     background:
-        radial-gradient(circle at top,#ffffff,#eef4ff 60%);
+    linear-gradient(
+        135deg,
+        #f8fbff,
+        #eef5ff
+    );
+
     margin:0;
     padding:40px 20px;
+
     color:#333;
     min-height:100vh;
+
     display:flex;
     justify-content:center;
 }
 
-/* 戻るリンク */
+/* 戻る */
 .back-link{
     position:absolute;
     top:25px;
     left:30px;
+
     text-decoration:none;
-    color:#4a90e2;
+    color:#5b8def;
+
     font-size:14px;
     font-weight:bold;
+
     transition:0.2s;
 }
 
 .back-link:hover{
-    color:#256fd1;
-    transform:translateX(-2px);
+    color:#3474e0;
+    transform:translateX(-3px);
 }
 
-/* ===== カード ===== */
+/* ===== メインカード ===== */
 .container{
     width:1000px;
     max-width:100%;
+
     background:white;
-    border-radius:24px;
+
+    border-radius:28px;
     padding:45px;
+
     box-sizing:border-box;
 
     box-shadow:
-        0 10px 30px rgba(0,0,0,0.08),
-        0 3px 10px rgba(0,0,0,0.05);
+        0 18px 40px rgba(61,115,196,0.08),
+        0 4px 12px rgba(0,0,0,0.04);
 
-    animation:fadeIn 0.4s ease;
+    animation:fadeIn .4s ease;
 }
 
 /* タイトル */
 h2{
-    margin:0 0 40px;
+    margin:0 0 35px;
+
     text-align:center;
-    color:#4a90e2;
-    font-size:32px;
-    font-weight:bold;
+
+    color:#5b8def;
+
+    font-size:34px;
+    font-weight:700;
     letter-spacing:2px;
 }
 
 /* ===== 検索エリア ===== */
 .search-box{
-    background:#f8fbff;
-    border:1px solid #dce7f7;
-    border-radius:20px;
-    padding:28px;
+    background:
+    linear-gradient(
+        180deg,
+        #fbfdff,
+        #f5f9ff
+    );
+
+    border:1px solid #dce8f7;
+
+    border-radius:24px;
+
+    padding:32px;
+
     margin-bottom:35px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
-/* 小タイトル */
+/* 小見出し */
 .search-box h3{
-    margin-top:0;
-    margin-bottom:25px;
-    color:#555;
+    margin:0 0 22px;
+
+    color:#4c5b70;
+
     font-size:20px;
-    border-left:5px solid #66a3ff;
+    font-weight:bold;
+
+    border-left:6px solid #7db5ff;
     padding-left:12px;
 }
 
 /* ===== フォーム ===== */
-form{
+.search-form,
+.student-form{
     display:flex;
-    align-items:center;
+    align-items:flex-end;
     gap:18px;
-    flex-wrap:nowrap;
-    overflow-x:auto;
-    padding-bottom:5px;
+    flex-wrap:wrap;
+}
+
+/* グループ */
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
 }
 
 /* ラベル */
-form{
-    font-size:14px;
+label{
+    font-size:13px;
     font-weight:bold;
-    color:#555;
-    white-space:nowrap;
+    color:#687385;
 }
 
-/* select */
-select{
-    min-width:170px;
-    padding:12px 14px;
-    border:1px solid #d6dfeb;
-    border-radius:12px;
-    background:white;
-    font-size:15px;
-    transition:0.2s;
-    box-shadow:0 1px 4px rgba(0,0,0,0.05);
-}
+/* ===== 入力 ===== */
+select,
+.student-no{
+    min-width:180px;
 
-select:hover{
-    border-color:#66a3ff;
-}
+    padding:13px 15px;
 
-select:focus{
-    outline:none;
-    border-color:#66a3ff;
-    box-shadow:0 0 0 4px rgba(102,163,255,0.15);
-}
+    border:
+    1px solid #d8e1ee;
 
-/* ボタン */
-button[type="submit"]{
-    padding:12px 30px;
-    border:none;
     border-radius:14px;
-    background:linear-gradient(to right,#66a3ff,#4d8cff);
-    color:white;
+
+    background:white;
+
     font-size:15px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.25s;
+
+    transition:.2s;
 
     box-shadow:
-        0 5px 12px rgba(77,140,255,0.25);
+        0 2px 6px rgba(0,0,0,0.04);
+}
+
+/* 学生番号だけ少し強調 */
+.student-no{
+    min-width:220px;
+
+    background:
+    linear-gradient(
+        to bottom,
+        #ffffff,
+        #f8fbff
+    );
+
+    border:2px solid #dce7f7;
+}
+
+/* hover */
+select:hover,
+.student-no:hover{
+    border-color:#86b6ff;
+}
+
+/* focus */
+select:focus,
+.student-no:focus{
+    outline:none;
+
+    border-color:#5b8def;
+
+    box-shadow:
+        0 0 0 5px
+        rgba(91,141,239,.15);
+}
+
+/* プレースホルダ */
+.student-no::placeholder{
+    color:#a5afbd;
+}
+
+/* ===== ボタン ===== */
+button[type="submit"]{
+    height:48px;
+
+    padding:0 28px;
+
+    border:none;
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+        to right,
+        #6aa7ff,
+        #5b8def
+    );
+
+    color:white;
+
+    font-size:15px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    box-shadow:
+        0 6px 14px
+        rgba(91,141,239,.28);
 }
 
 button[type="submit"]:hover{
     transform:translateY(-2px);
+
     box-shadow:
-        0 8px 18px rgba(77,140,255,0.35);
+        0 10px 18px
+        rgba(91,141,239,.35);
 }
 
 button[type="submit"]:active{
-    transform:scale(0.98);
+    transform:scale(.98);
+}
+
+/* ===== 区切り線 ===== */
+.divider{
+    border:none;
+    height:1px;
+
+    background:
+    linear-gradient(
+        to right,
+        transparent,
+        #d7e5f7,
+        transparent
+    );
+
+    margin:32px 0;
 }
 
 /* ===== エラー ===== */
 .error{
-    margin-top:18px;
-    padding:14px 18px;
-    border-radius:12px;
-    background:#fff1f1;
+    margin-top:20px;
+
+    padding:15px 18px;
+
+    border-radius:14px;
+
+    background:#fff3f3;
     border:1px solid #ffcaca;
-    color:#e14d4d;
+
+    color:#dd5050;
     font-weight:bold;
 }
 
 /* ===== テーブル ===== */
 table{
     width:100%;
+
     border-collapse:separate;
     border-spacing:0;
+
     overflow:hidden;
-    border-radius:18px;
+
+    border-radius:22px;
 
     box-shadow:
-        0 4px 14px rgba(0,0,0,0.06);
+        0 8px 24px
+        rgba(0,0,0,.06);
 }
 
 /* ヘッダー */
 th{
     background:
-        linear-gradient(to right,#66a3ff,#4d8cff);
+    linear-gradient(
+        to right,
+        #69a5ff,
+        #5b8def
+    );
 
     color:white;
-    padding:16px;
+
+    padding:18px 14px;
+
     font-size:14px;
     font-weight:bold;
-    letter-spacing:0.5px;
+    letter-spacing:.5px;
 }
 
-/* データ */
+/* セル */
 td{
     background:white;
-    padding:15px;
-    border-bottom:1px solid #edf2f7;
+
+    padding:16px 14px;
+
     text-align:center;
-    font-size:14px;
-    transition:0.2s;
+
+    border-bottom:
+    1px solid #edf2fa;
+
+    transition:.2s;
 }
 
 /* 偶数行 */
 tbody tr:nth-child(even) td{
-    background:#f8fbff;
+    background:#f9fbff;
 }
 
 /* hover */
@@ -205,28 +330,33 @@ tbody tr:hover td{
     background:#eef5ff;
 }
 
+/* 最終行 */
+tbody tr:last-child td{
+    border-bottom:none;
+}
+
 /* 角丸 */
 th:first-child{
-    border-top-left-radius:18px;
+    border-top-left-radius:22px;
 }
 
 th:last-child{
-    border-top-right-radius:18px;
+    border-top-right-radius:22px;
 }
 
 tbody tr:last-child td:first-child{
-    border-bottom-left-radius:18px;
+    border-bottom-left-radius:22px;
 }
 
 tbody tr:last-child td:last-child{
-    border-bottom-right-radius:18px;
+    border-bottom-right-radius:22px;
 }
 
-/* ===== アニメーション ===== */
+/* ===== アニメ ===== */
 @keyframes fadeIn{
     from{
         opacity:0;
-        transform:translateY(10px);
+        transform:translateY(12px);
     }
 
     to{
@@ -248,37 +378,105 @@ tbody tr:last-child td:last-child{
         <h2>成績参照</h2>
 
         <div class="search-box">
-            <h3>科目情報</h3>
 
-            <form action="TestList.action" method="post">
-                <input type="hidden" name="f" value="sj">
+    <h3>科目情報</h3>
 
-                入学年度
-                <select name="f1">
-                    <option value="">--------</option>
-                    <c:forEach items="${yearList}" var="year">
-                        <option value="${year}">${year}</option>
-                    </c:forEach>
-                </select>
+    <!-- 科目検索 -->
+    <form action="TestList.action" method="post"
+          class="search-form">
 
-                クラス
-                <select name="f2">
-                    <option value="">--------</option>
-                    <c:forEach items="${classList}" var="cls">
-                        <option value="${cls}">${cls}</option>
-                    </c:forEach>
-                </select>
+        <input type="hidden"
+               name="f"
+               value="sj">
 
-                科目
-                <select name="f3">
-                    <option value="">--------</option>
-                    <c:forEach items="${subjectList}" var="sub">
-                        <option value="${sub.cd}">${sub.name}</option>
-                    </c:forEach>
-                </select>
+        <div class="form-group">
+            <label>入学年度</label>
+            <select name="f1">
+                <option value="">--------</option>
+                <c:forEach items="${yearList}"
+                           var="year">
+                    <option value="${year}">
+                        ${year}
+                    </option>
+                </c:forEach>
+            </select>
+        </div>
 
-                <button type="submit">検索</button>
-            </form>
+        <div class="form-group">
+            <label>クラス</label>
+            <select name="f2">
+                <option value="">--------</option>
+                <c:forEach items="${classList}"
+                           var="cls">
+                    <option value="${cls}">
+                        ${cls}
+                    </option>
+                </c:forEach>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>科目</label>
+            <select name="f3">
+                <option value="">--------</option>
+                <c:forEach items="${subjectList}"
+                           var="sub">
+                    <option value="${sub.cd}">
+                        ${sub.name}
+                    </option>
+                </c:forEach>
+            </select>
+        </div>
+
+        <button type="submit">
+            検索
+        </button>
+    </form>
+
+    <hr class="divider">
+
+    <h3>学生情報</h3>
+
+    <!-- 学生番号検索 -->
+    <form action="TestList.action"
+          method="post"
+          class="student-form">
+
+        <input type="hidden"
+               name="f"
+               value="sj">
+
+        <!-- 科目情報引き継ぎ -->
+        <input type="hidden"
+               name="f1"
+               value="${param.f1}">
+
+        <input type="hidden"
+               name="f2"
+               value="${param.f2}">
+
+        <input type="hidden"
+               name="f3"
+               value="${param.f3}">
+
+        <div class="form-group">
+            <label>学生番号</label>
+
+            <input
+                type="text"
+                name="f4"
+                class="student-no"
+                placeholder=
+                "学生番号を入力"
+                value="${param.f4}">
+        </div>
+
+        <button type="submit">
+            検索
+        </button>
+    </form>
+
+</div>
 
             <c:if test="${not empty error}">
                 <p class="error">${error}</p>
