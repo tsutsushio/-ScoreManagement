@@ -234,4 +234,111 @@ public class TestDAO extends DAO {
         }
         return list;
     }
+
+    
+    public List<TestBean> searchBySubject(
+            int entYear,
+            String classNum,
+            String subjectCd,
+            String studentNo,
+            SchoolBean school)
+            throws Exception {
+
+        List<TestBean> list =
+            new ArrayList<>();
+
+        String sql =
+        	    "SELECT " +
+        	    "ST.NO AS STUDENT_NO, " +
+        	    "ST.NAME AS STUDENT_NAME, " +
+        	    "ST.ENT_YEAR, " +
+        	    "ST.CLASS_NUM, " +
+        	    "T.NO, " +
+        	    "T.POINT " +
+        	    "FROM TEST T " +
+        	    "JOIN STUDENT ST " +
+        	    "ON T.STUDENT_NO = ST.NO " +
+        	    "AND T.SCHOOL_CD = ST.SCHOOL_CD " +
+        	    "WHERE ST.ENT_YEAR = ? " +
+        	    "AND ST.CLASS_NUM = ? " +
+        	    "AND T.SUBJECT_CD = ? " +
+        	    "AND T.SCHOOL_CD = ? ";
+
+        	if (
+        	    studentNo != null
+        	    && !studentNo.isEmpty()
+        	) {
+
+        	    sql +=
+        	        " AND ST.NO = ?";
+        	}
+
+        	sql +=
+        	    " ORDER BY ST.NO, T.NO";
+
+        try (
+            Connection con =
+                getConnection();
+
+            PreparedStatement st =
+                con.prepareStatement(sql)
+        ) {
+
+        	st.setInt(1, entYear);
+        	st.setString(2, classNum);
+        	st.setString(3, subjectCd);
+        	st.setString(4, school.getCd());
+
+        	if (
+        	    studentNo != null
+        	    && !studentNo.isEmpty()
+        	) {
+
+        	    st.setString(5, studentNo);
+        	}
+
+            try (
+                ResultSet rs =
+                    st.executeQuery()
+            ) {
+
+                while (rs.next()) {
+
+                    TestBean test =
+                        new TestBean();
+
+                    test.setNo(
+                        rs.getInt("NO"));
+
+                    test.setPoint(
+                        rs.getInt("POINT"));
+
+                    StudentBean student =
+                        new StudentBean();
+
+                    student.setNo(
+                        rs.getString(
+                            "STUDENT_NO"));
+
+                    student.setName(
+                        rs.getString(
+                            "STUDENT_NAME"));
+
+                    student.setEntYear(
+                        rs.getInt(
+                            "ENT_YEAR"));
+
+                    test.setStudent(
+                        student);
+
+                    list.add(test);
+                }
+            }
+        }
+
+        return list;
+    }
 }
+
+
+
