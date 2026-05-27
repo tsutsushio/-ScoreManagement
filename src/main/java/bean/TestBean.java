@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public class TestBean implements Serializable {
 
-    private String studentNo;
+    // クラス図準拠の基本フィールド
+    private StudentBean student;
+
     private String classNum;
     private String subjectCd;
     private String schoolCd;
@@ -15,12 +17,14 @@ public class TestBean implements Serializable {
     private String studentName;
     private int entYear;
 
-    // =========================================
-    // ゲッター・セッター
-    // =========================================
+    // 🌟画面表示用の集計データ（追加フィールド）
+    private int rank;           // 順位
+    private int maxPoint;       // 最高点
+    private double averagePoint;// 平均点
 
-    public String getStudentNo() { return studentNo; }
-    public void setStudentNo(String studentNo) {this.studentNo = studentNo;}
+    // --- 基本のゲッター・セッター ---
+    public StudentBean getStudent() { return student; }
+    public void setStudent(StudentBean student) { this.student = student; }
 
     public String getClassNum() { return classNum; }
     public void setClassNum(String classNum) { this.classNum = classNum; }
@@ -37,9 +41,13 @@ public class TestBean implements Serializable {
     public int getPoint() { return point; }
     public void setPoint(int point) { this.point = point; }
 
-    public String getStudentName() { return studentName; }
-    public void setStudentName(String studentName) { this.studentName = studentName; }
 
-    public int getEntYear() { return entYear; }
-    public void setEntYear(int entYear) { this.entYear = entYear; }
+    public int getRank() { return rank; }
+    public void setRank(int rank) { this.rank = rank; }
+
+    public int getMaxPoint() { return maxPoint; }
+    public void setMaxPoint(int maxPoint) { this.maxPoint = maxPoint; }
+
+    public double getAveragePoint() { return averagePoint; }
+    public void setAveragePoint(double averagePoint) { this.averagePoint = averagePoint; }
 }
