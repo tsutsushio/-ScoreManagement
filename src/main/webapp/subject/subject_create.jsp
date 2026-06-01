@@ -211,6 +211,7 @@ body {
                        required>
             </div>
 
+
             <!-- ボタン -->
             <div class="button-area">
                 <input type="submit" value="登録">
