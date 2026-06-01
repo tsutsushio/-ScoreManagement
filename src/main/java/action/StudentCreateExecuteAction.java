@@ -52,7 +52,7 @@ public class StudentCreateExecuteAction extends Action {
             errors.put("name", "氏名を入力してください");
         }
         if (password == null || password.isEmpty()) {
-        	errors.put("password", "パスワードを入力してください");
+            errors.put("password", "パスワードを入力してください");
         }
         
         StudentDAO dao = new StudentDAO();
@@ -92,8 +92,27 @@ public class StudentCreateExecuteAction extends Action {
         student.setSchool(loginUser.getSchool()); // 先生の学校コードをセット
         student.setPassword(password);
 
-        // クラス図にある save メソッドを呼び出す
-        dao.save(student);
+        // 🌟【追加】DAOの処理をtry-catchで囲み、例外を受け止める
+        try {
+            // クラス図にある save メソッドを呼び出す
+            dao.save(student);
+            
+        } catch (Exception e) {
+            // DAOから投げられたエラーメッセージ（「生徒の名前が長すぎます...」など）を取得
+            errors.put("name", e.getMessage()); 
+            
+            // 入力途中のデータをリクエストに保持して画面に戻す
+            req.setAttribute("errors", errors);
+            req.setAttribute("entYear", entYearStr);
+            req.setAttribute("no", no);
+            req.setAttribute("name", name);
+            req.setAttribute("classNum", classNum);
+            req.setAttribute("password", password);
+            
+            setDropdownLists(req);
+            
+            return "/WEB-INF/view/student/student_create.jsp";
+        }
 
         // 6. 登録完了画面へ遷移
         return "/WEB-INF/view/student/student_create_done.jsp";

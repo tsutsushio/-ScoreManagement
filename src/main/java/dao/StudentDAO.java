@@ -100,6 +100,13 @@ public class StudentDAO extends DAO {
     // 【登録・更新】学生データを保存するメソッド
     // =========================================================
     public boolean save(StudentBean student) throws Exception {
+        
+        // 🌟【例外処理 1】事前バリデーション（実行前チェック）
+        // DBの仕様（VARCHAR(10)）に合わせて、名前が10文字を超えていたら例外を投げて処理を中断する
+        if (student.getName() != null && student.getName().length() > 10) {
+            throw new Exception("生徒の名前が長すぎます。10文字以内で入力してください。");
+        }
+
         boolean isSuccess = false;
         StudentBean existingStudent = get(student.getNo());
         String sql = "";
@@ -133,11 +140,22 @@ public class StudentDAO extends DAO {
                 st.setString(6, student.getNo());
             }
             
-            int result = st.executeUpdate();
-            if (result > 0) {
-                isSuccess = true;
+            // 🌟【例外処理 2】SQL実行時のエラーキャッチ
+            try {
+                int result = st.executeUpdate();
+                if (result > 0) {
+                    isSuccess = true;
+                }
+            } catch (java.sql.SQLException e) {
+                // データベース側で何らかのエラー（桁あふれ、制約違反など）が起きた場合
+                e.printStackTrace(); // コンソールに詳細なエラーログを残す
+                throw new Exception("データベースの保存に失敗しました。入力文字数が多すぎる等の可能性があります。");
+            } finally {
+                // エラーが起きても起きなくても、確実にPreparedStatementを閉じる（メモリリーク防止）
+                if (st != null) {
+                    st.close();
+                }
             }
-            st.close();
         }
         return isSuccess;
     }
