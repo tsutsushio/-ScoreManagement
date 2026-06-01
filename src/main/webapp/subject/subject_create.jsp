@@ -164,6 +164,7 @@ body {
 
 <div class="main">
 
+
     <!-- 左上の戻るリンク -->
     <div class="back-link">
         <a href="${pageContext.request.contextPath}/action/SubjectList.action">

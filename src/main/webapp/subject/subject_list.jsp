@@ -136,6 +136,7 @@ tbody tr:hover {
 <header>
     <h1>得点管理システム</h1>
 
+
 <div class="back-link">
     <a href="${pageContext.request.contextPath}/action/Menu.action">
         ← メインメニューへ戻る

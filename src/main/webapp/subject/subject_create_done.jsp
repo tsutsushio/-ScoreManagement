@@ -107,6 +107,7 @@ body {
 
 @media screen and (max-width: 600px) {
 
+
     .done-box {
         width: calc(100% - 40px);
     }
