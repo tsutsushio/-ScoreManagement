@@ -207,7 +207,7 @@ body {
                        id="name"
                        name="name"
                        value="${name}"
-                       maxlength="50"
+                       maxlength="20"
                        required>
             </div>
 

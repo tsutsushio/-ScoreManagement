@@ -44,6 +44,16 @@ public class SubjectCreateExecuteAction extends Action {
 
             return "/subject/subject_create.jsp";
         }
+        
+        if (name.length() > 20) {
+
+            request.setAttribute(
+                    "errorMessage",
+                    "科目名は20文字以内で入力してください。"
+            );
+
+            return "/subject/subject_create.jsp";
+        }
 
         SubjectDAO dao = new SubjectDAO();
 
