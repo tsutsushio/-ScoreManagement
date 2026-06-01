@@ -93,10 +93,10 @@ public class TestSearchAction extends Action {
             StudentBean sBean = new StudentBean();
             sBean.setNo(student.getNo());
 
-            SubjectBean subject = new SubjectBean();
+            SubjectBean subject_1 = new SubjectBean();
             subject.setCd(subjectCd);
 
-            SchoolBean school = new SchoolBean();
+            SchoolBean school_1 = new SchoolBean();
             school.setCd(schoolCd);
 
             TestBean test =

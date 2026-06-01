@@ -196,4 +196,23 @@ public class StudentDAO extends DAO {
 		// TODO 自動生成されたメソッド・スタブ
 		return filter(school, entYear, classNum, isAttend);
 	}
+	
+	public boolean updatePassword(String no, String newPassword) throws Exception {
+        boolean isSuccess = false;
+        // 指定された学籍番号のパスワードだけをピンポイントで書き換える
+        String sql = "UPDATE STUDENT SET PASSWORD = ? WHERE NO = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+            
+            st.setString(1, newPassword);
+            st.setString(2, no);
+            
+            int result = st.executeUpdate();
+            if (result > 0) {
+                isSuccess = true;
+            }
+        }
+        return isSuccess;
+    }
 }

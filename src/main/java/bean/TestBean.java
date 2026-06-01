@@ -50,4 +50,13 @@ public class TestBean implements Serializable {
 
     public double getAveragePoint() { return averagePoint; }
     public void setAveragePoint(double averagePoint) { this.averagePoint = averagePoint; }
+    
+	public void setSubject(SubjectBean subject) {}
+	public void setSchool(SchoolBean school) {}
+	
+	public void setStudentNo(String studentNo) {}
+	
+	public SubjectBean getSubject() {return null;}
+	public SchoolBean getSchool() {return null;}
+	public String getStudentNo() {return null;}
 }

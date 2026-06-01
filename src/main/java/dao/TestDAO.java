@@ -69,10 +69,10 @@ public class TestDAO extends DAO {
             SubjectBean subject,
             int num,
             SchoolBean school) throws Exception {
-
+    	
+        List<TestBean> list = new ArrayList<>();
 
         String sql = baseSql + "WHERE SCHOOL_CD = ?";
->
         if (subject != null && subject.getCd() != null) {
             sql += " AND SUBJECT_CD = '" + subject.getCd() + "'";
         }
@@ -206,9 +206,9 @@ public class TestDAO extends DAO {
                      "WHERE T2.STUDENT_NO = ? " +
                      "AND T2.NO = (SELECT MAX(NO) FROM TEST WHERE STUDENT_NO = ?)";
 
-        List<TestBean> list = new ArrayList<>();
+        List<TestBean> list_1 = new ArrayList<>();
 
-        String sql =
+        String sql_1 =
                 "SELECT T.SUBJECT_CD, "
                 + "S.NAME AS SUBJECT_NAME, "
                 + "T.POINT, "
@@ -273,9 +273,9 @@ public class TestDAO extends DAO {
                      "WHERE T2.STUDENT_NO = ? " +
                      "ORDER BY T2.NO DESC, T2.SUBJECT_CD ASC";
 
-        List<TestBean> list = new ArrayList<>();
+        List<TestBean> list_1 = new ArrayList<>();
 
-        String sql =
+        String sql_1 =
                 "SELECT T.NO, "
                 + "T.SUBJECT_CD, "
                 + "S.NAME AS SUBJECT_NAME, "
@@ -311,7 +311,6 @@ public class TestDAO extends DAO {
                     subject.setName(rs.getString("SUBJECT_NAME"));
                     test.setSubject(subject);
                     
->
                     list.add(test);
                 }
             }
@@ -319,4 +318,9 @@ public class TestDAO extends DAO {
 
         return list;
     }
+	public List<TestBean> searchBySubject(int int1, String classNum, String subjectCd, SchoolBean school) {
+		return null;
+	}
+	public boolean save(TestBean test) {return false;}
+	public TestBean get(SubjectBean subject, SchoolBean school, int no) {return null;}
 }
