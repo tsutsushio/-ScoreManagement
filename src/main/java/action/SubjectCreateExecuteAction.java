@@ -71,9 +71,11 @@ public class SubjectCreateExecuteAction extends Action {
 
         // 登録データ作成
         SubjectBean subject = new SubjectBean();
-        subject.setSchoolCd(
-                loginUser.getSchool().getCd()
+
+        subject.setSchool(
+                loginUser.getSchool()
         );
+
         subject.setCd(cd);
         subject.setName(name);
 
