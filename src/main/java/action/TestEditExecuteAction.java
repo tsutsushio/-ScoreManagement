@@ -1,9 +1,8 @@
-// ===============================
-// TestRegistExecuteAction.java
-// ===============================
 package action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import bean.StudentBean;
@@ -11,6 +10,8 @@ import bean.SubjectBean;
 import bean.TeacherBean;
 import bean.TestBean;
 import dao.StudentDAO;
+import dao.SubjectDAO;
+import dao.TestDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -24,17 +25,15 @@ public class TestEditExecuteAction extends Action {
             HttpServletResponse res
     ) throws Exception {
 
-        // ログインチェック
+        // 1. ログインチェック
         HttpSession session = req.getSession();
-
-        TeacherBean loginUser =
-            (TeacherBean) session.getAttribute("loginUser");
+        TeacherBean loginUser = (TeacherBean) session.getAttribute("loginUser");
 
         if (loginUser == null) {
             return "/login/login.jsp";
         }
 
-        // パラメータ取得
+        // 2. パラメータ取得
         String studentNo = req.getParameter("studentNo");
         String subjectCd = req.getParameter("subjectCd");
         String noStr = req.getParameter("no");
@@ -48,18 +47,13 @@ public class TestEditExecuteAction extends Action {
 
         // 回数(no)チェック
         if (noStr == null || noStr.isEmpty()) {
-
             errors.put("no", "回数を入力してください");
-
         } else {
-
             try {
                 no = Integer.parseInt(noStr);
-
                 if (no < 1) {
                     errors.put("no", "回数は1以上で入力してください");
                 }
-
             } catch (Exception e) {
                 errors.put("no", "回数は数字で入力してください");
             }
@@ -67,18 +61,13 @@ public class TestEditExecuteAction extends Action {
 
         // 点数(point)チェック
         if (pointStr == null || pointStr.isEmpty()) {
-
             errors.put("point", "点数を入力してください");
-
         } else {
-
             try {
                 point = Integer.parseInt(pointStr);
-
                 if (point < 0 || point > 100) {
                     errors.put("point", "0〜100で入力してください");
                 }
-
             } catch (Exception e) {
                 errors.put("point", "点数は数字で入力してください");
             }
@@ -96,73 +85,71 @@ public class TestEditExecuteAction extends Action {
 
         // 学生存在チェック
         if (studentNo != null && !studentNo.isEmpty()) {
-
             StudentDAO studentDao = new StudentDAO();
-
-            StudentBean student =
-                studentDao.get(studentNo);
-
+            StudentBean student = studentDao.get(studentNo);
             if (student == null) {
                 errors.put("studentNo", "存在しない学生です");
             }
         }
 
-        // エラー時
+        // 3. 入力チェックでエラーがあった場合はデータを保持して画面に戻す
         if (!errors.isEmpty()) {
-
             req.setAttribute("errors", errors);
-
             req.setAttribute("studentNo", studentNo);
             req.setAttribute("subjectCd", subjectCd);
             req.setAttribute("no", noStr);
             req.setAttribute("point", pointStr);
             req.setAttribute("classNum", classNum);
 
-            return "/WEB-INF/view/test/test-regist.jsp";
+            // 🌟 画面再表示用に科目一覧を再取得してセット
+            SubjectDAO subjectDAO = new SubjectDAO();
+            req.setAttribute("subjectList", subjectDAO.filter(loginUser.getSchool().getCd()));
+
+            return "/WEB-INF/view/test/test-edit.jsp";
         }
 
-        // Beanに詰める
-        StudentBean student =
-                new StudentBean();
+        // 4. Beanにデータを詰める
+        StudentBean student = new StudentBean();
+        student.setNo(studentNo);
 
-        student.setNo(
-                studentNo
-        );
+        SubjectBean subject = new SubjectBean();
+        subject.setCd(subjectCd);
 
-        SubjectBean subject =
-                new SubjectBean();
+        TestBean test = new TestBean();
+        test.setStudent(student);
+        test.setSubject(subject);
+        test.setSchool(loginUser.getSchool());
+        test.setNo(no);
+        test.setPoint(point);
+        test.setClassNum(classNum);
 
-        subject.setCd(
-                subjectCd
-        );
+        List<TestBean> list = new ArrayList<>();
+        list.add(test);
 
-        TestBean test =
-                new TestBean();
+        TestDAO dao = new TestDAO();
 
-        test.setStudent(
-                student
-        );
+        // 5. 🌟 データベース保存処理の実行と例外処理のキャッチ
+        try {
+            dao.save(list);
+        } catch (Exception e) {
+            // DAO側から返ってきたエラーメッセージをセット
+            errors.put("point", e.getMessage());
+            
+            req.setAttribute("errors", errors);
+            req.setAttribute("studentNo", studentNo);
+            req.setAttribute("subjectCd", subjectCd);
+            req.setAttribute("no", noStr);
+            req.setAttribute("point", pointStr);
+            req.setAttribute("classNum", classNum);
 
-        test.setSubject(
-                subject
-        );
+            // 🌟 画面再表示用に科目一覧を再取得してセット
+            SubjectDAO subjectDAO = new SubjectDAO();
+            req.setAttribute("subjectList", subjectDAO.filter(loginUser.getSchool().getCd()));
 
-        test.setSchool(
-                loginUser.getSchool()
-        );
+            return "/WEB-INF/view/test/test-edit.jsp";
+        }
 
-        test.setNo(
-                no
-        );
-
-        test.setPoint(
-                point
-        );
-
-        test.setClassNum(
-                classNum
-        );
-        // 完了画面へ
+        // 6. 完了画面へ
         return "/WEB-INF/view/test/test-regist-done.jsp";
     }
 }

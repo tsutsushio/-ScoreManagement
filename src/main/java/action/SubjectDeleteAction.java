@@ -1,9 +1,11 @@
 package action;
 
+import bean.SubjectBean;
 import bean.TeacherBean;
 import dao.SubjectDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import tool.Action;
 
 public class SubjectDeleteAction extends Action {
@@ -13,31 +15,31 @@ public class SubjectDeleteAction extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-        // ログインユーザー取得
-        TeacherBean user = (TeacherBean)
-                request.getSession().getAttribute("loginUser");
+        // 1. ログインユーザー取得
+        HttpSession session = request.getSession();
+        TeacherBean user = (TeacherBean) session.getAttribute("loginUser");
 
-        // 未ログインならログイン画面へ
         if (user == null) {
-            return "/login.jsp";
+            return "/login/login.jsp"; // パスを正確なものに調整
         }
 
-        // 科目コード取得
+        // 2. 削除対象の科目コードを取得
         String cd = request.getParameter("cd");
 
-        // DAO生成
+        // 3. 【シーケンス図通り】科目の詳細データを取得する
         SubjectDAO dao = new SubjectDAO();
+        SubjectBean subject = dao.get(cd);
 
-        // cd が指定されていれば削除
-        if (cd != null && !cd.isEmpty()) {
-            String schoolCd = user.getSchool().getCd();
-            dao.delete(cd, schoolCd);
+        if (subject == null) {
+            // 万が一データが存在しない場合は一覧へ戻すなどの安全対策
+            return "/action/SubjectList.action";
         }
 
-        // 一覧を再取得
-        request.setAttribute("subjectList", dao.list());
+        // 4. 確認画面で表示するためにリクエストにセット
+        request.setAttribute("cd", subject.getCd());
+        request.setAttribute("name", subject.getName());
 
-        // 一覧画面へ戻る
-        return "/subject/subject_list.jsp";
+        // 5. 削除確認画面へ遷移
+        return "/subject/subject_delete.jsp";
     }
 }
