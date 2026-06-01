@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import bean.SchoolBean;
 import bean.SubjectBean;
 
 public class SubjectDAO extends DAO {
@@ -26,9 +27,13 @@ public class SubjectDAO extends DAO {
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
                     subject = new SubjectBean();
-                    subject.setSchoolCd(rs.getString("SCHOOL_CD"));
                     subject.setCd(rs.getString("CD"));
                     subject.setName(rs.getString("NAME"));
+                    
+                    // 🌟 修正ポイント：SchoolBeanを作ってセット
+                    SchoolBean school = new SchoolBean();
+                    school.setCd(rs.getString("SCHOOL_CD"));
+                    subject.setSchool(school);
                 }
             }
         }
@@ -40,7 +45,6 @@ public class SubjectDAO extends DAO {
     // =========================================================
     public int insert(SubjectBean subject) throws Exception {
         
-        // 🌟【例外処理】事前バリデーション（DBの文字数あふれ防止）
         if (subject.getCd() != null && subject.getCd().length() != 3) {
             throw new Exception("科目コードは3文字で入力してください。");
         }
@@ -54,11 +58,11 @@ public class SubjectDAO extends DAO {
         try (Connection con = getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
              
-            st.setString(1, subject.getSchoolCd());
+            // 🌟 修正ポイント：subjectの中のSchoolBeanからCDを取り出す
+            st.setString(1, subject.getSchool().getCd());
             st.setString(2, subject.getCd());
             st.setString(3, subject.getName());
 
-            // 🌟【例外処理】SQL実行時のエラーキャッチ
             try {
                 count = st.executeUpdate();
             } catch (java.sql.SQLException e) {
@@ -83,9 +87,13 @@ public class SubjectDAO extends DAO {
 
             while (rs.next()) {
                 SubjectBean subject = new SubjectBean();
-                subject.setSchoolCd(rs.getString("SCHOOL_CD"));
                 subject.setCd(rs.getString("CD"));
                 subject.setName(rs.getString("NAME"));
+                
+                // 🌟 修正ポイント
+                SchoolBean school = new SchoolBean();
+                school.setCd(rs.getString("SCHOOL_CD"));
+                subject.setSchool(school);
 
                 list.add(subject);
             }
@@ -100,11 +108,9 @@ public class SubjectDAO extends DAO {
         boolean isSuccess = false;
 
         try (Connection con = getConnection()) {
-            // トランザクションを開始して、両方の削除が確実にセットで行われるようにする
             con.setAutoCommit(false);
             
             try {
-                // TESTテーブルの関連データを先に削除
                 String sql1 = "DELETE FROM TEST WHERE SCHOOL_CD = ? AND SUBJECT_CD = ?";
                 try (PreparedStatement st1 = con.prepareStatement(sql1)) {
                     st1.setString(1, schoolCd);
@@ -112,7 +118,6 @@ public class SubjectDAO extends DAO {
                     st1.executeUpdate();
                 }
 
-                // SUBJECTテーブルから科目を削除
                 String sql2 = "DELETE FROM SUBJECT WHERE SCHOOL_CD = ? AND CD = ?";
                 try (PreparedStatement st2 = con.prepareStatement(sql2)) {
                     st2.setString(1, schoolCd);
@@ -121,11 +126,9 @@ public class SubjectDAO extends DAO {
                     isSuccess = (count > 0);
                 }
                 
-                // 両方成功したら確定
                 con.commit();
                 
             } catch (Exception e) {
-                // 途中でエラーが起きたら巻き戻す
                 con.rollback();
                 throw new Exception("科目の削除に失敗しました。関連するデータが存在する可能性があります。");
             }
@@ -138,7 +141,6 @@ public class SubjectDAO extends DAO {
     // =========================================================
     public boolean update(SubjectBean subject) throws Exception {
         
-        // 🌟【例外処理】事前バリデーション
         if (subject.getName() != null && subject.getName().length() > 20) {
             throw new Exception("科目名は20文字以内で入力してください。");
         }
@@ -150,7 +152,8 @@ public class SubjectDAO extends DAO {
              PreparedStatement st = con.prepareStatement(sql)) {
 
             st.setString(1, subject.getName());
-            st.setString(2, subject.getSchoolCd());
+            // 🌟 修正ポイント
+            st.setString(2, subject.getSchool().getCd());
             st.setString(3, subject.getCd());
 
             try {
@@ -180,9 +183,13 @@ public class SubjectDAO extends DAO {
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
                     SubjectBean subject = new SubjectBean();
-                    subject.setSchoolCd(rs.getString("SCHOOL_CD"));
                     subject.setCd(rs.getString("CD"));
                     subject.setName(rs.getString("NAME"));
+                    
+                    // 🌟 修正ポイント
+                    SchoolBean school = new SchoolBean();
+                    school.setCd(rs.getString("SCHOOL_CD"));
+                    subject.setSchool(school);
 
                     list.add(subject);
                 }
