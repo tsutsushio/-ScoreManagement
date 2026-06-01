@@ -14,80 +14,61 @@
 
 body {
     margin: 0;
-    font-family: "Yu Gothic", "Meiryo", sans-serif;
-    background:
-        radial-gradient(circle at top right, rgba(0, 220, 255, 0.12), transparent 40%),
-        linear-gradient(135deg, #07111f 0%, #0a1f38 35%, #0f3b63 70%, #1ec8ff 100%);
-    color: #eafcff;
-    min-height: 100vh;
+    padding: 0;
+    font-family: "Yu Gothic", sans-serif;
+    background-color: #f4f7fb;
 
     display: flex;
     justify-content: center;
     align-items: center;
+
+    min-height: 100vh;
+    color: #333;
 }
 
-/* 完了ボックス */
-
 .done-box {
+    width: 450px;
 
-    width: 420px;
+    background: #ffffff;
 
     padding: 35px;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(5, 20, 40, 0.92),
-            rgba(10, 35, 65, 0.9)
-        );
-
-    border:
-        1px solid rgba(78, 242, 255, 0.35);
 
     border-radius: 14px;
 
     box-shadow:
-        0 0 20px rgba(30, 200, 255, 0.18),
-        0 10px 30px rgba(0, 0, 0, 0.35);
+        0 4px 12px rgba(0,0,0,0.08);
 
     text-align: center;
-
-    backdrop-filter: blur(6px);
 }
-
-/* タイトル */
 
 .done-box h2 {
+    margin: 0 0 20px;
 
-    margin-top: 0;
+    padding: 14px 20px;
 
-    margin-bottom: 20px;
+    background: #fff;
 
-    font-size: 30px;
+    border-left: 6px solid #6ea8ff;
 
-    letter-spacing: 2px;
+    border-radius: 10px;
 
-    color: #ffffff;
+    font-size: 28px;
 
-    text-shadow:
-        0 0 8px rgba(78, 242, 255, 0.8);
+    text-align: left;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.08);
 }
-
-/* メッセージ */
 
 .done-message {
-
     font-size: 16px;
 
-    margin-bottom: 30px;
+    color: #444;
 
-    color: #dffcff;
+    margin: 30px 0;
 }
 
-/* ボタンエリア */
-
 .button-area {
-
     display: flex;
 
     justify-content: center;
@@ -95,20 +76,18 @@ body {
     gap: 15px;
 }
 
-/* ボタン */
-
 .button-area a {
-
     display: inline-block;
 
-    background:
-        linear-gradient(135deg, #00b7ff, #6ef6ff);
+    padding: 10px 22px;
 
-    color: #00111f;
+    background-color: #6ea8ff;
 
-    padding: 12px 22px;
+    color: #ffffff;
 
-    border-radius: 999px;
+    border: 2px solid #2f5fb8;
+
+    border-radius: 8px;
 
     text-decoration: none;
 
@@ -116,20 +95,30 @@ body {
 
     font-weight: bold;
 
-    box-shadow:
-        0 0 14px rgba(110, 246, 255, 0.6);
-
-    transition: 0.2s ease;
+    transition: 0.2s;
 }
 
 .button-area a:hover {
-
-    transform:
-        translateY(-2px)
-        scale(1.03);
+    background-color: #4a7bd8;
 
     box-shadow:
-        0 0 20px rgba(110, 246, 255, 0.85);
+        0 4px 10px rgba(74,123,216,0.35);
+}
+
+@media screen and (max-width: 600px) {
+
+    .done-box {
+        width: calc(100% - 40px);
+    }
+
+    .button-area {
+        flex-direction: column;
+    }
+
+    .button-area a {
+        width: 100%;
+        box-sizing: border-box;
+    }
 }
 
 </style>
