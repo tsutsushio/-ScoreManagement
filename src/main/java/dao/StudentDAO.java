@@ -102,7 +102,9 @@ public class StudentDAO extends DAO {
     public boolean save(StudentBean student) throws Exception {
         
         // 🌟【例外処理 1】事前バリデーション（実行前チェック）
-        // DBの仕様（VARCHAR(10)）に合わせて、名前が10文字を超えていたら例外を投げて処理を中断する
+    	if (student.getNo() != null && student.getNo().length() > 10) {
+            throw new Exception("学生番号が長すぎます。10文字以内で入力してください。");
+        }
         if (student.getName() != null && student.getName().length() > 10) {
             throw new Exception("生徒の名前が長すぎます。10文字以内で入力してください。");
         }

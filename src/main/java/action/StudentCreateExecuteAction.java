@@ -38,45 +38,49 @@ public class StudentCreateExecuteAction extends Action {
             entYear = Integer.parseInt(entYearStr);
         }
 
-        // エラーメッセージを格納するためのMapを準備
         Map<String, String> errors = new HashMap<>();
 
-        // 3. 入力値のチェック（バリデーション）※画像のエラー画面を再現
+        // 🌟 3. 入力値のチェック（バリデーション）
         if (entYear == 0) {
             errors.put("entYear", "入学年度を選択してください");
         }
+        
+        // 学生番号のチェック（未入力 ＋ 10文字オーバー）
         if (no == null || no.isEmpty()) {
             errors.put("no", "学生番号を入力してください");
+        } else if (no.length() > 10) {
+            errors.put("no", "学生番号は10文字以内で入力してください");
         }
+        
+        // 氏名のチェック（未入力 ＋ 10文字オーバー）
         if (name == null || name.isEmpty()) {
             errors.put("name", "氏名を入力してください");
+        } else if (name.length() > 10) {
+            errors.put("name", "氏名は10文字以内で入力してください");
         }
+        
         if (password == null || password.isEmpty()) {
             errors.put("password", "パスワードを入力してください");
         }
         
         StudentDAO dao = new StudentDAO();
 
-        // 未入力エラーがない場合のみ、学生番号の重複チェックを行う
+        // 未入力や文字数エラーがない場合のみ、学生番号の重複チェックを行う
         if (errors.isEmpty()) {
             StudentBean existingStudent = dao.get(no);
             if (existingStudent != null) {
-                // すでに同じ学生番号がDBに存在する場合
                 errors.put("no", "学生番号が重複しています");
             }
         }
 
-        // 4. エラーがあった場合は、登録画面（student_create.jsp）に戻す
+        // 4. エラーがあった場合は、登録画面に戻す
         if (!errors.isEmpty()) {
-            // エラーメッセージと、入力途中のデータをリクエストに保存
             req.setAttribute("errors", errors);
             req.setAttribute("entYear", entYearStr);
             req.setAttribute("no", no);
             req.setAttribute("name", name);
             req.setAttribute("classNum", classNum);
             req.setAttribute("password", password);
-            
-            // ドロップダウンのリストを再生成（StudentCreateActionと同じ処理）
             setDropdownLists(req);
             
             return "/WEB-INF/view/student/student_create.jsp";
@@ -88,39 +92,30 @@ public class StudentCreateExecuteAction extends Action {
         student.setNo(no);
         student.setName(name);
         student.setClassNum(classNum);
-        student.setIsAttend(true); // 新規登録なので在学中(true)にする
-        student.setSchool(loginUser.getSchool()); // 先生の学校コードをセット
+        student.setIsAttend(true);
+        student.setSchool(loginUser.getSchool());
         student.setPassword(password);
 
-        // 🌟【追加】DAOの処理をtry-catchで囲み、例外を受け止める
         try {
-            // クラス図にある save メソッドを呼び出す
             dao.save(student);
-            
         } catch (Exception e) {
-            // DAOから投げられたエラーメッセージ（「生徒の名前が長すぎます...」など）を取得
-            errors.put("name", e.getMessage()); 
+            // DAOで想定外のDBエラーが起きた場合は、学生番号の下にエラーを出す
+            errors.put("no", e.getMessage()); 
             
-            // 入力途中のデータをリクエストに保持して画面に戻す
             req.setAttribute("errors", errors);
             req.setAttribute("entYear", entYearStr);
             req.setAttribute("no", no);
             req.setAttribute("name", name);
             req.setAttribute("classNum", classNum);
             req.setAttribute("password", password);
-            
             setDropdownLists(req);
             
             return "/WEB-INF/view/student/student_create.jsp";
         }
 
-        // 6. 登録完了画面へ遷移
         return "/WEB-INF/view/student/student_create_done.jsp";
     }
 
-    /**
-     * エラーで元の画面に戻る際に、ドロップダウンのリストを再生成するヘルパーメソッド
-     */
     private void setDropdownLists(HttpServletRequest req) {
         int currentYear = LocalDate.now().getYear();
         List<Integer> entYearList = new ArrayList<>();
