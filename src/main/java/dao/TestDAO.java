@@ -743,37 +743,42 @@ public class TestDAO extends DAO {
                     st.executeQuery()
             ) {
 
-                while (rs.next()) {
+            	while (rs.next()) {
 
-                    TestBean test =
-                        new TestBean();
+            	    TestBean test =
+            	        new TestBean();
 
-                    test.setNo(
-                        rs.getInt("NO"));
+            	    test.setNo(
+            	        rs.getInt("NO"));
 
-                    test.setPoint(
-                        rs.getInt("POINT"));
+            	    test.setPoint(
+            	        rs.getInt("POINT"));
 
-                    StudentBean student =
-                        new StudentBean();
+            	    // ←追加
+            	    test.setClassNum(
+            	        rs.getString("CLASS_NUM"));
 
-                    student.setNo(
-                        rs.getString(
-                            "STUDENT_NO"));
+            	    StudentBean student =
+            	        new StudentBean();
 
-                    student.setName(
-                        rs.getString(
-                            "STUDENT_NAME"));
+            	    student.setNo(
+            	        rs.getString("STUDENT_NO"));
 
-                    student.setEntYear(
-                        rs.getInt(
-                            "ENT_YEAR"));
+            	    student.setName(
+            	        rs.getString("STUDENT_NAME"));
 
-                    test.setStudent(
-                        student);
+            	    student.setEntYear(
+            	        rs.getInt("ENT_YEAR"));
 
-                    list.add(test);
-                }
+            	    // ←追加
+            	    student.setClassNum(
+            	        rs.getString("CLASS_NUM"));
+
+            	    test.setStudent(
+            	        student);
+
+            	    list.add(test);
+            	}
             }
         }
 
