@@ -176,6 +176,18 @@ td input[type="number"] {
     margin: 0;
 }
 
+/* 🌟 エラーメッセージのスタイル */
+.error-msg {
+    color: #e74c3c;
+    background-color: #fdf0ed;
+    border: 1px solid #e74c3c;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
 .search-form {
     position: relative;
     z-index: 10;
@@ -199,12 +211,10 @@ td input[type="number"] {
 
     <h2>成績登録</h2>
 
-    <!-- 検索フォーム -->
     <form action="TestSearch.action"
           method="post"
           class="search-form">
 
-        <!-- 入学年度 -->
         <div class="search-item">
             <label>入学年度</label>
 
@@ -222,7 +232,6 @@ td input[type="number"] {
             </select>
         </div>
 
-        <!-- クラス -->
         <div class="search-item">
             <label>クラス</label>
 
@@ -240,7 +249,6 @@ td input[type="number"] {
             </select>
         </div>
 
-        <!-- 科目 -->
         <div class="search-item">
             <label>科目</label>
 
@@ -258,7 +266,6 @@ td input[type="number"] {
             </select>
         </div>
 
-        <!-- 回数 -->
         <div class="search-item">
             <label>回数</label>
 
@@ -270,7 +277,6 @@ td input[type="number"] {
                 value="${fNo}">
         </div>
 
-        <!-- 検索ボタン -->
         <div class="search-button">
             <button type="submit">
                 検索
@@ -279,12 +285,17 @@ td input[type="number"] {
 
     </form>
 
-    <!-- 検索結果（1件以上） -->
     <c:if test="${not empty testList}">
 
         <div class="result-box">
 
             <h2>検索結果</h2>
+
+            <c:if test="${not empty errors.point}">
+                <div class="error-msg">
+                    ${errors.point}
+                </div>
+            </c:if>
 
             <form action="TestRegistExecute.action"
                   method="post">
@@ -316,7 +327,6 @@ td input[type="number"] {
                     </c:forEach>
                 </table>
 
-                <!-- hidden -->
                 <input
                     type="hidden"
                     name="subjectCd"
@@ -344,7 +354,6 @@ td input[type="number"] {
 
     </c:if>
 
-    <!-- 検索結果（0件） -->
     <c:if test="${testList != null and empty testList}">
         <div class="result-box">
             <h2>検索結果</h2>
