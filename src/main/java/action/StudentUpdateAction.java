@@ -39,6 +39,6 @@ public class StudentUpdateAction extends Action {
         req.setAttribute("classList", classList);
         
         // 6. 変更画面へ遷移
-        return "/WEB-INF/view/student/student-update.jsp";
+        return "/WEB-INF/view/student/student_update.jsp";
     }
 }

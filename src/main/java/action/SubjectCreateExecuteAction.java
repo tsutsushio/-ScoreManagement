@@ -44,11 +44,22 @@ public class SubjectCreateExecuteAction extends Action {
 
             return "/subject/subject_create.jsp";
         }
+        
+        if (name.length() > 20) {
+
+            request.setAttribute(
+                    "errorMessage",
+                    "科目名は20文字以内で入力してください。"
+            );
+
+            return "/subject/subject_create.jsp";
+        }
+        
 
         SubjectDAO dao = new SubjectDAO();
 
         // 重複チェック
-        SubjectBean existing = dao.get(cd, null);
+        SubjectBean existing = dao.get(cd);
         if (existing != null) {
             request.setAttribute(
                     "errorMessage",
@@ -60,9 +71,11 @@ public class SubjectCreateExecuteAction extends Action {
 
         // 登録データ作成
         SubjectBean subject = new SubjectBean();
-        subject.setSchoolCd(
-                loginUser.getSchool().getCd()
+
+        subject.setSchool(
+                loginUser.getSchool()
         );
+
         subject.setCd(cd);
         subject.setName(name);
 

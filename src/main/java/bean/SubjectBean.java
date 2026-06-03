@@ -6,31 +6,16 @@ public class SubjectBean implements Serializable {
 
     private String cd;
     private String name;
-    private String schoolCd;
+    private SchoolBean school; 
 
     public SubjectBean() {}
 
-    public String getCd() {
-        return cd;
-    }
+    public String getCd() { return cd; }
+    public void setCd(String cd) { this.cd = cd; }
 
-    public void setCd(String cd) {
-        this.cd = cd;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSchoolCd() {
-        return schoolCd;
-    }
-
-    public void setSchoolCd(String schoolCd) {
-        this.schoolCd = schoolCd;
-    }
+    public SchoolBean getSchool() { return school; }
+    public void setSchool(SchoolBean school) { this.school = school; }
 }

@@ -6,16 +6,11 @@ public class TestBean implements Serializable {
 
     // クラス図準拠の基本フィールド
     private StudentBean student;
-
     private String classNum;
-    private String subjectCd;
-    private String schoolCd;
+    private SubjectBean subject;
+    private SchoolBean school;
     private int no;
     private int point;
-    
-    // 画面表示用などの追加フィールド
-    private String studentName;
-    private int entYear;
 
     // 🌟画面表示用の集計データ（追加フィールド）
     private int rank;           // 順位
@@ -29,18 +24,17 @@ public class TestBean implements Serializable {
     public String getClassNum() { return classNum; }
     public void setClassNum(String classNum) { this.classNum = classNum; }
 
-    public String getSubjectCd() { return subjectCd; }
-    public void setSubjectCd(String subjectCd) { this.subjectCd = subjectCd;}
+    public SubjectBean getSubject() { return subject; }
+    public void setSubject(SubjectBean subject) { this.subject = subject; }
 
-    public String getSchoolCd() { return schoolCd; }
-    public void setSchoolCd(String schoolCd) { this.schoolCd = schoolCd; }
+    public SchoolBean getSchool() { return school; }
+    public void setSchool(SchoolBean school) { this.school = school; }
 
     public int getNo() { return no; }
     public void setNo(int no) { this.no = no; }
 
     public int getPoint() { return point; }
     public void setPoint(int point) { this.point = point; }
-
 
     public int getRank() { return rank; }
     public void setRank(int rank) { this.rank = rank; }
@@ -50,13 +44,4 @@ public class TestBean implements Serializable {
 
     public double getAveragePoint() { return averagePoint; }
     public void setAveragePoint(double averagePoint) { this.averagePoint = averagePoint; }
-    
-	public void setSubject(SubjectBean subject) {}
-	public void setSchool(SchoolBean school) {}
-	
-	public void setStudentNo(String studentNo) {}
-	
-	public SubjectBean getSubject() {return null;}
-	public SchoolBean getSchool() {return null;}
-	public String getStudentNo() {return null;}
 }

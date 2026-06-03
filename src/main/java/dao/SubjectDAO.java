@@ -11,210 +11,190 @@ import bean.SubjectBean;
 
 public class SubjectDAO extends DAO {
 
-    /**
-     * 【追加】クラス図: get(cd: String, school: School): Subject
-     * 学校と科目コードを指定して1件取得する
-     */
-    public SubjectBean get(String cd, SchoolBean school) throws Exception {
+    // =========================================================
+    // 【1件取得】科目コードで1件取得
+    // =========================================================
+    public SubjectBean get(String cd) throws Exception {
+
         SubjectBean subject = null;
-        Connection con = getConnection();
-        
-        try {
-            String sql = "SELECT CD, NAME FROM SUBJECT WHERE CD = ? AND SCHOOL_CD = ?";
-            PreparedStatement st = con.prepareStatement(sql);
+        String sql = "SELECT SCHOOL_CD, CD, NAME FROM SUBJECT WHERE CD = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+             
             st.setString(1, cd);
-            st.setString(2, school.getCd());
-            ResultSet rs = st.executeQuery();
 
-            if (rs.next()) {
-                subject = new SubjectBean();
-                subject.setCd(rs.getString("CD"));
-                subject.setName(rs.getString("NAME"));
-                subject.setSchoolCd(school.getCd()); 
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    subject = new SubjectBean();
+                    subject.setCd(rs.getString("CD"));
+                    subject.setName(rs.getString("NAME"));
+                    
+                    // 🌟 修正ポイント：SchoolBeanを作ってセット
+                    SchoolBean school = new SchoolBean();
+                    school.setCd(rs.getString("SCHOOL_CD"));
+                    subject.setSchool(school);
+                }
             }
-
-            rs.close();
-            st.close();
-        } finally {
-            con.close();
         }
         return subject;
     }
 
-    /**
-     * 【追加】クラス図: filter(school: School): List<Subject>
-     * 特定の学校に紐づく科目一覧を取得する (引数: SchoolBean)
-     */
-    public List<SubjectBean> filter(SchoolBean school) throws Exception {
-        // 既存のString引数のfilterメソッドを呼び出して再利用
-        return filter(school.getCd());
+    // =========================================================
+    // 【新規登録】科目を登録する
+    // =========================================================
+    public int insert(SubjectBean subject) throws Exception {
+        
+        if (subject.getCd() != null && subject.getCd().length() != 3) {
+            throw new Exception("科目コードは3文字で入力してください。");
+        }
+        if (subject.getName() != null && subject.getName().length() > 20) {
+            throw new Exception("科目名は20文字以内で入力してください。");
+        }
+
+        int count = 0;
+        String sql = "INSERT INTO SUBJECT (SCHOOL_CD, CD, NAME) VALUES (?, ?, ?)";
+
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+             
+            // 🌟 修正ポイント：subjectの中のSchoolBeanからCDを取り出す
+            st.setString(1, subject.getSchool().getCd());
+            st.setString(2, subject.getCd());
+            st.setString(3, subject.getName());
+
+            try {
+                count = st.executeUpdate();
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+                throw new Exception("データベースの保存に失敗しました。科目コードが既に存在する可能性があります。");
+            }
+        }
+        return count;
     }
 
-    /**
-     * 学校ごとの科目一覧取得 (引数: String)
-     */
-    public List<SubjectBean> filter(String schoolCd) throws Exception {
-        List<SubjectBean> list = new ArrayList<>();
-        Connection con = getConnection();
+    // =========================================================
+    // 【一覧取得】すべての科目を取得
+    // =========================================================
+    public List<SubjectBean> list() throws Exception {
 
-        try {
-            String sql = "SELECT SCHOOL_CD, CD, NAME FROM SUBJECT WHERE SCHOOL_CD = ? ORDER BY CD ASC";
-            PreparedStatement st = con.prepareStatement(sql);
-            st.setString(1, schoolCd);
-            ResultSet rs = st.executeQuery();
+        List<SubjectBean> list = new ArrayList<>();
+        String sql = "SELECT SCHOOL_CD, CD, NAME FROM SUBJECT ORDER BY CD";
+
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
 
             while (rs.next()) {
                 SubjectBean subject = new SubjectBean();
-                subject.setSchoolCd(rs.getString("SCHOOL_CD"));
                 subject.setCd(rs.getString("CD"));
                 subject.setName(rs.getString("NAME"));
+                
+                // 🌟 修正ポイント
+                SchoolBean school = new SchoolBean();
+                school.setCd(rs.getString("SCHOOL_CD"));
+                subject.setSchool(school);
+
                 list.add(subject);
             }
-            rs.close();
-            st.close();
-        } finally {
-            con.close();
         }
-
         return list;
     }
 
-    /**
-     * 【追加】クラス図: save(subject: Subject): boolean
-     * 存在すれば更新、なければ登録を行う
-     */
-    public boolean save(SubjectBean subject) throws Exception {
-        Connection con = getConnection();
-        boolean exists = false;
-        
-        try {
-            // DB接続して存在確認
-            String checkSql = "SELECT COUNT(*) FROM SUBJECT WHERE CD = ? AND SCHOOL_CD = ?";
-            PreparedStatement stCheck = con.prepareStatement(checkSql);
-            stCheck.setString(1, subject.getCd());
-            stCheck.setString(2, subject.getSchoolCd());
-            ResultSet rs = stCheck.executeQuery();
-            
-            if (rs.next() && rs.getInt(1) > 0) {
-                exists = true;
-            }
-            rs.close();
-            stCheck.close();
-        } finally {
-            con.close();
-        }
+    // =========================================================
+    // 【削除】成績データを先に消してから科目を削除
+    // =========================================================
+    public boolean delete(String cd, String schoolCd) throws Exception {
+        boolean isSuccess = false;
 
-        // 存在する場合は既存のupdateメソッドを呼ぶ
-        if (exists) {
-            return update(subject);
-        } else {
-            // 新規登録
-            Connection conInsert = getConnection();
+        try (Connection con = getConnection()) {
+            con.setAutoCommit(false);
+            
             try {
-                String sql = "INSERT INTO SUBJECT (SCHOOL_CD, CD, NAME) VALUES (?, ?, ?)";
-                PreparedStatement st = conInsert.prepareStatement(sql);
-                st.setString(1, subject.getSchoolCd());
-                st.setString(2, subject.getCd());
-                st.setString(3, subject.getName());
-                int count = st.executeUpdate();
-                st.close();
-                return count > 0;
-            } finally {
-                conInsert.close();
+                String sql1 = "DELETE FROM TEST WHERE SCHOOL_CD = ? AND SUBJECT_CD = ?";
+                try (PreparedStatement st1 = con.prepareStatement(sql1)) {
+                    st1.setString(1, schoolCd);
+                    st1.setString(2, cd);
+                    st1.executeUpdate();
+                }
+
+                String sql2 = "DELETE FROM SUBJECT WHERE SCHOOL_CD = ? AND CD = ?";
+                try (PreparedStatement st2 = con.prepareStatement(sql2)) {
+                    st2.setString(1, schoolCd);
+                    st2.setString(2, cd);
+                    int count = st2.executeUpdate();
+                    isSuccess = (count > 0);
+                }
+                
+                con.commit();
+                
+            } catch (Exception e) {
+                con.rollback();
+                throw new Exception("科目の削除に失敗しました。関連するデータが存在する可能性があります。");
             }
         }
+        return isSuccess;
     }
 
-    /**
-     * 更新 (既存メソッドを綺麗に維持)
-     */
+    // =========================================================
+    // 【更新】科目名を更新
+    // =========================================================
     public boolean update(SubjectBean subject) throws Exception {
-        Connection con = getConnection();
-        try {
-            String sql = "UPDATE SUBJECT SET NAME = ? WHERE SCHOOL_CD = ? AND CD = ?";
-            PreparedStatement st = con.prepareStatement(sql);
+        
+        if (subject.getName() != null && subject.getName().length() > 20) {
+            throw new Exception("科目名は20文字以内で入力してください。");
+        }
+
+        boolean isSuccess = false;
+        String sql = "UPDATE SUBJECT SET NAME = ? WHERE SCHOOL_CD = ? AND CD = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+
             st.setString(1, subject.getName());
-            st.setString(2, subject.getSchoolCd());
+            // 🌟 修正ポイント
+            st.setString(2, subject.getSchool().getCd());
             st.setString(3, subject.getCd());
 
-            int count = st.executeUpdate();
-            st.close();
-            return count > 0;
-        } finally {
-            con.close();
+            try {
+                int count = st.executeUpdate();
+                isSuccess = (count > 0);
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+                throw new Exception("科目の更新に失敗しました。");
+            }
         }
+        return isSuccess;
     }
 
-    /**
-     * 【追加】クラス図: delete(subject: Subject): boolean
-     * データを削除する (引数: SubjectBean)
-     */
-    public boolean delete(SubjectBean subject) throws Exception {
-        // 既存の引数2つのdeleteメソッドを呼び出し、TESTテーブルの整合性も守る
-        return delete(subject.getCd(), subject.getSchoolCd());
-    }
+    // =========================================================
+    // 【条件検索】学校ごとの科目一覧取得
+    // =========================================================
+    public List<SubjectBean> filter(String schoolCd) throws Exception {
 
-    /**
-     * 削除 (既存のTESTテーブル連動削除ロジックをベースに維持)
-     */
-    public boolean delete(String cd, String schoolCd) throws Exception {
-        Connection con = getConnection();
+        List<SubjectBean> list = new ArrayList<>();
+        String sql = "SELECT SCHOOL_CD, CD, NAME FROM SUBJECT WHERE SCHOOL_CD = ? ORDER BY CD";
 
-        try {
-            // TESTテーブルの関連データを先に削除（整合性維持）
-            String sql1 = "DELETE FROM TEST WHERE SCHOOL_CD = ? AND SUBJECT_CD = ?";
-            PreparedStatement st1 = con.prepareStatement(sql1);
-            st1.setString(1, schoolCd);
-            st1.setString(2, cd);
-            st1.executeUpdate();
-            st1.close();
+        try (Connection con = getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
 
-            // SUBJECTテーブルから科目を削除
-            String sql2 = "DELETE FROM SUBJECT WHERE SCHOOL_CD = ? AND CD = ?";
-            PreparedStatement st2 = con.prepareStatement(sql2);
-            st2.setString(1, schoolCd);
-            st2.setString(2, cd);
-            int count = st2.executeUpdate();
-            st2.close();
+            st.setString(1, schoolCd);
 
-            return count > 0;
-        } finally {
-            con.close();
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    SubjectBean subject = new SubjectBean();
+                    subject.setCd(rs.getString("CD"));
+                    subject.setName(rs.getString("NAME"));
+                    
+                    // 🌟 修正ポイント
+                    SchoolBean school = new SchoolBean();
+                    school.setCd(rs.getString("SCHOOL_CD"));
+                    subject.setSchool(school);
+
+                    list.add(subject);
+                }
+            }
         }
+        return list;
     }
-    
-    public int insert(SubjectBean subject) throws Exception{
-    	Connection con = getConnection();
-    	String sql = "INSERT INTO SUBJECT (SCHOOL_CD, CD, NAME) VALUES (?, ?, ?)";
-    	PreparedStatement st = con.prepareStatement(sql);
-    	st.setString(1, subject.getSchoolCd());
-    	st.setString(2, subject.getCd());
-    	st.setString(3, subject.getName());
-    	
-    	int count = st.executeUpdate();
-    	
-    	st.close();
-    	con.close();
-    	
-    	return count;
-    }
-    public List<SubjectBean> list() throws Exception {
-    	List<SubjectBean> list = new ArrayList<> ();
-    	Connection con = getConnection();
-    	String sql = "SELECT SCHOOL_CD, CD, NAME FROM SUBJECT ORDER BY CD";
-    	PreparedStatement st = con.prepareStatement(sql);
-    	ResultSet rs = st.executeQuery();
-    	while (rs.next()) {
-    		SubjectBean subject = new SubjectBean();
-    		subject.setSchoolCd(rs.getString("SCHOOL_CD"));
-    				subject.setCd(rs.getString("CD"));
-    				subject.setName(rs.getString("NAME"));
-    				list.add(subject);
-    	}
-    	rs.close();
-    	st.close();
-    	con.close();
-    	
-    	return list;
-    	}
-    }
+}

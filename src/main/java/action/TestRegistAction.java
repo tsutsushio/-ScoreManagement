@@ -8,214 +8,108 @@ import java.util.TreeSet;
 
 import bean.StudentBean;
 import bean.TeacherBean;
-import bean.TestBean;
-import dao.ClassNumDAO;
 import dao.StudentDAO;
 import dao.SubjectDAO;
-import dao.TestDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import tool.Action;
-import util.Util;
 
 public class TestRegistAction
 extends Action {
 
     @Override
     public String execute(
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+            HttpServletRequest req,
+            HttpServletResponse res
+    ) throws Exception {
 
-        // ログインユーザー取得
-        Util util = new Util();
-        TeacherBean teacher = util.getUser(request);
+        HttpSession session =
+                req.getSession();
 
-        // 未ログインチェック
-        if (teacher == null) {
-            return "/login/login.jsp";
-        }
-
-        // 画面表示用データセット
-        setRequestData(request, response);
-
-        // パラメータ取得
-        String studentNo = request.getParameter("student_no");
-        String subjectCd = request.getParameter("subject_cd");
-        String classNum = request.getParameter("class_num");
-        String noStr = request.getParameter("no");
-        String pointStr = request.getParameter("point");
-
-        // 初回表示
-        if (studentNo == null) {
-            return "/WEB-INF/view/test/test-regist.jsp";
-        }
-
-        // 入力保持
-        request.setAttribute("student_no", studentNo);
-        request.setAttribute("subject_cd", subjectCd);
-        request.setAttribute("class_num", classNum);
-        request.setAttribute("no", noStr);
-        request.setAttribute("point", pointStr);
-
-        // 必須チェック
-        if (studentNo.isBlank()
-                || subjectCd.isBlank()
-                || classNum == null
-                || classNum.isBlank()
-                || noStr.isBlank()
-                || pointStr.isBlank()) {
-
-            request.setAttribute(
-                    "errorMessage",
-                    "未入力の項目があります。"
-            );
-
-            return "/WEB-INF/view/test/test-regist.jsp";
-        }
-
-        int no;
-        int point;
-
-        try {
-
-            no = Integer.parseInt(noStr);
-            point = Integer.parseInt(pointStr);
-
-            // 点数範囲チェック
-            if (point < 0 || point > 100) {
-
-                request.setAttribute(
-                        "errorMessage",
-                        "点数は0〜100の範囲で入力してください。"
+        TeacherBean loginUser =
+                (TeacherBean)
+                session.getAttribute(
+                        "loginUser"
                 );
 
-                return "/WEB-INF/view/test/test-regist.jsp";
-            }
+        if (loginUser == null) {
 
-        } catch (NumberFormatException e) {
-
-            request.setAttribute(
-                    "errorMessage",
-                    "数字を正しく入力してください。"
-            );
-
-            return "/WEB-INF/view/test/test-regist.jsp";
+            return
+                "/login/login.jsp";
         }
 
-        // 登録処理
-        TestDAO testDao = new TestDAO();
-
         String schoolCd =
-                teacher.getSchool().getCd();
+                loginUser
+                .getSchool()
+                .getCd();
 
-        TestBean test = new TestBean();
-
-        test.setStudentNo(studentNo);
-        test.setSubjectCd(subjectCd);
-        test.setSchoolCd(schoolCd);
-        test.setNo(no);
-        test.setPoint(point);
-        test.setClassNum(classNum);
-
-        boolean result =
-                testDao.save(test);
-
-        if (!result) {
-
-            request.setAttribute(
-                    "errorMessage",
-                    "登録に失敗しました。"
-            );
-
-            return "/WEB-INF/view/test/test-regist.jsp";
-        }
-
-        return "TestList.action";
-    }
-
-    /**
-     * 画面表示用データ設定
-     */
-    private void setRequestData(
-            HttpServletRequest request,
-            HttpServletResponse response)
-            throws Exception {
-
-        Util util = new Util();
-
-        TeacherBean teacher =
-                util.getUser(request);
-
-        String schoolCd =
-                teacher.getSchool().getCd();
-
-        // 科目一覧
+        // ========= 科目一覧 =========
         SubjectDAO subjectDAO =
                 new SubjectDAO();
 
-        request.setAttribute(
+        req.setAttribute(
                 "subjectList",
-                subjectDAO.filter(schoolCd)
+                subjectDAO.filter(
+                        schoolCd
+                )
         );
 
-        // 入学年度一覧
-        List<Integer> entYearList =
+        // ========= 入学年度 =========
+        List<Integer>
+            entYearList =
                 new ArrayList<>();
 
         int currentYear =
-                Year.now().getValue();
+                Year.now()
+                .getValue();
 
-        for (int i = currentYear;
-                i >= 2020;
-                i--) {
-
+        for (
+            int i = currentYear;
+            i >= 2020;
+            i--
+        ) {
             entYearList.add(i);
         }
 
-        request.setAttribute(
+        req.setAttribute(
                 "entYearList",
                 entYearList
         );
 
-        // クラス一覧
+        // ========= クラス一覧 =========
         StudentDAO studentDAO =
                 new StudentDAO();
 
-        List<StudentBean> studentList =
-                studentDAO.filter(
-                        schoolCd,
-                        0,
-                        null,
-                        true
-                );
+        List<StudentBean>
+        studentList =
+            studentDAO.filter(
+                    schoolCd,
+                    0,
+                    null,
+                    true
+            );
 
-        Set<String> classSet =
+        Set<String>
+            classSet =
                 new TreeSet<>();
 
-        for (StudentBean student : studentList) {
+        for (
+            StudentBean student
+            : studentList
+        ) {
 
             classSet.add(
-                    student.getClassNum()
+                student.getClassNum()
             );
         }
 
-        request.setAttribute(
+        req.setAttribute(
                 "classList",
                 classSet
         );
 
-        // ClassNumDAO
-        ClassNumDAO classNumDao =
-                new ClassNumDAO();
-
-        List<String> classNumList =
-                classNumDao.filter(
-                        teacher.getSchool()
-                );
-
-        request.setAttribute(
-                "class_num_set",
-                classNumList
-        );
+        return
+            "/WEB-INF/view/test/test-regist.jsp";
     }
 }

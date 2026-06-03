@@ -16,7 +16,7 @@ public class SubjectUpdateAction extends Action {
         String cd = request.getParameter("cd");
 
         SubjectDAO dao = new SubjectDAO();
-        SubjectBean subject = dao.get(cd, null);
+        SubjectBean subject = dao.get(cd);
 
         request.setAttribute("subject", subject);
 
