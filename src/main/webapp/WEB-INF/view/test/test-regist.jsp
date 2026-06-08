@@ -8,195 +8,220 @@
 <title>成績登録</title>
 
 <style>
-/* 全体のレイアウト */
+/* 全体のベーススタイル */
+/* 1. body全体を縦並びのFlexboxにする */
 body {
-    font-family: "Yu Gothic", "Meiryo", sans-serif;
-    background-color: #f5f7fb;
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    background-color: #f8f9fa;
+    color: #333333;
+    margin: 0;
+    padding: 20px 20px 0 20px; /* 下側の余白を0にします */
+    
+    /* ーーー ここから追加 ーーー */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 30px 0;
+    min-height: 100vh; /* 画面全体の高さを最低基準にする */
+    box-sizing: border-box;
+    /* ーーーーーーーーーーーーーー */
 }
 
-/* 白いカード */
+/* 2. メインコンテンツのコンテナを伸縮させる */
 .container {
-    background: white;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    width: 900px;
-    box-sizing: border-box;
-}
-
-/* タイトル */
-h2 {
-    color: #4a90e2;
-    margin-top: 0;
-    margin-bottom: 25px;
-    text-align: center;
-    font-size: 24px;
-}
-
-/* ラベル */
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-    font-size: 14px;
-}
-
-/* 入力フォーム */
-input[type="text"],
-input[type="number"],
-select {
+    max-width: 1000px;
+    margin: 0 auto;
     width: 100%;
-    padding: 10px;
-    border: 1px solid #dce4ec;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 16px;
-    background-color: #fff;
-    transition: border-color 0.2s;
+    
+    /* ーーー ここから追加 ーーー */
+    flex: 1; /* 余ったスペースをすべて埋めてフッターを押し下げる */
+    /* ーーーーーーーーーーーーーー */
 }
 
-input:focus,
-select:focus {
-    outline: none;
-    border-color: #66a3ff;
-}
-
-/* ボタン共通 */
-button[type="submit"] {
-    padding: 12px 20px;
-    background: #66a3ff;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-button[type="submit"]:hover {
-    background: #4d8cff;
-}
-
-/* ===== 検索結果エリア ===== */
-.result-box {
-    margin-top: 20px;
-    background: #fff;
-    border-radius: 16px;
-    padding: 30px;
+/* 3. フッター自体のスタイリング（追加） */
+footer, 
+#footer { /* JSP側でインクルードされているフッターの要素名に合わせてください */
+    width: 100%;
+    background-color: #f1f1f1; /* 背景色（画像に合わせた薄いグレー） */
+    padding: 15px 0;
+    text-align: center;
+    font-size: 13px;
+    color: #666666;
+    margin-top: 40px; /* コンテンツとの間に最低限あける隙間 */
     box-sizing: border-box;
 }
 
 /* 戻るリンク */
 .back-link {
-    margin-bottom: 20px;
+    display: inline-block;
+    color: #666666;
     text-decoration: none;
-    color: #4a90e2;
     font-size: 14px;
+    margin-bottom: 20px;
 }
-
 .back-link:hover {
     text-decoration: underline;
 }
 
-/* ===== 検索フォーム横並び ===== */
+/* コンテナ */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* 画面タイトル (成績管理 / 成績登録) */
+h2 {
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f1f1f1;
+    padding: 12px 20px;
+    margin: 0 0 20px 0;
+    border-radius: 4px;
+    color: #333333;
+}
+
+/* 検索フォームエリア */
 .search-form {
     display: flex;
-    align-items: flex-end;
-    gap: 16px;
     flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 15px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 30px;
 }
 
 .search-item {
-    flex: 1;
-    min-width: 140px;
-}
-
-.search-button {
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    gap: 8px;
 }
 
+.search-item label {
+    font-size: 14px;
+    color: #666666;
+}
+
+/* 入力・選択コントロール共通 */
+.search-item select,
+.search-item input[type="number"] {
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 15px;
+    background-color: #ffffff;
+    min-width: 100px;
+    box-sizing: border-box;
+}
+
+/* 科目セレクトボックスの幅を広めに調整 */
+.search-item select[name="subjectCd"] {
+    min-width: 200px;
+}
+
+/* 検索ボタン */
 .search-button button {
-    width: auto;
-    margin: 0;
-    height: 45px;
-    white-space: nowrap;
+    height: 36px;
+    padding: 0 20px;
+    background-color: #555555;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.search-button button:hover {
+    background-color: #333333;
 }
 
-/* ===== テーブル ===== */
+/* エラーメッセージ */
+.error-msg {
+    color: #de3545;
+    background-color: #fbebeb;
+    border: 1px solid #f5c6cb;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* 検索結果ボックス内のタイトルを通常の文字に変更 */
+.result-box h2 {
+    all: unset;
+    display: block;
+    font-size: 15px;
+    color: #333333;
+    margin-bottom: 15px;
+}
+
+/* 一覧テーブルスタイル */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    background: white;
+    margin-bottom: 20px;
+    font-size: 15px;
 }
 
-th {
-    background-color: #66a3ff;
-    color: white;
-    padding: 12px;
+table th, table td {
+    padding: 12px 10px;
+    text-align: left;
+    vertical-align: middle;
 }
 
-td {
-    border: 1px solid #dce4ec;
-    padding: 10px;
-    text-align: center;
+/* ヘッダー行 */
+table th {
+    font-weight: bold;
+    color: #333333;
+    border-bottom: 1px solid #333333;
 }
 
-td input[type="number"] {
-    width: 80px;
-    margin: auto;
+/* データ行 */
+table td {
+    border-bottom: 1px solid #e0e0e0;
+    color: #444444;
 }
 
-/* 登録ボタン中央 */
+/* 点数入力ボックス */
+table input[type="number"] {
+    width: 140px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+/* 登録して終了ボタン */
 .register-btn {
-    display: flex;
-    justify-content: center;
     margin-top: 20px;
 }
 
 .register-btn button {
-    width: 250px;
+    height: 38px;
+    padding: 0 20px;
+    background-color: #6c757d;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-/* 0件メッセージ */
+.register-btn button:hover {
+    background-color: #5a6268;
+}
+
+/* 該当者なしメッセージ */
 .no-result {
-    text-align: center;
-    color: #666;
-    font-size: 25px;
-    padding: 24px 0;
-    margin: 0;
+    color: #666666;
+    font-size: 15px;
+    padding: 10px 0;
 }
 
-/* 🌟 エラーメッセージのスタイル */
-.error-msg {
-    color: #e74c3c;
-    background-color: #fdf0ed;
-    border: 1px solid #e74c3c;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-weight: bold;
-    text-align: center;
-}
-
-.search-form {
-    position: relative;
-    z-index: 10;
-}
-
-.result-box {
-    position: relative;
-    z-index: 1;
-}
 </style>
 </head>
 
