@@ -100,11 +100,12 @@ body {
                 <a href="${pageContext.request.contextPath}/action/Menu.action" class="nav-btn">
             ホーム
         </a>
-        <a href="${pageContext.request.contextPath}/action/Logout.action" class="nav-btn" style="background: #fff0f0; color: #cc0000; border-color: #ffcccc;">
+        <a href="${pageContext.request.contextPath}/action/Logout.action"  class="nav-btn">
             ログアウト
         </a>
     </div>
 </div>
+<br>
 
 </div>
 
