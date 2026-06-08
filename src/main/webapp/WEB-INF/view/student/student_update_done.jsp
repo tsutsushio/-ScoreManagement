@@ -1,17 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <title>得点管理システム - 学生変更完了</title>
+
 <style>
-    /* 全体：他の画面と共通の縦幅いっぱいベースを作る */
+    /* 全体レイアウト：他の画面と共通の縦幅いっぱいベース */
     html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-        font-family: sans-serif;
-        background-color: #f9f9f9;
+        font-family: "Yu Gothic", sans-serif;
+        background-color: #ffffff;
     }
 
     body {
@@ -19,65 +22,53 @@
         flex-direction: column; /* 上からヘッダー、コンテンツの順 */
     }
 
-    /* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
+    /* メインコンテナ（サイドバーとコンテンツの横並び） */
     .container {
         display: flex;
-        flex: 1;            /* 画面の残りの高さをすべて使う */
+        flex: 1;
         width: 100%;
         align-items: stretch;
     }
 
-    /* メインエリア：この中でメッセージボックスを画面の真ん中に寄せる */
+    /* 右側メインエリア */
     .main-content {
         flex: 1;
-        padding: 40px;
+        padding: 20px 40px;
+        background-color: #ffffff;
         box-sizing: border-box;
-        background-color: #f9f9f9;
-
-        /* メッセージボックスを中央に配置するための設定 */
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
-    /* メッセージボックス（スタイルはそのまま流用） */
-    .message-box {
-        background-color: white;
-        padding: 40px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        text-align: center;
-        width: 350px;
-        box-sizing: border-box; /* パディングでの幅崩れ防止 */
-    }
-
-    h2 {
-        color: #333;
+    /* ① 見出し「学生情報変更」（グレーの帯） */
+    .main-content h2 {
         margin-top: 0;
         margin-bottom: 20px;
+        padding: 10px 15px;
+        background-color: #f2f2f2;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
     }
 
-    p {
-        color: #555;
-        font-size: 16px;
-        margin-bottom: 30px;
+    /* ② 変更完了メッセージ（緑の帯） */
+    .success-alert {
+        background-color: #92c5ad; /* 画像の落ち着いた緑色 */
+        color: #333;
+        text-align: center;
+        padding: 8px 10px;
+        font-size: 13px;
+        margin-bottom: 50px; /* 下のリンクとの間隔 */
     }
-    
-    .btn {
-        display: block;
-        padding: 12px;
-        text-decoration: none;
-        border-radius: 4px;
-        font-size: 16px;
-        font-weight: bold;
-        transition: background-color 0.2s;
-        background-color: #0d6efd; /* 青色 */
-        color: white;
+
+    /* ③ 学生一覧リンクエリア */
+    .link-group {
+        font-size: 14px;
     }
-    
-    .btn:hover {
-        background-color: #0b5ed7;
+    .link-group a {
+        color: #0066ff;
+        text-decoration: underline;
+    }
+    .link-group a:hover {
+        color: #0044cc;
     }
 </style>
 </head>
@@ -91,12 +82,17 @@
 
     <div class="main-content">
 
-        <div class="message-box">
-            <h2>変更完了</h2>
-            <p>学生情報の変更が完了しました。</p>
-            
-            <a href="${pageContext.request.contextPath}/action/StudentList.action" class="btn">学生一覧へ戻る</a>
+        <h2>学生情報変更</h2>
+        
+        <div class="success-alert">
+            変更が完了しました
+        </div>
+        
+        <div class="link-group">
+            <a href="${pageContext.request.contextPath}/action/StudentList.action">学生一覧へ戻る</a>
         </div>
 
-    </div> </div> </body>
+    </div> </div> <%@ include file="/footer.jsp" %>
+
+</body>
 </html>

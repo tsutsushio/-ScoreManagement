@@ -1,161 +1,130 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <title>得点管理システム - 学生情報登録</title>
+
 <style>
-/* 全体：メインメニューと同じく縦いっぱいに広げる基礎を作る */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-    background-color: #f4f7f9;
-    color: #333;
-}
+    /* 全体レイアウト：画面の残りの高さをすべて使う基礎構造 */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: "Yu Gothic", sans-serif;
+        background-color: #ffffff;
+    }
 
-body {
-    display: flex;
-    flex-direction: column; /* 上からヘッダー、コンテンツの順 */
-}
+    body {
+        display: flex;
+        flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+    }
 
-/* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
-.container {
-    display: flex;
-    flex: 1;            /* 画面の残りの高さをすべて使う */
-    width: 100%;
-    align-items: stretch;
-}
+    /* メインコンテナ（サイドバーとコンテンツの並び） */
+    .container {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        align-items: stretch;
+    }
 
-/* メインエリア：この中でフォームを中央寄せにする */
-.main-content {
-    flex: 1;
-    padding: 40px 20px;
-    box-sizing: border-box;
-    background-color: #f4f7f9;
-    
-    /* フォームと戻るリンクを中央に集めるための設定 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    /* 左側サイドバーから独立した、右側メインエリア */
+    .main-content {
+        flex: 1;
+        padding: 20px 40px;
+        background-color: #ffffff;
+        box-sizing: border-box;
+    }
 
-/* 戻るリンクをカードの幅（450px）に合わせて左側に配置 */
-.back-link { 
-    display: inline-block;
-    margin-bottom: 15px; 
-    text-decoration: none; 
-    color: #3498db; 
-    font-size: 14px;
-    font-weight: bold;
-    transition: color 0.2s;
-    align-self: center; /* 親の中央寄せに追従させつつ、幅をカードと同期 */
-    max-width: 450px;
-    width: 100%;
-}
+    /* 見出し「学生情報登録」（グレーの帯） */
+    .main-content h2 {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding: 10px 15px;
+        background-color: #f2f2f2;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-.back-link:hover { 
-    color: #2980b9;
-    text-decoration: underline;
-}
+    /* フォームコンテナ */
+    .form-container {
+        max-width: 800px;
+        width: 100%;
+    }
 
-/* タイトルをカードの中に収まるように一旦非表示に */
-h2 {
-    display: none;
-}
+    /* 各入力項目の縦並びグループ設定 */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 20px;
+    }
 
-/* フォーム全体を包むカード（中央揃えのメイン枠） */
-.form-container {
-    background: #ffffff;
-    padding: 35px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    width: 100%;
-    max-width: 450px; /* 変更画面と同じ幅に統一 */
-    box-sizing: border-box;
-}
+    .form-group label {
+        font-size: 13px;
+        color: #666;
+        font-weight: bold;
+    }
 
-/* カードの先頭にタイトルを美しく配置するための疑似要素 */
-.form-container::before {
-    content: "学生情報登録";
-    display: block;
-    font-size: 22px;
-    font-weight: bold;
-    color: #2c3e50;
-    text-align: center;
-    padding-bottom: 12px;
-    margin-bottom: 25px;
-    border-bottom: 2px solid #f4f7f9;
-}
+    /* 入力欄（テキスト・セレクト共通の見た目） */
+    .form-group input[type="text"],
+    .form-group input[type="password"],
+    .form-group select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+        background-color: #ffffff;
+        color: #333;
+    }
 
-.form-group { 
-    margin-bottom: 20px; 
-}
+    /* プレースホルダーの色調整 */
+    .form-group input::placeholder {
+        color: #aaa;
+    }
 
-.form-group label { 
-    display: inline-block; 
-    font-size: 14px;
-    font-weight: bold; 
-    margin-bottom: 8px; 
-    color: #34495e; 
-}
+    /* 「登録して終了」ボタン（グレーの四角ボタン仕様） */
+    .btn-submit {
+        background-color: #6c757d;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 24px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 15px;
+        transition: background-color 0.2s;
+    }
+    .btn-submit:hover {
+        background-color: #5a6268;
+    }
 
-/* テキスト入力・パスワード・セレクトボックスをすべて統一 */
-.form-group input[type="text"], 
-.form-group input[type="password"], 
-.form-group select {
-    width: 100%;
-    height: 42px;
-    padding: 0 12px;
-    font-size: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: #fff;
-    box-sizing: border-box;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
+    /* 「戻る」リンク（ボタンの下の青文字下線） */
+    .back-link-box {
+        margin-top: 5px;
+    }
+    .back-link {
+        color: #0066ff;
+        font-size: 14px;
+        text-decoration: underline;
+    }
+    .back-link:hover {
+        color: #0044cc;
+    }
 
-/* プレースホルダーの文字色を少し薄くして見やすく */
-.form-group input::placeholder {
-    color: #b0bec5;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-    outline: none;
-}
-
-/* エラーメッセージ（赤文字） */
-.error-msg {
-    color: #e74c3c;
-    font-size: 13px;
-    display: block;
-    margin-top: 6px;
-    font-weight: 500;
-}
-
-/* 登録ボタン */
-.btn-submit {
-    width: 100%;
-    height: 45px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.2s;
-    margin-top: 10px;
-}
-
-.btn-submit:hover { 
-    background-color: #2980b9; 
-}
+    /* エラーメッセージ（バリデーション赤文字） */
+    .error-msg {
+        color: #d9534f;
+        font-size: 13px;
+        margin-top: 4px;
+        font-weight: bold;
+    }
 </style>
 </head>
 <body>
@@ -167,8 +136,6 @@ h2 {
     <%@ include file="/sidebar.jsp" %>
 
     <div class="main-content">
-
-        <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
 
         <h2>学生情報登録</h2>
 
@@ -184,7 +151,7 @@ h2 {
                         </c:forEach>
                     </select>
                     <c:if test="${not empty errors.entYear}">
-                        <span class="error-msg">${errors.entYear}</span>
+                        <div class="error-msg">${errors.entYear}</div>
                     </c:if>
                 </div>
 
@@ -192,7 +159,7 @@ h2 {
                     <label>学生番号</label>
                     <input type="text" name="no" value="${no}" placeholder="学生番号を入力してください">
                     <c:if test="${not empty errors.no}">
-                        <span class="error-msg">${errors.no}</span>
+                        <div class="error-msg">${errors.no}</div>
                     </c:if>
                 </div>
 
@@ -200,7 +167,7 @@ h2 {
                     <label>氏名</label>
                     <input type="text" name="name" value="${name}" placeholder="氏名を入力してください">
                     <c:if test="${not empty errors.name}">
-                        <span class="error-msg">${errors.name}</span>
+                        <div class="error-msg">${errors.name}</div>
                     </c:if>
                 </div>
 
@@ -215,15 +182,21 @@ h2 {
                 
                 <div class="form-group">
                     <label>パスワード</label>
-                    <input type="password" name="password" placeholder="パスワードを入力してください">
+                    <input type="password" name="password" placeholder="パスワードを入力してください（必要な場合）">
                     <c:if test="${not empty errors.password}">
-                        <span class="error-msg">${errors.password}</span>
+                        <div class="error-msg">${errors.password}</div>
                     </c:if>
                 </div>
 
-                <button type="submit" class="btn-submit">登録</button>
+                <button type="submit" class="btn-submit">登録して終了</button>
             </form>
+            
+            <div class="back-link-box">
+                <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
+            </div>
         </div>
 
-    </div> </div> </body>
+    </div> </div> <%@ include file="/footer.jsp" %>
+
+</body>
 </html>

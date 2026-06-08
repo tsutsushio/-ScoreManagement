@@ -1,10 +1,10 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <style>
 /* header.jsp内でのbodyへのmargin/padding指定は、
    読み込み先のメイン画面全体を破壊する原因になるため削除しました 
 */
-
 /* 上部バー（普通に上部に配置し、横幅100%） */
 .top-bar {
     width: 100%;
@@ -21,6 +21,7 @@
     backdrop-filter: blur(8px);
 
     border-bottom: 1px solid #c9dfff;
+    z-index: 1000;
 }
 
 /* 左側：タイトル文字 */
@@ -43,6 +44,7 @@
 /* ログインユーザ名 */
 .user-name {
     color: #333333;
+    font-weight: bold;
 }
 
 /* ログアウトリンク */
@@ -61,31 +63,10 @@
     <h1 class="nav-left">得点管理システム</h1>
 
     <div class="nav-right">
-        <%
-            Object userObj = session.getAttribute("loginUser");
-            boolean isLogin = false;
-
-            if (userObj != null) {
-                try {
-                    String userName = String.valueOf(
-                        userObj.getClass().getMethod("getName").invoke(userObj)
-                    );
-                    
-                    if (userName != null && !userName.trim().isEmpty() && !userName.equals("null")) {
-                        isLogin = true;
-                    }
-                } catch (Exception e) {
-                    isLogin = true;
-                }
-            }
-
-            if (isLogin) {
-        %>
-            <span class="user-name">${loginUser.name}様</span>
-            <a href="Logout.action" class="logout-link">ログアウト</a>
-        <%
-            }
-        %>
+        <c:if test="${not empty sessionScope.loginUser and not empty sessionScope.loginUser.name and sessionScope.loginUser.name != 'null'}">
+            <span class="user-name"><c:out value="${sessionScope.loginUser.name}"/>様</span>
+            <a href="${pageContext.request.contextPath}/action/Logout.action" class="logout-link">ログアウト</a>
+        </c:if>
     </div>
 
 </div>

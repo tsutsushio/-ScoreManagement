@@ -6,203 +6,165 @@
 <head>
 <meta charset="UTF-8">
 <title>得点管理システム - 学生情報変更</title>
+
 <style>
-/* 全体：共通の縦幅いっぱいベースを作る */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-    background-color: #f4f7f9;
-    color: #333;
-}
+    /* 全体レイアウト：他の画面と共通の縦幅いっぱいベース */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: "Yu Gothic", sans-serif;
+        background-color: #ffffff;
+    }
 
-body {
-    display: flex;
-    flex-direction: column; /* 上からヘッダー、コンテンツの順 */
-}
+    body {
+        display: flex;
+        flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+    }
 
-/* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
-.container {
-    display: flex;
-    flex: 1;            /* 画面の残りの高さをすべて使う */
-    width: 100%;
-    align-items: stretch;
-}
+    /* メインコンテナ（サイドバーとコンテンツの並び） */
+    .container {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        align-items: stretch;
+    }
 
-/* メインエリア：この中でフォームを中央寄せにする */
-.main-content {
-    flex: 1;
-    padding: 40px 20px;
-    box-sizing: border-box;
-    background-color: #f4f7f9;
-    
-    /* フォームと戻るリンクを中央に集めるための設定 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    /* 右側メインエリア */
+    .main-content {
+        flex: 1;
+        padding: 20px 40px;
+        background-color: #ffffff;
+        box-sizing: border-box;
+    }
 
-/* 戻るリンクをカードの幅（450px）に合わせて左側に配置 */
-.back-link { 
-    display: inline-block;
-    margin-bottom: 15px; 
-    text-decoration: none; 
-    color: #3498db; 
-    font-size: 14px;
-    font-weight: bold;
-    transition: color 0.2s;
-    align-self: center; /* 親の中央寄せに追従させつつ、幅をカードと同期 */
-    max-width: 450px;
-    width: 100%;
-}
+    /* ① 見出し「学生情報変更」（グレーの帯） */
+    .main-content h2 {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding: 10px 15px;
+        background-color: #f2f2f2;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-.back-link:hover { 
-    color: #2980b9;
-    text-decoration: underline;
-}
+    /* フォームコンテナ */
+    .form-container {
+        max-width: 800px;
+        width: 100%;
+    }
 
-/* フォーム全体を包むカード */
-.form-container {
-    background: #ffffff;
-    padding: 35px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    width: 100%;
-    max-width: 450px;
-    box-sizing: border-box;
-}
+    /* ②④⑥⑧ 各入力項目の縦並びグループ設定 */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 20px;
+    }
 
-/* タイトルヘッダー */
-h2 { 
-    font-size: 22px;
-    color: #2c3e50;
-    margin-top: 0;
-    margin-bottom: 25px;
-    text-align: center;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #f4f7f9;
-}
+    .form-group label {
+        font-size: 13px;
+        color: #333;
+        font-weight: bold;
+    }
 
-.form-group { 
-    margin-bottom: 20px; 
-}
+    /* ③⑤ 入学年度・学生番号のテキスト表示（グレーの文字） */
+    .readonly-text {
+        margin: 0;
+        padding: 4px 0;
+        font-size: 14px;
+        color: #666;
+    }
 
-label { 
-    font-size: 14px;
-    font-weight: bold;
-    color: #34495e;
-    display: inline-block;
-    margin-bottom: 8px; 
-}
+    /* ⑦⑨ 入力欄（テキスト・セレクト共通の見た目） */
+    .form-group input[type="text"],
+    .form-group select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+        background-color: #ffffff;
+        color: #333;
+    }
 
-/* 変更不可の項目（入学年度・学生番号） */
-.readonly-text {
-    font-size: 16px;
-    color: #7f8c8d;
-    margin: 0;
-    padding: 8px 12px;
-    background-color: #f8f9fa;
-    border-radius: 6px;
-    border: 1px dashed #cfd8dc;
-}
+    /* ⑩⑪ 在学中フラグ（ラベルの右側にチェックボックスを配置） */
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 25px;
+    }
+    .checkbox-group label {
+        font-size: 13px;
+        color: #333;
+        font-weight: bold;
+    }
+    .checkbox-group input[type="checkbox"] {
+        margin: 0;
+        cursor: pointer;
+    }
 
-/* 入力フォーム・セレクトボックス */
-.form-group input[type="text"], 
-.form-group select {
-    width: 100%;
-    height: 42px;
-    padding: 0 12px;
-    font-size: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: #fff;
-    box-sizing: border-box;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
+    /* ⑫ 「変更」ボタン（鮮やかな青色の四角ボタン仕様） */
+    .btn-submit {
+        background-color: #0066ff;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 15px;
+        transition: background-color 0.2s;
+    }
+    .btn-submit:hover {
+        background-color: #0044cc;
+    }
 
-.form-group input[type="text"]:focus,
-.form-group select:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-    outline: none;
-}
+    /* ⑬ 「戻る」リンク（青文字下線） */
+    .back-link-box {
+        margin-top: 5px;
+    }
+    .back-link {
+        color: #0066ff;
+        font-size: 14px;
+        text-decoration: underline;
+    }
+    .back-link:hover {
+        color: #0044cc;
+    }
 
-/* 在学中チェックボックス */
-.checkbox-group {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
-    padding: 5px 0;
-}
+    /* サーバー側エラーメッセージ */
+    .error-msg {
+        color: #d9534f;
+        font-size: 13px;
+        margin-top: 4px;
+        font-weight: bold;
+    }
 
-.checkbox-group label {
-    margin-bottom: 0;
-    cursor: pointer;
-}
-
-.checkbox-group input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: #3498db;
-}
-
-/* エラーメッセージ */
-.error-msg {
-    color: #e74c3c;
-    font-size: 13px;
-    display: block;
-    margin-top: 6px;
-    font-weight: 500;
-}
-
-/* 変更ボタン */
-.btn-submit {
-    width: 100%;
-    height: 45px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.2s;
-}
-
-.btn-submit:hover { 
-    background-color: #2980b9; 
-}
-
-/* 削除ボタン用フォームの調整 */
-form[action*="StudentDelete.action"] {
-    border-top: 1px dashed #e2e8f0;
-    margin-top: 25px !important;
-    padding-top: 20px;
-}
-
-/* 削除ボタン本体 */
-form[action*="StudentDelete.action"] button {
-    width: 100%;
-    height: 40px;
-    background-color: #fff !important;
-    color: #e74c3c !important;
-    border: 1px solid #e74c3c !important;
-    border-radius: 6px !important;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: all 0.2s;
-}
-
-form[action*="StudentDelete.action"] button:hover {
-    background-color: #e74c3c !important;
-    color: #fff !important;
-}
+    /* 削除ボタン用フォームの配置 */
+    .delete-form {
+        margin-top: 40px;
+        border-top: 1px dashed #ccc;
+        padding-top: 20px;
+    }
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: bold;
+        transition: background-color 0.2s;
+    }
+    .btn-delete:hover {
+        background-color: #bd2130;
+    }
 </style>
 </head>
 <body>
@@ -214,12 +176,10 @@ form[action*="StudentDelete.action"] button:hover {
     <%@ include file="/sidebar.jsp" %>
 
     <div class="main-content">
-
-        <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">←ホームに戻る</a>
+        
+        <h2>学生情報変更</h2>
 
         <div class="form-container">
-            <h2>学生情報変更</h2>
-
             <form action="${pageContext.request.contextPath}/action/StudentUpdateExecute.action" method="post">
                 
                 <div class="form-group">
@@ -238,7 +198,7 @@ form[action*="StudentDelete.action"] button:hover {
                     <label>氏名</label>
                     <input type="text" name="name" value="${student.name}" required>
                     <c:if test="${not empty errors.name}">
-                        <span class="error-msg">${errors.name}</span>
+                        <div class="error-msg">${errors.name}</div>
                     </c:if>
                 </div>
 
@@ -252,18 +212,25 @@ form[action*="StudentDelete.action"] button:hover {
                 </div>
 
                 <div class="checkbox-group">
-                    <label>在学中</label>
-                    <input type="checkbox" name="isAttend" value="true" ${student.isAttend ? 'checked' : ''}>
+                    <label for="isAttend">在学中</label>
+                    <input type="checkbox" id="isAttend" name="isAttend" value="true" ${student.isAttend ? 'checked' : ''}>
                 </div>
 
                 <button type="submit" class="btn-submit">変更</button>
+                
             </form>
             
-            <form action="${pageContext.request.contextPath}/action/StudentDelete.action" method="post" onsubmit="return confirm('本当にこの学生データを削除してよろしいですか？\n※この操作は取り消せません。');">
+            <div class="back-link-box">
+                <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
+            </div>
+
+            <form action="${pageContext.request.contextPath}/action/StudentDelete.action" method="post" onsubmit="return confirm('本当にこの学生データを削除してよろしいですか？\n※この操作は取り消せません。');" class="delete-form">
                 <input type="hidden" name="no" value="${student.no}">
-                <button type="submit">削除する</button>
+                <button type="submit" class="btn-delete">この学生データを削除する</button>
             </form>
         </div>
 
-    </div> </div> </body>
+    </div> </div> <%@ include file="/footer.jsp" %>
+
+</body>
 </html>

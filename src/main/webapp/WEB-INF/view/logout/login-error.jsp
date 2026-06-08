@@ -20,4 +20,3 @@
     </p>
 </form>
 
-<%@ include file="/footer.html" %>
