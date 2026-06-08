@@ -35,6 +35,13 @@
         color: #2f5fb8;
         text-decoration: underline;
     }
+    
+    header {
+    background: #fff;
+    padding: 15px 30px;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
 
     h2 {
         margin: 0 0 25px;
@@ -200,6 +207,14 @@
         background-color: #6ea8ff;
         color: #fff;
     }
+    
+    footer {
+        background-color: #e0e0e0;
+        text-align: center;
+        padding: 14px;
+        font-size: 12px;
+        color: #666;
+    }
 
     @media screen and (max-width: 768px) {
         .search-row {
@@ -228,6 +243,11 @@
 </style>
 </head>
 <body>
+
+<header>
+    <h1>得点管理システム</h1>
+</header>
+
 
 <div class="container">
 
@@ -323,6 +343,9 @@
     </c:if>
 
 </div>
+<footer>
+    &copy; 2026 得点管理システム
+</footer>
 
 </body>
 </html>

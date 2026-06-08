@@ -1,101 +1,65 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>${pageTitle}</title>
-
 <style>
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-/* 全体 */
-body {
-    margin: 0;
-    padding-top: 70px; /* ヘッダー分 */
-    font-family: "Yu Gothic", sans-serif;
-    background: #f8fbff;
+    background:#e9eef5;
+
+    border-bottom:1px solid #ccc;
+
+    padding:20px 30px;
 }
 
-/* 上部バー */
-.top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 30px;
-    box-sizing: border-box;
-
-    background: rgba(230, 240, 255, 0.9);
-    backdrop-filter: blur(8px);
-
-    border-bottom: 1px solid #c9dfff;
-
-    z-index: 1000;
+.header-title{
+    font-size:36px;
+    font-weight:bold;
 }
 
-/* 左側 */
-.nav-left {
-    font-size: 20px;
-    font-weight: bold;
-    color: #2d4f7c;
+.header-menu{
+    display:flex;
+    align-items:center;
+    gap:20px;
 }
 
-/* 右側 */
-.nav-right {
-    display: flex;
-    gap: 15px;
+.user-name{
+    color:#333;
 }
 
-/* ボタン */
-.nav-btn {
-    text-decoration: none;
-
-    padding: 8px 16px;
-
-    background: white;
-    color: #2d4f7c;
-
-    border-radius: 10px;
-    border: 1px solid #bcd6ff;
-
-    font-size: 14px;
-    font-weight: bold;
-
-    transition: 0.2s;
+.header-menu a{
+    color:#3366cc;
+    text-decoration:none;
 }
 
-/* ホバー */
-.nav-btn:hover {
-    background: #dbe9ff;
-    transform: translateY(-1px);
+.header-menu a:hover{
+    text-decoration:underline;
 }
 
 </style>
-</head>
 
-<body>
 
-<!-- 上部バー -->
-<div class="top-bar">
+<div class="header">
 
-    <!-- タイトル -->
-    <div class="nav-left">
+    <div class="header-title">
         得点管理システム
     </div>
 
-    <!-- メニュー -->
-    <div class="nav-right">
-        <a href="Menu.action" class="nav-btn">ホーム</a>
-        <a href="Logout.action" class="nav-btn">ログアウト</a>
+    <div class="header-menu">
+
+        <span class="user-name">
+            ${loginUser.name}様
+        </span>
+
+        <a href="${pageContext.request.contextPath}/action/Menu.action">
+            ホーム
+        </a>
+
+        <a href="${pageContext.request.contextPath}/action/Logout.action">
+            ログアウト
+        </a>
+
     </div>
 
 </div>
-
-</body>
-</html>
