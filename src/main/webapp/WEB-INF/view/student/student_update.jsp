@@ -8,246 +8,216 @@
 <meta charset="UTF-8">
 <title>得点管理システム - 学生情報変更</title>
 <style>
-body {
-    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-    background-color: #f4f7f9;
-    color: #333;
-    margin: 0;
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    /* 全体レイアウト */
+    body {
+        margin: 0;
+        font-family: "Yu Gothic", sans-serif;
+        background-color: #ffffff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-/* フォーム全体を包むカード */
-.form-container {
-    background: #ffffff;
-    padding: 35px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    width: 100%;
-    max-width: 450px; /* 少しゆったりめの幅に変更 */
-    box-sizing: border-box;
-}
+    /* メインコンテナ（サイドバー無しの単一コンテンツエリア） */
+    .main-content {
+        flex: 1;
+        padding: 20px 40px;
+        background-color: #ffffff;
+    }
 
-/* タイトルヘッダー */
-h2 { 
-    font-size: 22px;
-    color: #2c3e50;
-    margin-top: 0;
-    margin-bottom: 25px;
-    text-align: center;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #f4f7f9; /* 野暮ったい背景を消し、下線でスマートに */
-}
+    /* ① 見出し「学生情報変更」（グレーの帯） */
+    .main-content h2 {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding: 10px 15px;
+        background-color: #f2f2f2;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-.form-group { 
-    margin-bottom: 20px; 
-}
+    /* フォームコンテナ */
+    .form-container {
+        max-width: 800px;
+        width: 100%;
+    }
 
-label { 
-    font-size: 14px;
-    font-weight: bold;
-    color: #34495e;
-    display: inline-block;
-    margin-bottom: 8px; 
-}
+    /* ②④⑥⑧ 各入力項目の縦並びグループ設定 */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 20px;
+    }
 
-/* 変更不可の項目（入学年度・学生番号） */
-.readonly-text {
-    font-size: 16px;
-    color: #7f8c8d;
-    margin: 0;
-    padding: 8px 12px;
-    background-color: #f8f9fa; /* 入力できないことが直感でわかる背景色 */
-    border-radius: 6px;
-    border: 1px dashed #cfd8dc;
-}
+    .form-group label {
+        font-size: 13px;
+        color: #333;
+    }
 
-/* 入力フォーム・セレクトボックス */
-.form-group input[type="text"], 
-.form-group select {
-    width: 100%;
-    height: 42px;
-    padding: 0 12px;
-    font-size: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: #fff;
-    box-sizing: border-box;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
+    /* ③⑤ 入学年度・学生番号のテキスト表示（グレーの文字） */
+    .readonly-text {
+        margin: 0;
+        padding: 4px 0;
+        font-size: 14px;
+        color: #666;
+    }
 
-.form-group input[type="text"]:focus,
-.form-group select:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-    outline: none;
-}
+    /* ⑦⑨ 入力欄（テキスト・セレクト共通の見た目） */
+    .form-group input[type="text"],
+    .form-group select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+        background-color: #ffffff;
+        color: #333;
+    }
 
-/* 在学中チェックボックス */
-.checkbox-group {
-    display: flex;
-    flex-direction: row-reverse; /* ラベルの右側にチェックボックスを配置 */
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
-    padding: 5px 0;
-}
+    /* ⑩⑪ 在学中フラグ（ラベルの右側にチェックボックスを配置） */
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 25px;
+    }
+    .checkbox-group label {
+        font-size: 13px;
+        color: #333;
+    }
+    .checkbox-group input[type="checkbox"] {
+        margin: 0;
+        cursor: pointer;
+    }
 
-.checkbox-group label {
-    margin-bottom: 0;
-    cursor: pointer;
-}
+    /* ⑫ 「変更」ボタン（鮮やかな青色の四角ボタン） */
+    .btn-submit {
+        background-color: #0066ff;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-bottom: 15px;
+    }
+    .btn-submit:hover {
+        background-color: #0044cc;
+    }
 
-.checkbox-group input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: #3498db; /* チェック時の色をテーマカラーに統一 */
-}
+    /* ⑬ 「戻る」リンク（青文字下線） */
+    .back-link-box {
+        margin-top: 5px;
+    }
+    .back-link {
+        color: #0066ff;
+        font-size: 14px;
+        text-decoration: underline;
+    }
+    .back-link:hover {
+        color: #0044cc;
+    }
 
-/* エラーメッセージ */
-.error-msg {
-    color: #e74c3c;
-    font-size: 13px;
-    display: block;
-    margin-top: 6px;
-    font-weight: 500;
-}
+    /* サーバー側エラーメッセージ */
+    .error-msg {
+        color: #d9534f;
+        font-size: 12px;
+        margin-top: 2px;
+    }
 
-/* 変更ボタン */
-.btn-submit {
-    width: 100%;
-    height: 45px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.2s;
-}
-
-.btn-submit:hover { 
-    background-color: #2980b9; 
-}
-
-/* 削除ボタン用フォームの調整 */
-form[action*="StudentDelete.action"] {
-    border-top: 1px dashed #e2e8f0;
-    margin-top: 25px !important;
-    padding-top: 20px;
-}
-
-/* 削除ボタン本体 */
-form[action*="StudentDelete.action"] button {
-    width: 100%; /* 横いっぱいに広げて押しやすく */
-    height: 40px;
-    background-color: #fff !important; /* 初期状態は白背景で主張を抑える */
-    color: #e74c3c !important;
-    border: 1px solid #e74c3c !important;
-    border-radius: 6px !important;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: all 0.2s;
-}
-
-form[action*="StudentDelete.action"] button:hover {
-    background-color: #e74c3c !important; /* ホバー時だけ警告の赤色に */
-    color: #fff !important;
-}
-
-/* 戻るリンク */
-.back-link { 
-    display: inline-block;
-    margin-bottom: 15px; 
-    text-decoration: none; 
-    color: #3498db; 
-    font-size: 14px;
-    font-weight: bold;
-    transition: color 0.2s;
-    align-self: flex-start; /* カードの左端のラインに揃えます */
-    max-width: 450px;
-    width: 100%;
-}
-
-.back-link:hover { 
-    color: #2980b9;
-    text-decoration: underline;
-}
-
+    /* 削除ボタン用フォームの配置 */
+    .delete-form {
+        margin-top: 40px;
+        border-top: 1px dashed #ccc;
+        padding-top: 20px;
+    }
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+    .btn-delete:hover {
+        background-color: #bd2130;
+    }
 </style>
 </head>
 <body>
-            <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">←ホームに戻る</a>
 
-    <div class="form-container">
+    <div class="main-content">
+        
+        <!-- ① 見出し「学生情報変更」 -->
         <h2>学生情報変更</h2>
 
-        <!-- 更新処理を行う StudentUpdateExecuteAction へPOST送信 -->
-        <form action="${pageContext.request.contextPath}/action/StudentUpdateExecute.action" method="post">
+        <div class="form-container">
+            <!-- 更新処理を行う StudentUpdateExecuteAction へPOST送信 -->
+            <form action="${pageContext.request.contextPath}/action/StudentUpdateExecute.action" method="post">
+                
+                <!-- ②③ 入学年度 (変更不可・表示のみ) -->
+                <div class="form-group">
+                    <label>入学年度</label>
+                    <p class="readonly-text">${student.entYear}</p>
+                    <input type="hidden" name="entYear" value="${student.entYear}">
+                </div>
+
+                <!-- ④⑤ 学生番号 (変更不可・表示のみ) -->
+                <div class="form-group">
+                    <label>学生番号</label>
+                    <p class="readonly-text">${student.no}</p>
+                    <input type="hidden" name="no" value="${student.no}">
+                </div>
+
+                <!-- ⑥⑦ 氏名 (変更可能) -->
+                <div class="form-group">
+                    <label>氏名</label>
+                    <input type="text" name="name" value="${student.name}" required>
+                    <c:if test="${not empty errors.name}">
+                        <span class="error-msg">${errors.name}</span>
+                    </c:if>
+                </div>
+
+                <!-- ⑧⑨ クラス (変更可能) -->
+                <div class="form-group">
+                    <label>クラス</label>
+                    <select name="classNum">
+                        <c:forEach var="c" items="${classList}">
+                            <option value="${c}" ${student.classNum == c ? 'selected' : ''}>${c}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+
+                <!-- ⑩⑪ 在学中フラグ (ラベルの右側にチェックボックスを横並び) -->
+                <div class="checkbox-group">
+                    <label for="isAttend">在学中</label>
+                    <input type="checkbox" id="isAttend" name="isAttend" value="true" ${student.isAttend ? 'checked' : ''}>
+                </div>
+
+                <!-- ⑫ 変更ボタン -->
+                <button type="submit" class="btn-submit">変更</button>
+                
+            </form>
             
-            <!-- 1. 入学年度 (変更不可・表示のみ) -->
-            <div class="form-group">
-                <label>入学年度</label>
-                <p class="readonly-text">${student.entYear}</p>
-                <!-- ※画面には表示しないが、更新処理に必要なので裏側で送信する -->
-                <input type="hidden" name="entYear" value="${student.entYear}">
+            <!-- ⑬ 戻るリンク -->
+            <div class="back-link-box">
+                <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
             </div>
 
-            <!-- 2. 学生番号 (変更不可・表示のみ) -->
-            <div class="form-group">
-                <label>学生番号</label>
-                <p class="readonly-text">${student.no}</p>
-                <!-- ※キーとなる学生番号も裏側で送信する -->
+            <!-- 削除ボタン用のフォーム（見た目に配慮して境界線の下に配置） -->
+            <form action="${pageContext.request.contextPath}/action/StudentDelete.action" method="post" onsubmit="return confirm('本当にこの学生データを削除してよろしいですか？\n※この操作は取り消せません。');" class="delete-form">
                 <input type="hidden" name="no" value="${student.no}">
-            </div>
+                <button type="submit" class="btn-delete">この学生データを削除する</button>
+            </form>
+        </div>
 
-            <!-- 3. 氏名 (変更可能) -->
-            <div class="form-group">
-                <label>氏名</label>
-                <!-- required属性をつけることで、画像2枚目の未入力エラー（ポップアップ）を再現 -->
-                <input type="text" name="name" value="${student.name}" required>
-                <!-- サーバー側で弾かれた場合のエラー表示領域 -->
-                <c:if test="${not empty errors.name}">
-                    <span class="error-msg">${errors.name}</span>
-                </c:if>
-            </div>
-
-            <!-- 4. クラス (変更可能) -->
-            <div class="form-group">
-                <label>クラス</label>
-                <select name="classNum">
-                    <c:forEach var="c" items="${classList}">
-                        <!-- 現在のクラスと一致するoptionにselectedをつける -->
-                        <option value="${c}" ${student.classNum == c ? 'selected' : ''}>${c}</option>
-                    </c:forEach>
-                </select>
-            </div>
-
-            <!-- 5. 在学中フラグ (変更可能) -->
-            <div class="checkbox-group">
-                <label>在学中</label>
-                <!-- isAttendがtrueの場合、最初からチェックを入れておく -->
-                <input type="checkbox" name="isAttend" value="true" ${student.isAttend ? 'checked' : ''}>
-            </div>
-
-            <!-- ボタンエリア -->
-            <button type="submit" class="btn-submit">変更</button>
-
-            
-        </form>
-        
-                <!--削除ボタン用のフォーム -->
-        <form action="${pageContext.request.contextPath}/action/StudentDelete.action" method="post" onsubmit="return confirm('本当にこの学生データを削除してよろしいですか？\n※この操作は取り消せません。');" style="text-align: right; margin-top: 20px;">
-            <input type="hidden" name="no" value="${student.no}">
-            <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">削除する</button>
-        </form>
     </div>
+
+    <!-- フッターの読み込み -->
+    <%@ include file="/footer.jsp" %>
 
 </body>
 </html>
