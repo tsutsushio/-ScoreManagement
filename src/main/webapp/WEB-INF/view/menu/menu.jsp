@@ -10,103 +10,26 @@
 <title>得点管理システム - メインメニュー</title>
 
 <style>
-    /* 全体 */
-    body {
-        margin: 0;
-        font-family: "Yu Gothic", sans-serif;
-        background-color: #f5f7fb;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* ヘッダー */
-    header {
-        background-color: #e6f0ff;
-        border-bottom: 2px solid #c8dcff;
-        padding: 18px 32px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    header h1 {
-        margin: 0;
-        font-size: 28px;
-        color: #333;
-    }
-
-    .user-info {
-        font-size: 14px;
-        color: #555;
-        text-align: right;
-        line-height: 1.6;
-    }
-
-    /* 日付表示 */
-    .date-display {
-        font-size: 13px;
-        color: #666;
-        margin-bottom: 4px;
-    }
-
-    .user-info a {
-        margin-left: 16px;
-        color: #0066cc;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    .user-info a:hover {
-        text-decoration: underline;
-    }
-
-    /* 全体レイアウト */
-    .container {
-        display: flex;
-        flex: 1;
-    }
-
-    /* サイドバー */
-    .sidebar {
-        width: 220px;
-        background-color: #ffffff;
-        border-right: 1px solid #ddd;
-        padding: 24px 20px;
-        box-sizing: border-box;
-    }
-
-    .sidebar ul {
-        list-style: none;
+    /* 全体：画面の縦幅に合わせる */
+    html, body {
+        height: 100%;
         margin: 0;
         padding: 0;
+        font-family: "Yu Gothic", sans-serif;
+        background-color: #f5f7fb;
     }
 
-    .sidebar li {
-        margin-bottom: 16px;
-        color: #333;
-        font-weight: bold;
+    body {
+        display: flex;
+        flex-direction: column; /* ヘッダー、中身、フッターを縦に並べる */
     }
 
-    .sidebar a {
-        color: #0066cc;
-        text-decoration: none;
-        font-weight: normal;
-    }
-
-    .sidebar a:hover {
-        text-decoration: underline;
-    }
-
-    .sub-menu {
-        margin-top: 8px;
-        margin-left: 15px;
-    }
-
-    .sub-menu li {
-        margin-bottom: 8px;
-        font-size: 14px;
-        font-weight: normal;
+    /* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
+    .container {
+        display: flex;
+        flex: 1;          /* 画面の余った縦幅をすべてこれに使う */
+        width: 100%;      /* 横幅いっぱい */
+        align-items: stretch; /* 子要素（サイドバーとメイン）の高さを統一する */
     }
 
     /* メインエリア */
@@ -114,6 +37,7 @@
         flex: 1;
         padding: 40px;
         background-color: #f5f7fb;
+        box-sizing: border-box;
     }
 
     .main-content h2 {
@@ -208,83 +132,24 @@
         padding: 14px;
         font-size: 12px;
         color: #666;
+        width: 100%;
+        box-sizing: border-box;
     }
 </style>
 </head>
-
 <body>
 
-<header>
-    <h1>得点管理システム</h1>
-
-    <div class="user-info">
-        <div class="date-display">
-            <fmt:formatDate value="<%= new java.util.Date() %>"
-                            pattern="yyyy年M月d日（E）"
-                            timeZone="Asia/Tokyo" />
-        </div>
-
-        ${loginUser.name} 様
-        <a href="${pageContext.request.contextPath}/action/Logout.action">
-            ログアウト
-        </a>
-    </div>
-</header>
+<%@ include file="/header.jsp" %>
 
 <div class="container">
 
-    <!-- サイドバー -->
-    <div class="sidebar">
-        <ul>
-            <li>メニュー</li>
-
-            <li>
-                学生管理
-                <ul class="sub-menu">
-                    <li>
-                        <a href="${pageContext.request.contextPath}/action/StudentList.action">
-                            学生一覧
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li>
-                成績管理
-                <ul class="sub-menu">
-                    <li>
-                        <a href="${pageContext.request.contextPath}/action/TestRegist.action">
-                            成績登録
-                        </a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.request.contextPath}/action/TestList.action">
-					    成績参照
-					</a>
-                    </li>
-                </ul>
-            </li>
-
-            <li>
-                科目管理
-                <ul class="sub-menu">
-                    <li>
-                        <a href="${pageContext.request.contextPath}/action/SubjectList.action">
-                            科目一覧
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-
-    <!-- メイン -->
+    <%@ include file="/sidebar.jsp" %>
+    
     <div class="main-content">
         <h2>メインメニュー</h2>
 
         <div class="card-container">
 
-            <!-- 学生管理 -->
             <div class="menu-card card-student">
                 <h3>学生管理</h3>
 
@@ -295,12 +160,10 @@
                 </div>
             </div>
 
-            <!-- 成績管理 -->
             <div class="menu-card card-score">
                 <h3>成績管理</h3>
 
                 <div class="menu-links">
-
                  	<a href="${pageContext.request.contextPath}/action/TestRegist.action">
 					    成績登録
 					</a>
@@ -310,7 +173,6 @@
                 </div>
             </div>
 
-            <!-- 科目管理 -->
             <div class="menu-card card-subject">
                 <h3>科目管理</h3>
 

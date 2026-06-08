@@ -1,65 +1,79 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib prefix="c"
-    uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>成績参照</title>
+<title>得点管理システム - 成績参照</title>
 
 <style>
-/* ===== 全体 ===== */
-body{
-    font-family:
-    "Yu Gothic","Meiryo",sans-serif;
-
-    background:
-    linear-gradient(
-        135deg,
-        #f8fbff,
-        #eef5ff
-    );
-
-    margin:0;
-    padding:40px 20px;
-
-    color:#333;
-    min-height:100vh;
-
-    display:flex;
-    justify-content:center;
+/* ===== 全体：共通の縦幅いっぱいベースを作る ===== */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Yu Gothic", "Meiryo", sans-serif;
+    background-color: #f5f7fb;
+    color: #333;
 }
 
-/* 戻る */
-.back-link{
-    position:absolute;
-    top:25px;
-    left:30px;
-
-    text-decoration:none;
-    color:#5b8def;
-
-    font-size:14px;
-    font-weight:bold;
-
-    transition:0.2s;
+body {
+    display: flex;
+    flex-direction: column; /* 上からヘッダー、コンテンツの順 */
 }
 
-.back-link:hover{
-    color:#3474e0;
-    transform:translateX(-3px);
+/* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
+.container {
+    display: flex;
+    flex: 1;            /* 画面の残りの高さをすべて使う */
+    width: 100%;
+    align-items: stretch;
 }
 
-/* ===== メインカード ===== */
-.container{
-    width:1000px;
-    max-width:100%;
+/* メインエリア：この中でコンテンツを中央寄せにする */
+.main-content {
+    flex: 1;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #f8fbff, #eef5ff);
+    overflow-y: auto;   /* テーブル等で縦に長くなっても右側だけスクロール可能に */
 
-    background:white;
+    /* コンテンツを中央に集めるための設定 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-    border-radius:28px;
-    padding:45px;
+/* 戻るリンク：絶対配置を解除し、カードの左端のラインに揃える */
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #5b8def;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.2s;
+    align-self: center; /* 親の中央寄せに追従させつつ、幅をカードと同期 */
+    width: 100%;
+    max-width: 1000px;  /* カードの最大幅と合わせる */
+    box-sizing: border-box;
+}
+
+.back-link:hover {
+    color: #3474e0;
+    transform: translateX(-3px);
+}
+
+/* ===== メインカード（クラス名競合防止のため .container から変更） ===== */
+.main-card {
+    width: 100%;
+    max-width: 1000px;
+
+    background: white;
+
+    border-radius: 28px;
+    padding: 45px;
 
     box-sizing:border-box;
 
@@ -71,7 +85,7 @@ body{
 }
 
 /* タイトル */
-h2{
+h2 {
     margin:0 0 35px;
 
     text-align:center;
@@ -84,7 +98,7 @@ h2{
 }
 
 /* ===== 検索エリア ===== */
-.search-box{
+.search-box {
     background:
     linear-gradient(
         180deg,
@@ -105,7 +119,7 @@ h2{
 }
 
 /* 小見出し */
-.search-box h3{
+.search-box h3 {
     margin:0 0 22px;
 
     color:#4c5b70;
@@ -119,7 +133,7 @@ h2{
 
 /* ===== フォーム ===== */
 .search-form,
-.student-form{
+.student-form {
     display:flex;
     align-items:flex-end;
     gap:18px;
@@ -127,14 +141,14 @@ h2{
 }
 
 /* グループ */
-.form-group{
+.form-group {
     display:flex;
     flex-direction:column;
     gap:8px;
 }
 
 /* ラベル */
-label{
+label {
     font-size:13px;
     font-weight:bold;
     color:#687385;
@@ -142,7 +156,7 @@ label{
 
 /* ===== 入力 ===== */
 select,
-.student-no{
+.student-no {
     min-width:180px;
 
     padding:13px 15px;
@@ -163,7 +177,7 @@ select,
 }
 
 /* 学生番号だけ少し強調 */
-.student-no{
+.student-no {
     min-width:220px;
 
     background:
@@ -178,13 +192,13 @@ select,
 
 /* hover */
 select:hover,
-.student-no:hover{
+.student-no:hover {
     border-color:#86b6ff;
 }
 
 /* focus */
 select:focus,
-.student-no:focus{
+.student-no:focus {
     outline:none;
 
     border-color:#5b8def;
@@ -195,12 +209,12 @@ select:focus,
 }
 
 /* プレースホルダ */
-.student-no::placeholder{
+.student-no::placeholder {
     color:#a5afbd;
 }
 
 /* ===== ボタン ===== */
-button[type="submit"]{
+button[type="submit"] {
     height:48px;
 
     padding:0 28px;
@@ -229,7 +243,7 @@ button[type="submit"]{
         rgba(91,141,239,.28);
 }
 
-button[type="submit"]:hover{
+button[type="submit"]:hover {
     transform:translateY(-2px);
 
     box-shadow:
@@ -237,12 +251,12 @@ button[type="submit"]:hover{
         rgba(91,141,239,.35);
 }
 
-button[type="submit"]:active{
+button[type="submit"]:active {
     transform:scale(.98);
 }
 
 /* ===== 区切り線 ===== */
-.divider{
+.divider {
     border:none;
     height:1px;
 
@@ -258,7 +272,7 @@ button[type="submit"]:active{
 }
 
 /* ===== エラー ===== */
-.error{
+.error {
     margin-top:20px;
 
     padding:15px 18px;
@@ -273,7 +287,7 @@ button[type="submit"]:active{
 }
 
 /* ===== テーブル ===== */
-table{
+table {
     width:100%;
 
     border-collapse:separate;
@@ -289,7 +303,7 @@ table{
 }
 
 /* ヘッダー */
-th{
+th {
     background:
     linear-gradient(
         to right,
@@ -307,7 +321,7 @@ th{
 }
 
 /* セル */
-td{
+td {
     background:white;
 
     padding:16px 14px;
@@ -321,162 +335,131 @@ td{
 }
 
 /* 偶数行 */
-tbody tr:nth-child(even) td{
+tbody tr:nth-child(even) td {
     background:#f9fbff;
 }
 
 /* hover */
-tbody tr:hover td{
+tbody tr:hover td {
     background:#eef5ff;
 }
 
 /* 最終行 */
-tbody tr:last-child td{
+tbody tr:last-child td {
     border-bottom:none;
 }
 
 /* 角丸 */
-th:first-child{
+th:first-child {
     border-top-left-radius:22px;
 }
 
-th:last-child{
+th:last-child {
     border-top-right-radius:22px;
 }
 
-tbody tr:last-child td:first-child{
+tbody tr:last-child td:first-child {
     border-bottom-left-radius:22px;
 }
 
-tbody tr:last-child td:last-child{
+tbody tr:last-child td:last-child {
     border-bottom-right-radius:22px;
 }
 
 /* ===== アニメ ===== */
-@keyframes fadeIn{
-    from{
+@keyframes fadeIn {
+    from {
         opacity:0;
         transform:translateY(12px);
     }
-
-    to{
+    to {
         opacity:1;
         transform:translateY(0);
     }
 }
-
 </style>
-
 </head>
-
 <body>
-    <a href="${pageContext.request.contextPath}/action/Menu.action" class="back-link">
-        ← メニューへ戻る
-    </a>
 
-    <div class="container">
-        <h2>成績参照</h2>
+<%@ include file="/header.jsp" %>
 
-        <div class="search-box">
+<div class="container">
 
-    <h3>科目情報</h3>
+    <%@ include file="/sidebar.jsp" %>
 
-    <!-- 科目検索 -->
-    <form action="TestList.action" method="post"
-          class="search-form">
+    <div class="main-content">
 
-        <input type="hidden"
-               name="f"
-               value="sj">
+        <a href="${pageContext.request.contextPath}/action/Menu.action" class="back-link">
+            ← メニューへ戻る
+        </a>
 
-        <div class="form-group">
-            <label>入学年度</label>
-            <select name="f1">
-                <option value="">--------</option>
-                <c:forEach items="${yearList}"
-                           var="year">
-                    <option value="${year}">
-                        ${year}
-                    </option>
-                </c:forEach>
-            </select>
-        </div>
+        <div class="main-card">
+            <h2>成績参照</h2>
 
-        <div class="form-group">
-            <label>クラス</label>
-            <select name="f2">
-                <option value="">--------</option>
-                <c:forEach items="${classList}"
-                           var="cls">
-                    <option value="${cls}">
-                        ${cls}
-                    </option>
-                </c:forEach>
-            </select>
-        </div>
+            <div class="search-box">
+                <h3>科目情報</h3>
 
-        <div class="form-group">
-            <label>科目</label>
-            <select name="f3">
-                <option value="">--------</option>
-                <c:forEach items="${subjectList}"
-                           var="sub">
-                    <option value="${sub.cd}">
-                        ${sub.name}
-                    </option>
-                </c:forEach>
-            </select>
-        </div>
+                <form action="TestList.action" method="post" class="search-form">
+                    <input type="hidden" name="f" value="sj">
 
-        <button type="submit">
-            検索
-        </button>
-    </form>
+                    <div class="form-group">
+                        <label>入学年度</label>
+                        <select name="f1">
+                            <option value="">--------</option>
+                            <c:forEach items="${yearList}" var="year">
+                                <option value="${year}">
+                                    ${year}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
 
-    <hr class="divider">
+                    <div class="form-group">
+                        <label>クラス</label>
+                        <select name="f2">
+                            <option value="">--------</option>
+                            <c:forEach items="${classList}" var="cls">
+                                <option value="${cls}">
+                                    ${cls}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
 
-    <h3>学生情報</h3>
+                    <div class="form-group">
+                        <label>科目</label>
+                        <select name="f3">
+                            <option value="">--------</option>
+                            <c:forEach items="${subjectList}" var="sub">
+                                <option value="${sub.cd}">
+                                    ${sub.name}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
 
-    <!-- 学生番号検索 -->
-    <form action="TestList.action"
-          method="post"
-          class="student-form">
+                    <button type="submit">検索</button>
+                </form>
 
-        <input type="hidden"
-               name="f"
-               value="sj">
+                <hr class="divider">
 
-        <!-- 科目情報引き継ぎ -->
-        <input type="hidden"
-               name="f1"
-               value="${param.f1}">
+                <h3>学生情報</h3>
 
-        <input type="hidden"
-               name="f2"
-               value="${param.f2}">
+                <form action="TestList.action" method="post" class="student-form">
+                    <input type="hidden" name="f" value="sj">
 
-        <input type="hidden"
-               name="f3"
-               value="${param.f3}">
+                    <input type="hidden" name="f1" value="${param.f1}">
+                    <input type="hidden" name="f2" value="${param.f2}">
+                    <input type="hidden" name="f3" value="${param.f3}">
 
-        <div class="form-group">
-            <label>学生番号</label>
+                    <div class="form-group">
+                        <label>学生番号</label>
+                        <input type="text" name="f4" class="student-no" placeholder="学生番号を入力" value="${param.f4}">
+                    </div>
 
-            <input
-                type="text"
-                name="f4"
-                class="student-no"
-                placeholder=
-                "学生番号を入力"
-                value="${param.f4}">
-        </div>
-
-        <button type="submit">
-            検索
-        </button>
-    </form>
-
-</div>
+                    <button type="submit">検索</button>
+                </form>
+            </div>
 
             <c:if test="${not empty error}">
                 <p class="error">${error}</p>
@@ -508,7 +491,5 @@ tbody tr:last-child td:last-child{
                     </tbody>
                 </table>
             </c:if>
-        </div>
-    </div>
-</body>
+        </div> </div> </div> </body>
 </html>

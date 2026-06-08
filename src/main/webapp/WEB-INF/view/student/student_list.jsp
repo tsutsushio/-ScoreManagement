@@ -8,7 +8,9 @@
 <title>得点管理システム - 学生一覧</title>
 
 <style>
-    body {
+    /* 全体：メインメニューと同じく縦いっぱいに広げる基礎を作る */
+    html, body {
+        height: 100%;
         margin: 0;
         padding: 0;
         font-family: "Yu Gothic", sans-serif;
@@ -16,10 +18,25 @@
         color: #333;
     }
 
+    body {
+        display: flex;
+        flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+    }
+
+    /* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
     .container {
-        max-width: 1100px;
-        margin: 40px auto;
-        padding: 0 20px;
+        display: flex;
+        flex: 1;            /* 画面の残りの高さをすべて使う */
+        width: 100%;
+        align-items: stretch;
+    }
+
+    /* メインエリア（中身部分を包むラッパー） */
+    .main-content {
+        flex: 1;
+        padding: 40px;
+        box-sizing: border-box;
+        background-color: #f4f7fb;
     }
 
     .back-link {
@@ -111,13 +128,13 @@
         box-shadow: 0 4px 10px rgba(74,123,216,0.35);
     }
 
-    /* 新規追加：学生登録リンクのスタイル */
+    /* 学生登録リンク */
     .create-link {
-        margin-left: auto; /* これで同じ列の右端に寄ります */
+        margin-left: auto;
         padding: 9px 20px;
-        background-color: #6ea8ff; /* 背景色 */
-        color: #ffffff; /* 文字白 */
-        border: 2px solid #2f5fb8; /* 青色の淵 */
+        background-color: #6ea8ff;
+        color: #ffffff;
+        border: 2px solid #2f5fb8;
         border-radius: 8px;
         text-decoration: none;
         font-size: 14px;
@@ -212,7 +229,6 @@
             width: 100%;
         }
 
-        /* スマホ用：右寄せを解除し、幅いっぱいに広げる */
         .create-link {
             margin-left: 0;
             width: 100%;
@@ -229,100 +245,104 @@
 </head>
 <body>
 
+<%@ include file="/header.jsp" %>
+
 <div class="container">
 
-    <a class="back-link" href="<%= request.getContextPath() %>/action/Menu.action">
-        ← メニューへ戻る
-    </a>
+    <%@ include file="/sidebar.jsp" %>
 
-    <h2>学生管理</h2>
+    <div class="main-content">
 
-    <div class="search-box">
-        <form action="<%= request.getContextPath() %>/action/StudentList.action" method="post">
-            <div class="search-row">
+        <a class="back-link" href="<%= request.getContextPath() %>/action/Menu.action">
+            ← メニューへ戻る
+        </a>
 
-                <label>入学年度</label>
-                <select name="entYear">
-                    <option value="0">--------</option>
-                    <option value="2014">2014</option>
-                    <option value="2015">2015</option>
-                    <option value="2016">2016</option>
-                    <option value="2017">2017</option>
-                    <option value="2018">2018</option>
-                    <option value="2019">2019</option>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                </select>
+        <h2>学生管理</h2>
 
-                <label>クラス</label>
-                <select name="classNum">
-                    <option value="--------">--------</option>
-                    <option value="101">101</option>
-                    <option value="102">102</option>
-                    <option value="201">201</option>
-                    <option value="202">202</option>
-                </select>
+        <div class="search-box">
+            <form action="<%= request.getContextPath() %>/action/StudentList.action" method="post">
+                <div class="search-row">
 
-                <label class="checkbox-label">
-                    <input type="checkbox" name="isAttend" value="true">
-                    在学中
-                </label>
+                    <label>入学年度</label>
+                    <select name="entYear">
+                        <option value="0">--------</option>
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                    </select>
 
-                <button type="submit">絞り込む</button>
+                    <label>クラス</label>
+                    <select name="classNum">
+                        <option value="--------">--------</option>
+                        <option value="101">101</option>
+                        <option value="102">102</option>
+                        <option value="201">201</option>
+                        <option value="202">202</option>
+                    </select>
 
-                <a href="<%= request.getContextPath() %>/action/StudentCreate.action" class="create-link">学生登録</a>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="isAttend" value="true">
+                        在学中
+                    </label>
 
-            </div>
-        </form>
-    </div>
+                    <button type="submit">絞り込む</button>
 
-    <c:if test="${empty studentList}">
-        <p class="error-message">学生情報が存在しませんでした</p>
-    </c:if>
+                    <a href="<%= request.getContextPath() %>/action/StudentCreate.action" class="create-link">学生登録</a>
 
-    <c:if test="${not empty studentList}">
-        <p class="result-count">検索結果：${studentList.size()} 件</p>
+                </div>
+            </form>
+        </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>入学年度</th>
-                    <th>学生番号</th>
-                    <th>氏名</th>
-                    <th>クラス</th>
-                    <th>在学中</th>
-                    <th>学生情報変更</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="student" items="${studentList}">
+        <c:if test="${empty studentList}">
+            <p class="error-message">学生情報が存在しませんでした</p>
+        </c:if>
+
+        <c:if test="${not empty studentList}">
+            <p class="result-count">検索結果：${studentList.size()} 件</p>
+
+            <table>
+                <thead>
                     <tr>
-                        <td>${student.entYear}</td>
-                        <td>${student.no}</td>
-                        <td>${student.name}</td>
-                        <td>${student.classNum}</td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${student.isAttend}">〇</c:when>
-                                <c:otherwise>×</c:otherwise>
-                            </c:choose>
-                        </td>
-                        <td>
-                            <a class="edit-link"
-                               href="<%= request.getContextPath() %>/action/StudentUpdate.action?no=${student.no}">
-                                変更
-                            </a>
-                        </td>
+                        <th>入学年度</th>
+                        <th>学生番号</th>
+                        <th>氏名</th>
+                        <th>クラス</th>
+                        <th>在学中</th>
+                        <th>学生情報変更</th>
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-    </c:if>
+                </thead>
+                <tbody>
+                    <c:forEach var="student" items="${studentList}">
+                        <tr>
+                            <td>${student.entYear}</td>
+                            <td>${student.no}</td>
+                            <td>${student.name}</td>
+                            <td>${student.classNum}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${student.isAttend}">〇</c:when>
+                                    <c:otherwise>×</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <a class="edit-link"
+                                   href="<%= request.getContextPath() %>/action/StudentUpdate.action?no=${student.no}">
+                                    変更
+                                </a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:if>
 
-</div>
-
-</body>
+    </div> </div> </body>
 </html>

@@ -5,16 +5,42 @@
 <meta charset="UTF-8">
 <title>得点管理システム - 学生登録完了</title>
 <style>
-    /* 完了画面用のシンプルなレイアウト */
-    body {
+    /* 全体：他の画面と共通の縦幅いっぱいベースを作る */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
         font-family: sans-serif;
         background-color: #f9f9f9;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+    }
+
+    /* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
+    .container {
+        display: flex;
+        flex: 1;            /* 画面の残りの高さをすべて使う */
+        width: 100%;
+        align-items: stretch;
+    }
+
+    /* メインエリア：この中でメッセージボックスを画面の真ん中に寄せる */
+    .main-content {
+        flex: 1;
+        padding: 40px;
+        box-sizing: border-box;
+        background-color: #f9f9f9;
+
+        /* メッセージボックスを中央に配置するための設定 */
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        margin: 0;
     }
+
+    /* メッセージボックス（スタイルはそのまま流用） */
     .message-box {
         background-color: white;
         padding: 40px;
@@ -23,12 +49,15 @@
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         text-align: center;
         width: 350px;
+        box-sizing: border-box; /* パディングでの幅崩れ防止 */
     }
+
     h2 {
         color: #333;
         margin-top: 0;
         margin-bottom: 20px;
     }
+
     p {
         color: #555;
         font-size: 16px;
@@ -41,6 +70,7 @@
         flex-direction: column;
         gap: 15px;
     }
+
     .btn {
         display: block;
         padding: 12px;
@@ -50,19 +80,23 @@
         font-weight: bold;
         transition: background-color 0.2s;
     }
+
     /* 続けて登録するボタン（青） */
     .btn-primary {
         background-color: #007bff;
         color: white;
     }
+
     .btn-primary:hover {
         background-color: #0056b3;
     }
+
     /* 学生一覧へ戻るボタン（グレー） */
     .btn-secondary {
         background-color: #6c757d;
         color: white;
     }
+
     .btn-secondary:hover {
         background-color: #5a6268;
     }
@@ -70,16 +104,24 @@
 </head>
 <body>
 
-    <div class="message-box">
-        <h2>登録完了</h2>
-        <p>学生の登録が完了しました。</p>
-        
-        <div class="button-group">
-            <a href="${pageContext.request.contextPath}/action/StudentCreate.action" class="btn btn-primary">続けて登録する</a>
-            
-            <a href="${pageContext.request.contextPath}/action/StudentList.action" class="btn btn-secondary">学生一覧へ</a>
-        </div>
-    </div>
+<%@ include file="/header.jsp" %>
 
-</body>
+<div class="container">
+
+    <%@ include file="/sidebar.jsp" %>
+
+    <div class="main-content">
+
+        <div class="message-box">
+            <h2>登録完了</h2>
+            <p>学生の登録が完了しました。</p>
+            
+            <div class="button-group">
+                <a href="${pageContext.request.contextPath}/action/StudentCreate.action" class="btn btn-primary">続けて登録する</a>
+                
+                <a href="${pageContext.request.contextPath}/action/StudentList.action" class="btn btn-secondary">学生一覧へ</a>
+            </div>
+        </div>
+
+    </div> </div> </body>
 </html>

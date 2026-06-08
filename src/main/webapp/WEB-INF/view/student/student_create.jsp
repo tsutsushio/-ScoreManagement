@@ -6,12 +6,37 @@
 <meta charset="UTF-8">
 <title>得点管理システム - 学生情報登録</title>
 <style>
-body {
+/* 全体：メインメニューと同じく縦いっぱいに広げる基礎を作る */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
     font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
     background-color: #f4f7f9;
     color: #333;
-    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+}
+
+/* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
+.container {
+    display: flex;
+    flex: 1;            /* 画面の残りの高さをすべて使う */
+    width: 100%;
+    align-items: stretch;
+}
+
+/* メインエリア：この中でフォームを中央寄せにする */
+.main-content {
+    flex: 1;
     padding: 40px 20px;
+    box-sizing: border-box;
+    background-color: #f4f7f9;
+    
+    /* フォームと戻るリンクを中央に集めるための設定 */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,7 +51,7 @@ body {
     font-size: 14px;
     font-weight: bold;
     transition: color 0.2s;
-    align-self: flex-start; /* 左端に揃えるための設定 */
+    align-self: center; /* 親の中央寄せに追従させつつ、幅をカードと同期 */
     max-width: 450px;
     width: 100%;
 }
@@ -131,67 +156,74 @@ h2 {
 .btn-submit:hover { 
     background-color: #2980b9; 
 }
-
 </style>
 </head>
 <body>
 
-    <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
+<%@ include file="/header.jsp" %>
 
-    <h2>学生情報登録</h2>
+<div class="container">
 
-    <div class="form-container">
-        <form action="${pageContext.request.contextPath}/action/StudentCreateExecute.action" method="post">
-            
-            <div class="form-group">
-                <label>入学年度</label>
-                <select name="entYear">
-                    <option value="0">--------</option>
-                    <c:forEach var="year" items="${entYearList}">
-                        <option value="${year}" ${entYear == year ? 'selected' : ''}>${year}</option>
-                    </c:forEach>
-                </select>
-                <c:if test="${not empty errors.entYear}">
-                    <span class="error-msg">${errors.entYear}</span>
-                </c:if>
-            </div>
+    <%@ include file="/sidebar.jsp" %>
 
-            <div class="form-group">
-                <label>学生番号</label>
-                <input type="text" name="no" value="${no}" placeholder="学生番号を入力してください">
-                <c:if test="${not empty errors.no}">
-                    <span class="error-msg">${errors.no}</span>
-                </c:if>
-            </div>
+    <div class="main-content">
 
-            <div class="form-group">
-                <label>氏名</label>
-                <input type="text" name="name" value="${name}" placeholder="氏名を入力してください">
-                <c:if test="${not empty errors.name}">
-                    <span class="error-msg">${errors.name}</span>
-                </c:if>
-            </div>
+        <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
 
-            <div class="form-group">
-                <label>クラス</label>
-                <select name="classNum">
-                    <c:forEach var="c" items="${classList}">
-                        <option value="${c}" ${classNum == c ? 'selected' : ''}>${c}</option>
-                    </c:forEach>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>パスワード</label>
-                <input type="password" name="password" placeholder="パスワードを入力してください">
-                <c:if test="${not empty errors.password}">
-                    <span class="error-msg">${errors.password}</span>
-                </c:if>
-            </div>
+        <h2>学生情報登録</h2>
 
-            <button type="submit" class="btn-submit">登録</button>
-        </form>
-    </div>
+        <div class="form-container">
+            <form action="${pageContext.request.contextPath}/action/StudentCreateExecute.action" method="post">
+                
+                <div class="form-group">
+                    <label>入学年度</label>
+                    <select name="entYear">
+                        <option value="0">--------</option>
+                        <c:forEach var="year" items="${entYearList}">
+                            <option value="${year}" ${entYear == year ? 'selected' : ''}>${year}</option>
+                        </c:forEach>
+                    </select>
+                    <c:if test="${not empty errors.entYear}">
+                        <span class="error-msg">${errors.entYear}</span>
+                    </c:if>
+                </div>
 
-</body>
+                <div class="form-group">
+                    <label>学生番号</label>
+                    <input type="text" name="no" value="${no}" placeholder="学生番号を入力してください">
+                    <c:if test="${not empty errors.no}">
+                        <span class="error-msg">${errors.no}</span>
+                    </c:if>
+                </div>
+
+                <div class="form-group">
+                    <label>氏名</label>
+                    <input type="text" name="name" value="${name}" placeholder="氏名を入力してください">
+                    <c:if test="${not empty errors.name}">
+                        <span class="error-msg">${errors.name}</span>
+                    </c:if>
+                </div>
+
+                <div class="form-group">
+                    <label>クラス</label>
+                    <select name="classNum">
+                        <c:forEach var="c" items="${classList}">
+                            <option value="${c}" ${classNum == c ? 'selected' : ''}>${c}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>パスワード</label>
+                    <input type="password" name="password" placeholder="パスワードを入力してください">
+                    <c:if test="${not empty errors.password}">
+                        <span class="error-msg">${errors.password}</span>
+                    </c:if>
+                </div>
+
+                <button type="submit" class="btn-submit">登録</button>
+            </form>
+        </div>
+
+    </div> </div> </body>
 </html>

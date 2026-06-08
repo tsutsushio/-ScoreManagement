@@ -230,4 +230,5 @@ body {
 		    });
 		</script>
 	</body>
+	<%@ include file="/header.jsp" %>
 </html>

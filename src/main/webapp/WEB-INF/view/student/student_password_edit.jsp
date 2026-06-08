@@ -4,15 +4,40 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>パスワード変更</title>
+<title>得点管理システム - パスワード変更</title>
 
 <style>
-body {
+/* 全体：共通の縦幅いっぱいベースを作る */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
     font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
     background-color: #f4f7f9;
     color: #333;
-    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+}
+
+/* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
+.container {
+    display: flex;
+    flex: 1;            /* 画面の残りの高さをすべて使う */
+    width: 100%;
+    align-items: stretch;
+}
+
+/* メメインエリア：この中でフォーム一式を中央寄せにする */
+.main-content {
+    flex: 1;
     padding: 40px 20px;
+    box-sizing: border-box;
+    background-color: #f4f7f9;
+    
+    /* フォーム、タイトル、戻るリンクを中央に集める設定 */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,13 +46,15 @@ body {
 h1 {
     font-size: 24px;
     color: #2c3e50;
+    margin-top: 0;
     margin-bottom: 8px;
     text-align: center;
 }
 
-p {
+p.description {
     font-size: 14px;
     color: #7f8c8d;
+    margin-top: 0;
     margin-bottom: 24px;
     text-align: center;
 }
@@ -117,6 +144,13 @@ button[type="submit"]:hover {
     background-color: #2980b9;
 }
 
+/* 戻るリンク用の段落 */
+.back-p {
+    margin-top: 20px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
 a {
     color: #3498db;
     text-decoration: none;
@@ -132,121 +166,116 @@ a:hover {
 br {
     display: none; /* 余計な改行スペースを消して綺麗に整えます */
 }
-
 </style>
 </head>
-
 <body>
 
-<h1>パスワード変更</h1>
-<p>現在のパスワードと、新しいパスワードを入力してください。</p>
+<%@ include file="/header.jsp" %>
 
-<form action="../action/StudentPasswordEditExecute.action" method="post">
+<div class="container">
 
-    <!-- 現在のパスワード -->
-    <div class="form-group">
-        <label>現在のパスワード</label><br>
+    <%@ include file="/sidebar.jsp" %>
 
-        <div class="password-wrapper">
-            <input type="password"
-                   name="currentPassword"
-                   id="currentPassword"
-                   required>
+    <div class="main-content">
 
-            <button type="button"
-                    class="toggle-password"
-                    onclick="togglePassword('currentPassword', this)">
-                🔒
+        <h1>パスワード変更</h1>
+        <p class="description">現在のパスワードと、新しいパスワードを入力してください。</p>
+
+        <form action="../action/StudentPasswordEditExecute.action" method="post">
+
+            <div class="form-group">
+                <label>現在のパスワード</label>
+
+                <div class="password-wrapper">
+                    <input type="password"
+                           name="currentPassword"
+                           id="currentPassword"
+                           required>
+
+                    <button type="button"
+                            class="toggle-password"
+                            onclick="togglePassword('currentPassword', this)">
+                        🔒
+                    </button>
+                </div>
+
+                <c:if test="${not empty errors.currentPassword}">
+                    <span class="error-msg">
+                        ${errors.currentPassword}
+                    </span>
+                </c:if>
+            </div>
+
+            <div class="form-group">
+                <label>新しいパスワード</label>
+
+                <div class="password-wrapper">
+                    <input type="password"
+                           name="newPassword"
+                           id="newPassword"
+                           required>
+
+                    <button type="button"
+                            class="toggle-password"
+                            onclick="togglePassword('newPassword', this)">
+                        🔒
+                    </button>
+                </div>
+
+                <c:if test="${not empty errors.newPassword}">
+                    <span class="error-msg">
+                        ${errors.newPassword}
+                    </span>
+                </c:if>
+            </div>
+
+            <div class="form-group">
+                <label>新しいパスワード（確認用）</label>
+
+                <div class="password-wrapper">
+                    <input type="password"
+                           name="confirmPassword"
+                           id="confirmPassword"
+                           required>
+
+                    <button type="button"
+                            class="toggle-password"
+                            onclick="togglePassword('confirmPassword', this)">
+                        🔒
+                    </button>
+                </div>
+
+                <c:if test="${not empty errors.confirmPassword}">
+                    <span class="error-msg">
+                        ${errors.confirmPassword}
+                    </span>
+                </c:if>
+            </div>
+
+            <c:if test="${not empty errors.system}">
+                <div class="error-msg" style="margin-bottom: 15px;">
+                    ${errors.system}
+                </div>
+            </c:if>
+
+            <button type="submit">
+                パスワードを変更する
             </button>
-        </div>
+        </form>
 
-        <c:if test="${not empty errors.currentPassword}">
-            <span class="error-msg">
-                ${errors.currentPassword}
-            </span>
-        </c:if>
-    </div>
+        <p class="back-p">
+            <a href="../action/StudentMenu.action">
+                メニューに戻る
+            </a>
+        </p>
 
-    <!-- 新しいパスワード -->
-    <div class="form-group">
-        <label>新しいパスワード</label><br>
-
-        <div class="password-wrapper">
-            <input type="password"
-                   name="newPassword"
-                   id="newPassword"
-                   required>
-
-            <button type="button"
-                    class="toggle-password"
-                    onclick="togglePassword('newPassword', this)">
-                🔒
-            </button>
-        </div>
-
-        <c:if test="${not empty errors.newPassword}">
-            <span class="error-msg">
-                ${errors.newPassword}
-            </span>
-        </c:if>
-    </div>
-
-    <!-- 確認用 -->
-    <div class="form-group">
-        <label>新しいパスワード（確認用）</label><br>
-
-        <div class="password-wrapper">
-            <input type="password"
-                   name="confirmPassword"
-                   id="confirmPassword"
-                   required>
-
-            <button type="button"
-                    class="toggle-password"
-                    onclick="togglePassword('confirmPassword', this)">
-                🔒
-            </button>
-        </div>
-
-        <c:if test="${not empty errors.confirmPassword}">
-            <span class="error-msg">
-                ${errors.confirmPassword}
-            </span>
-        </c:if>
-    </div>
-
-    <c:if test="${not empty errors.system}">
-        <div class="error-msg" style="margin-bottom: 15px;">
-            ${errors.system}
-        </div>
-    </c:if>
-
-    <button type="submit">
-        パスワードを変更する
-    </button>
-</form>
-
-<br>
-
-<p>
-    <a href="../action/StudentMenu.action">
-        メニューに戻る
-    </a>
-</p>
-
-<script>
+    </div> </div> <script>
 function togglePassword(inputId, button){
-
-    const input =
-    document.getElementById(inputId);
-
+    const input = document.getElementById(inputId);
     if(input.type === "password"){
-
         input.type = "text";
         button.textContent = "🔓";
-
     }else{
-
         input.type = "password";
         button.textContent = "🔒";
     }

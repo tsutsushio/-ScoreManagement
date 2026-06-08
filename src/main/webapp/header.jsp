@@ -1,26 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>${pageTitle}</title>
-
 <style>
+/* header.jsp内でのbodyへのmargin/padding指定は、
+   読み込み先のメイン画面全体を破壊する原因になるため削除しました 
+*/
 
-/* 全体 */
-body {
-    margin: 0;
-    padding-top: 70px; /* ヘッダー分 */
-    font-family: "Yu Gothic", sans-serif;
-    background: #f8fbff;
-}
-
-/* 上部バー */
+/* 上部バー（普通に上部に配置し、横幅100%） */
 .top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 60px;
 
@@ -35,67 +21,71 @@ body {
     backdrop-filter: blur(8px);
 
     border-bottom: 1px solid #c9dfff;
-
-    z-index: 1000;
 }
 
-/* 左側 */
+/* 左側：タイトル文字 */
 .nav-left {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     color: #2d4f7c;
+    margin: 0;
+    padding: 0;
 }
 
-/* 右側 */
+/* 右側：ユーザー名とログアウトの並び */
 .nav-right {
     display: flex;
+    align-items: center;
     gap: 15px;
-}
-
-/* ボタン */
-.nav-btn {
-    text-decoration: none;
-
-    padding: 8px 16px;
-
-    background: white;
-    color: #2d4f7c;
-
-    border-radius: 10px;
-    border: 1px solid #bcd6ff;
-
     font-size: 14px;
-    font-weight: bold;
-
-    transition: 0.2s;
 }
 
-/* ホバー */
-.nav-btn:hover {
-    background: #dbe9ff;
-    transform: translateY(-1px);
+/* ログインユーザ名 */
+.user-name {
+    color: #333333;
 }
 
+/* ログアウトリンク */
+.logout-link {
+    color: #0066cc;
+    text-decoration: underline;
+}
+
+.logout-link:hover {
+    color: #003399;
+}
 </style>
-</head>
 
-<body>
-
-<!-- 上部バー -->
 <div class="top-bar">
 
-    <!-- タイトル -->
-    <div class="nav-left">
-        得点管理システム
-    </div>
+    <h1 class="nav-left">得点管理システム</h1>
 
-    <!-- メニュー -->
     <div class="nav-right">
-        <a href="Menu.action" class="nav-btn">ホーム</a>
-        <a href="Logout.action" class="nav-btn">ログアウト</a>
+        <%
+            Object userObj = session.getAttribute("loginUser");
+            boolean isLogin = false;
+
+            if (userObj != null) {
+                try {
+                    String userName = String.valueOf(
+                        userObj.getClass().getMethod("getName").invoke(userObj)
+                    );
+                    
+                    if (userName != null && !userName.trim().isEmpty() && !userName.equals("null")) {
+                        isLogin = true;
+                    }
+                } catch (Exception e) {
+                    isLogin = true;
+                }
+            }
+
+            if (isLogin) {
+        %>
+            <span class="user-name">${loginUser.name}様</span>
+            <a href="Logout.action" class="logout-link">ログアウト</a>
+        <%
+            }
+        %>
     </div>
 
 </div>
-
-</body>
-</html>
