@@ -158,12 +158,27 @@ select[name="f3"] {
     margin: 25px 0;
 }
 
-/* エラーメッセージ */
-.error {
-    color: #de3545;
-    font-size: 14px;
-    margin-bottom: 15px;
+/* 初期表示の青い案内メッセージ */
+.initial-msg {
+    color: #0099cc; /* 画像のような鮮やかな青色 */
+    font-size: 13px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    padding-left: 5px;
 }
+
+/* ① 入学年度とクラスと科目を選択してください（オレンジのエラー文字用） */
+.error {
+    color: #ff9900; /* 画像のようなオレンジ・薄い赤色 */
+    font-size: 13px;
+    margin-top: 15px;
+    margin-bottom: 0;
+    padding-left: 5px;
+}
+
+/* ② 学生情報が存在しませんでした（下部のエラー文字用） */
+/* ※JSPの下部にある <p class="error">${error}</p> に自動適用されます */
+
 
 /* ーーー テーブルスタイル ーーー */
 table {
@@ -280,6 +295,13 @@ footer, #footer {
                     <button type="submit">検索</button>
                 </form>
             </div>
+            <!-- 💡 検索ボタンを押す前（結果もエラーもない初期状態）だけメッセージを表示 -->
+<c:if test="${empty testList and empty error}">
+    <p class="initial-msg">
+        科目情報を選択または学生情報を入力して検索ボタンをクリックしてください
+    </p>
+</c:if>
+            
 
             <c:if test="${not empty error}">
                 <p class="error">${error}</p>
