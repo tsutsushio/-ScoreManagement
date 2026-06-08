@@ -157,11 +157,6 @@ body {
 
 <body>
 
-<header>
-    <h1>得点管理システム</h1>
-
-</header>
-
 <div class="main">
 
 

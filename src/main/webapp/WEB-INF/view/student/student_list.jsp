@@ -303,8 +303,6 @@
     </div>
 </div>
 
-<!-- フッターの読み込み（不要な直書きfooterタグを削除） -->
-<%@ include file="/footer.jsp" %>
-
 </body>
 </html>
+<%@ include file="/footer.jsp" %>
