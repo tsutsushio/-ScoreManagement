@@ -244,10 +244,6 @@
 </head>
 <body>
 
-<header>
-    <h1>得点管理システム</h1>
-</header>
-
 
 <div class="container">
 
@@ -343,9 +339,7 @@
     </c:if>
 
 </div>
-<footer>
-    &copy; 2026 得点管理システム
-</footer>
 
 </body>
 </html>
+<%@ include file="/footer.jsp" %>
