@@ -1,79 +1,57 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
+<title>得点管理システム</title>
 
 <style>
 
-/* 全体 */
-body {
-    margin: 0;
-    padding-top: 70px; /* ヘッダー分 */
-    font-family: "Yu Gothic", sans-serif;
-    background: #f8fbff;
+/* ===== 全体 ===== */
+body{
+    margin:0;
+    font-family:"Yu Gothic","Meiryo",sans-serif;
+    font-size:14px;
+    color:#333;
 }
 
-/* 上部バー */
-.top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
+/* ===== ヘッダー ===== */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding:20px 30px;
 
-    padding: 0 30px;
-    box-sizing: border-box;
-
-    background: rgba(230, 240, 255, 0.9);
-    backdrop-filter: blur(8px);
-
-    border-bottom: 1px solid #c9dfff;
-
-    z-index: 1000;
+    background:#e9eef5;
+    border-bottom:1px solid #ccc;
 }
 
-/* 左側 */
-.nav-left {
-    font-size: 20px;
-    font-weight: bold;
-    color: #2d4f7c;
+.header-title{
+    font-size:32px;
+    font-weight:bold;
 }
 
-/* 右側 */
-.nav-right {
-    display: flex;
-    gap: 15px;
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:15px;
 }
 
-/* ボタン */
-.nav-btn {
-    text-decoration: none;
-
-    padding: 8px 16px;
-
-    background: white;
-    color: #2d4f7c;
-
-    border-radius: 10px;
-    border: 1px solid #bcd6ff;
-
-    font-size: 14px;
-    font-weight: bold;
-
-    transition: 0.2s;
+.date-display,
+.user-name{
+    font-size:14px;
 }
 
-/* ホバー */
-.nav-btn:hover {
-    background: #dbe9ff;
-    transform: translateY(-1px);
+.nav-btn{
+    color:#3366cc;
+    text-decoration:none;
+}
+
+.nav-btn:hover{
+    text-decoration:underline;
 }
 
 </style>
@@ -81,30 +59,37 @@ body {
 
 <body>
 
-<!-- 上部バー -->
-<div class="top-bar">
-    <!-- 左側：タイトル -->
-    <div class="nav-left">
+<div class="header">
+
+    <div class="header-title">
         得点管理システム
     </div>
 
-    <!-- 右側：ユーザー情報とログアウトボタン -->
     <div class="nav-right">
+
         <span class="date-display">
-            <fmt:formatDate value="<%= new java.util.Date() %>"
-                            pattern="yyyy年M月d日（E）"
-                            timeZone="Asia/Tokyo" />
+            <fmt:formatDate
+                value="<%= new java.util.Date() %>"
+                pattern="yyyy年M月d日(E)"
+                timeZone="Asia/Tokyo"/>
         </span>
-        
-        <span>${loginUser.name} 様</span>
-                <a href="${pageContext.request.contextPath}/action/Menu.action" class="nav-btn">
+
+        <span class="user-name">
+            ${loginUser.name}様
+        </span>
+
+        <a href="${pageContext.request.contextPath}/action/Menu.action"
+           class="nav-btn">
             ホーム
         </a>
-        <a href="${pageContext.request.contextPath}/action/Logout.action"  class="nav-btn">
+
+        <a href="${pageContext.request.contextPath}/action/Logout.action"
+           class="nav-btn">
             ログアウト
         </a>
+
     </div>
-</div>
+
 </div>
 <br>
 </body>
