@@ -104,5 +104,3 @@
         }
     }, 1000);
 </script>
-
-<%@ include file="/footer.html" %>

@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ include file="/header.jsp" %>
 
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<<<<<<< HEAD
 <title>科目管理</title>
 
 <style>
@@ -182,6 +184,7 @@ td{
 
 <body>
 
+<<<<<<< HEAD
 <div class="back-link">
     <a href="${pageContext.request.contextPath}/action/Menu.action">
         ← メインメニューへ戻る

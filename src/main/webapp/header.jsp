@@ -1,5 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
 <style>
 .header{
     display:flex;
@@ -43,6 +49,10 @@
 <div class="header">
 
     <div class="header-title">
+<!-- 上部バー -->
+<div class="top-bar">
+    <!-- 左側：タイトル -->
+    <div class="nav-left">
         得点管理システム
     </div>
 
@@ -60,6 +70,24 @@
             ログアウト
         </a>
 
+    <!-- 右側：ユーザー情報とログアウトボタン -->
+    <div class="nav-right">
+        <span class="date-display">
+            <fmt:formatDate value="<%= new java.util.Date() %>"
+                            pattern="yyyy年M月d日（E）"
+                            timeZone="Asia/Tokyo" />
+        </span>
+        
+        <span>${loginUser.name} 様</span>
+                <a href="${pageContext.request.contextPath}/action/Menu.action" class="nav-btn">
+            ホーム
+        </a>
+        <a href="${pageContext.request.contextPath}/action/Logout.action"  class="nav-btn">
+            ログアウト
+        </a>
     </div>
 
 </div>
+
+</body>
+</html>

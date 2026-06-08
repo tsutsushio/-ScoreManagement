@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ include file="/header.jsp" %>
 
 <!DOCTYPE html>
 <html>
@@ -201,35 +202,13 @@
         background: linear-gradient(135deg, #d7d7e8, #c2c2d9);
     }
 
-    /* フッター */
-    footer {
-        background-color: #e0e0e0;
-        text-align: center;
-        padding: 14px;
-        font-size: 12px;
-        color: #666;
-    }
+
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>得点管理システム</h1>
 
-    <div class="user-info">
-        <div class="date-display">
-            <fmt:formatDate value="<%= new java.util.Date() %>"
-                            pattern="yyyy年M月d日（E）"
-                            timeZone="Asia/Tokyo" />
-        </div>
-
-        ${loginUser.name} 様
-        <a href="${pageContext.request.contextPath}/action/Logout.action">
-            ログアウト
-        </a>
-    </div>
-</header>
 
 <div class="container">
 
@@ -324,11 +303,11 @@
         </div>
     </div>
 
-</div>
+    </div><!-- containerの閉じタグ（参考用） -->
 
-<footer>
-    &copy; 2026 得点管理システム
-</footer>
+    <!-- フッターの読み込み -->
+    <%@ include file="/footer.jsp" %>
 
 </body>
+
 </html>
