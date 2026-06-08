@@ -363,6 +363,6 @@ td input[type="number"] {
     
 
 </div>
-
+    <%@ include file="/footer.jsp" %>
 </body>
 </html>

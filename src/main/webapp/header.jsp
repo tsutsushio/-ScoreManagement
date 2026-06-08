@@ -5,7 +5,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>${pageTitle}</title>
 
 <style>
 
@@ -98,13 +97,14 @@ body {
         </span>
         
         <span>${loginUser.name} 様</span>
-        
-        <a href="${pageContext.request.contextPath}/action/Logout.action" class="nav-btn">
+                <a href="${pageContext.request.contextPath}/action/Menu.action" class="nav-btn">
+            ホーム
+        </a>
+        <a href="${pageContext.request.contextPath}/action/Logout.action" class="nav-btn" style="background: #fff0f0; color: #cc0000; border-color: #ffcccc;">
             ログアウト
         </a>
     </div>
 </div>
-<br>
 
 </div>
 

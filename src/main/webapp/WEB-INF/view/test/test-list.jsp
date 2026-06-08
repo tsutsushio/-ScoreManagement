@@ -10,26 +10,29 @@
 
 <style>
 /* ===== 全体 ===== */
-body{
-    font-family:
-    "Yu Gothic","Meiryo",sans-serif;
+/* ===== 全体 ===== */
+body {
+    font-family: "Yu Gothic", "Meiryo", sans-serif;
+    background: linear-gradient(135deg, #f8fbff, #eef5ff);
+    margin: 0;
+    color: #333;
+    min-height: 100vh;
 
-    background:
-    linear-gradient(
-        135deg,
-        #f8fbff,
-        #eef5ff
-    );
-
-    margin:0;
-    padding:40px 20px;
-
-    color:#333;
-    min-height:100vh;
-
-    display:flex;
-    justify-content:center;
+    /* 💡 画面全体を縦並びのフレックスボックスにする */
+    display: flex;
+    flex-direction: column;
 }
+
+/* 💡 メインのカードを画面中央に配置するための外枠 */
+.main-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* 上寄せ（コンテンツが多いので） */
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
 
 /* 戻る */
 .back-link{
@@ -370,113 +373,77 @@ tbody tr:last-child td:last-child{
 </head>
 
 <body>
-    <a href="${pageContext.request.contextPath}/action/Menu.action" class="back-link">
-        ← メニューへ戻る
-    </a>
+    <!-- 💡 画面全体を包むwrapperを追加（ヘッダー・フッターとの縦並びを正常化） -->
+    <div class="main-wrapper">
+        
+        <!-- 戻るボタンを相対配置で収めるためにcontainerの内側に移動、またはwrapper直下に配置 -->
+        <a href="${pageContext.request.contextPath}/action/Menu.action" class="back-link">
+            ← メニューへ戻る
+        </a>
 
-    <div class="container">
-        <h2>成績参照</h2>
+        <div class="container">
+            <h2>成績参照</h2>
 
-        <div class="search-box">
+            <div class="search-box">
+                <h3>科目情報</h3>
 
-    <h3>科目情報</h3>
+                <!-- 科目検索 -->
+                <form action="TestList.action" method="post" class="search-form">
+                    <input type="hidden" name="f" value="sj">
 
-    <!-- 科目検索 -->
-    <form action="TestList.action" method="post"
-          class="search-form">
+                    <div class="form-group">
+                        <label>入学年度</label>
+                        <select name="f1">
+                            <option value="">--------</option>
+                            <c:forEach items="${yearList}" var="year">
+                                <option value="${year}">${year}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
 
-        <input type="hidden"
-               name="f"
-               value="sj">
+                    <div class="form-group">
+                        <label>クラス</label>
+                        <select name="f2">
+                            <option value="">--------</option>
+                            <c:forEach items="${classList}" var="cls">
+                                <option value="${cls}">${cls}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
 
-        <div class="form-group">
-            <label>入学年度</label>
-            <select name="f1">
-                <option value="">--------</option>
-                <c:forEach items="${yearList}"
-                           var="year">
-                    <option value="${year}">
-                        ${year}
-                    </option>
-                </c:forEach>
-            </select>
-        </div>
+                    <div class="form-group">
+                        <label>科目</label>
+                        <select name="f3">
+                            <option value="">--------</option>
+                            <c:forEach items="${subjectList}" var="sub">
+                                <option value="${sub.cd}">${sub.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
 
-        <div class="form-group">
-            <label>クラス</label>
-            <select name="f2">
-                <option value="">--------</option>
-                <c:forEach items="${classList}"
-                           var="cls">
-                    <option value="${cls}">
-                        ${cls}
-                    </option>
-                </c:forEach>
-            </select>
-        </div>
+                    <button type="submit">検索</button>
+                </form>
 
-        <div class="form-group">
-            <label>科目</label>
-            <select name="f3">
-                <option value="">--------</option>
-                <c:forEach items="${subjectList}"
-                           var="sub">
-                    <option value="${sub.cd}">
-                        ${sub.name}
-                    </option>
-                </c:forEach>
-            </select>
-        </div>
+                <hr class="divider">
 
-        <button type="submit">
-            検索
-        </button>
-    </form>
+                <h3>学生情報</h3>
 
-    <hr class="divider">
+                <!-- 学生番号検索 -->
+                <form action="TestList.action" method="post" class="student-form">
+                    <input type="hidden" name="f" value="sj">
+                    <!-- 科目情報引き継ぎ -->
+                    <input type="hidden" name="f1" value="${param.f1}">
+                    <input type="hidden" name="f2" value="${param.f2}">
+                    <input type="hidden" name="f3" value="${param.f3}">
 
-    <h3>学生情報</h3>
+                    <div class="form-group">
+                        <label>学生番号</label>
+                        <input type="text" name="f4" class="student-no" placeholder="学生番号を入力" value="${param.f4}">
+                    </div>
 
-    <!-- 学生番号検索 -->
-    <form action="TestList.action"
-          method="post"
-          class="student-form">
-
-        <input type="hidden"
-               name="f"
-               value="sj">
-
-        <!-- 科目情報引き継ぎ -->
-        <input type="hidden"
-               name="f1"
-               value="${param.f1}">
-
-        <input type="hidden"
-               name="f2"
-               value="${param.f2}">
-
-        <input type="hidden"
-               name="f3"
-               value="${param.f3}">
-
-        <div class="form-group">
-            <label>学生番号</label>
-
-            <input
-                type="text"
-                name="f4"
-                class="student-no"
-                placeholder=
-                "学生番号を入力"
-                value="${param.f4}">
-        </div>
-
-        <button type="submit">
-            検索
-        </button>
-    </form>
-
-</div>
+                    <button type="submit">検索</button>
+                </form>
+            </div>
 
             <c:if test="${not empty error}">
                 <p class="error">${error}</p>
@@ -508,7 +475,10 @@ tbody tr:last-child td:last-child{
                     </tbody>
                 </table>
             </c:if>
-        </div>
-    </div>
+        </div> <!-- .container の閉じタグ -->
+    </div> <!-- .main-wrapper の閉じタグ -->
+
+    <%@ include file="/footer.jsp" %>
 </body>
 </html>
+

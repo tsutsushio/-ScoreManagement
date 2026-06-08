@@ -176,6 +176,6 @@ button[type="submit"]:hover {
         
     </form>
 </div>
-
+    <%@ include file="/footer.jsp" %>
 </body>
 </html>

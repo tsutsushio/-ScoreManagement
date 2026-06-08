@@ -202,14 +202,7 @@
         background: linear-gradient(135deg, #d7d7e8, #c2c2d9);
     }
 
-    /* フッター */
-    footer {
-        background-color: #e0e0e0;
-        text-align: center;
-        padding: 14px;
-        font-size: 12px;
-        color: #666;
-    }
+
 </style>
 </head>
 
@@ -310,11 +303,11 @@
         </div>
     </div>
 
-</div>
+    </div><!-- containerの閉じタグ（参考用） -->
 
-<footer>
-    &copy; 2026 得点管理システム
-</footer>
+    <!-- フッターの読み込み -->
+    <%@ include file="/footer.jsp" %>
 
 </body>
+
 </html>
