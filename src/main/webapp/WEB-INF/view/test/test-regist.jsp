@@ -15,7 +15,7 @@ body {
     background-color: #f8f9fa;
     color: #333333;
     margin: 0;
-    padding: 20px 20px 0 20px; /* 下側の余白を0にします */
+    padding: 0; /* 下側の余白を0にします */
     
     /* ーーー ここから追加 ーーー */
     display: flex;
@@ -30,6 +30,7 @@ body {
     max-width: 1000px;
     margin: 0 auto;
     width: 100%;
+    padding: 20px; 
     
     /* ーーー ここから追加 ーーー */
     flex: 1; /* 余ったスペースをすべて埋めてフッターを押し下げる */

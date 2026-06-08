@@ -1,30 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<title>得点管理システム</title>
-
 <style>
-
-/* ===== 全体 ===== */
-body{
-    margin:0;
-    font-family:"Yu Gothic","Meiryo",sans-serif;
-    font-size:14px;
-    color:#333;
-}
-
-/* ===== ヘッダー ===== */
 .header{
     display:flex;
     justify-content:space-between;
     align-items:center;
 
     padding:20px 30px;
-
     background:#e9eef5;
     border-bottom:1px solid #ccc;
 }
@@ -39,25 +22,7 @@ body{
     align-items:center;
     gap:15px;
 }
-
-.date-display,
-.user-name{
-    font-size:14px;
-}
-
-.nav-btn{
-    color:#3366cc;
-    text-decoration:none;
-}
-
-.nav-btn:hover{
-    text-decoration:underline;
-}
-
 </style>
-</head>
-
-<body>
 
 <div class="header">
 
@@ -91,6 +56,3 @@ body{
     </div>
 
 </div>
-<br>
-</body>
-</html>
