@@ -8,344 +8,303 @@
 <title>得点管理システム - 学生一覧</title>
 
 <style>
+    /* 全体レイアウト */
     body {
         margin: 0;
-        padding: 0;
         font-family: "Yu Gothic", sans-serif;
-        background-color: #f4f7fb;
-        color: #333;
+        background-color: #ffffff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
 
+    /* メインコンテナ（サイドバーとコンテンツの並び） */
     .container {
-        max-width: 1100px;
-        margin: 40px auto;
-        padding: 0 20px;
+        display: flex;
+        flex: 1;
     }
 
-    .back-link {
-        display: inline-block;
-        margin-bottom: 20px;
-        color: #4a7bd8;
-        text-decoration: none;
+    /* 左側サイドバーメニュー */
+    .sidebar {
+        width: 220px;
+        background-color: #ffffff;
+        border-right: 1px solid #ddd;
+        padding: 24px 20px;
+        box-sizing: border-box;
+    }
+    .sidebar ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .sidebar li {
+        margin-bottom: 16px;
+        color: #333;
         font-weight: bold;
-        transition: 0.2s;
     }
-
-    .back-link:hover {
-        color: #2f5fb8;
+    .sidebar a {
+        color: #0066cc;
+        text-decoration: none;
+        font-weight: normal;
+        font-size: 14px;
+    }
+    .sidebar a:hover {
         text-decoration: underline;
     }
-    
-    header {
-    background: #fff;
-    padding: 15px 30px;
-    border-bottom: 1px solid #ddd;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-    h2 {
-        margin: 0 0 25px;
-        padding: 14px 20px;
-        background: #fff;
-        border-left: 6px solid #6ea8ff;
-        border-radius: 10px;
-        font-size: 28px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    .sub-menu {
+        margin-top: 8px;
+        margin-left: 15px;
     }
-
-    .search-box {
-        background: #fff;
-        padding: 24px;
-        border-radius: 14px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        margin-bottom: 30px;
-    }
-
-    .search-row {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 18px;
-    }
-
-    .search-row label {
-        font-weight: bold;
-        color: #444;
+    .sub-menu li {
+        margin-bottom: 8px;
         font-size: 14px;
-    }
-
-    .search-row select {
-        padding: 10px 14px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background-color: #fff;
-        font-size: 14px;
-        min-width: 130px;
-        transition: 0.2s;
-    }
-
-    .search-row select:focus {
-        outline: none;
-        border-color: #6ea8ff;
-        box-shadow: 0 0 0 3px rgba(110,168,255,0.2);
-    }
-
-    .checkbox-label {
-        display: flex;
-        align-items: center;
-        gap: 6px;
         font-weight: normal;
     }
 
-    .checkbox-label input {
-        transform: scale(1.1);
+    /* 右側メインエリア */
+    .main-content {
+        flex: 1;
+        padding: 20px 40px;
+        background-color: #ffffff;
     }
 
-    .search-row button {
-        padding: 11px 22px;
-        border: none;
-        border-radius: 8px;
-        background: linear-gradient(135deg, #6ea8ff, #4a7bd8);
-        color: #fff;
-        font-size: 14px;
+    /* ① 見出し「学生管理」（グレーの帯） */
+    .main-content h2 {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding: 10px 15px;
+        background-color: #f2f2f2;
+        color: #333;
+        font-size: 18px;
         font-weight: bold;
-        cursor: pointer;
-        transition: 0.2s;
     }
 
-    .search-row button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(74,123,216,0.35);
-    }
-
-    /* 新規追加：学生登録リンクのスタイル */
-    .create-link {
-        margin-left: auto; /* これで同じ列の右端に寄ります */
-        padding: 9px 20px;
-        background-color: #6ea8ff; /* 背景色 */
-        color: #ffffff; /* 文字白 */
-        border: 2px solid #2f5fb8; /* 青色の淵 */
-        border-radius: 8px;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
-        transition: 0.2s;
-        text-align: center;
-    }
-
-    .create-link:hover {
-        background-color: #4a7bd8;
-        color: #ffffff;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(74,123,216,0.35);
-    }
-
-    .error-message {
-        background: #ffe5e5;
-        color: #d33;
-        border-left: 5px solid #ff6b6b;
-        padding: 14px 18px;
-        border-radius: 8px;
+    /* 検索ボックスと登録リンクの親 */
+    .search-wrapper {
+        position: relative;
         margin-bottom: 20px;
-        font-weight: bold;
+        padding-top: 25px; /* 新規登録リンク用のスペース */
     }
 
-    .result-count {
-        margin-bottom: 14px;
-        font-weight: bold;
-        color: #555;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background: #fff;
-        border-radius: 14px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    thead {
-        background: linear-gradient(135deg, #6ea8ff, #4a7bd8);
-        color: #fff;
-    }
-
-    th {
-        padding: 14px 10px;
+    /* ⑧ 新規登録リンクの配置 */
+    .create-link {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #0066ff;
         font-size: 14px;
-        font-weight: bold;
+        text-decoration: underline;
     }
 
-    td {
-        padding: 14px 10px;
-        border-bottom: 1px solid #eee;
-        text-align: center;
-        font-size: 14px;
+    /* 検索行（②〜⑦、⑨） */
+    .search-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background-color: #ffffff;
     }
 
-    tbody tr:nth-child(even) {
-        background-color: #f8fbff;
+    /* 入学年度・クラスの入力セット */
+    .input-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
     }
-
-    tbody tr:hover {
-        background-color: #eef5ff;
-    }
-
-    .edit-link {
-        display: inline-block;
-        padding: 6px 14px;
-        background-color: #f0f6ff;
-        border: 1px solid #6ea8ff;
-        border-radius: 6px;
-        color: #4a7bd8;
-        text-decoration: none;
-        font-weight: bold;
-        transition: 0.2s;
-    }
-
-    .edit-link:hover {
-        background-color: #6ea8ff;
-        color: #fff;
-    }
-    
-    footer {
-        background-color: #e0e0e0;
-        text-align: center;
-        padding: 14px;
+    .input-item label {
         font-size: 12px;
         color: #666;
     }
+    .input-item select {
+        padding: 4px 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        min-width: 140px;
+        background-color: #ffffff;
+    }
 
-    @media screen and (max-width: 768px) {
-        .search-row {
-            flex-direction: column;
-            align-items: stretch;
-        }
+    /* ⑥⑦ 在学中チェックボックス */
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13px;
+        color: #333;
+        margin-top: 18px; /* 入力欄のラベル分、下へ下げる */
+    }
 
-        .search-row select,
-        .search-row button {
-            width: 100%;
-        }
+    /* ⑨ 絞込みボタン */
+    .search-btn {
+        background-color: #555555;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 16px;
+        font-size: 13px;
+        cursor: pointer;
+        margin-top: 18px; /* 入力欄のラベル分、下へ下げる */
+    }
+    .search-btn:hover {
+        background-color: #333333;
+    }
 
-        /* スマホ用：右寄せを解除し、幅いっぱいに広げる */
-        .create-link {
-            margin-left: 0;
-            width: 100%;
-            box-sizing: border-box;
-        }
+    /* ⑩ 検索結果件数テキスト */
+    .result-count {
+        font-size: 13px;
+        color: #333;
+        margin: 15px 0 10px 0;
+    }
 
-        table {
-            display: block;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
+    /* ⑪ テーブルスタイル（クリアなフラットデザイン） */
+    .student-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    /* ⑫〜base ヘッダーセル */
+    .student-table th {
+        border-bottom: 2px solid #333;
+        padding: 8px 10px;
+        text-align: left;
+        font-size: 14px;
+        color: #333;
+        font-weight: bold;
+    }
+    /* ⑰〜㉑ データセル */
+    .student-table td {
+        padding: 10px;
+        font-size: 14px;
+        color: #333;
+        vertical-align: middle;
+    }
+    /* ㉒ 変更リンク */
+    .edit-link {
+        color: #0066ff;
+        text-decoration: underline;
+    }
+
+    /* ㉓ 該当データがない時のメッセージ */
+    .error-message {
+        font-size: 14px;
+        color: #333;
+        margin-top: 25px;
     }
 </style>
 </head>
 <body>
 
-<header>
-    <h1>得点管理システム</h1>
-</header>
-
-
 <div class="container">
 
-    <a class="back-link" href="<%= request.getContextPath() %>/action/Menu.action">
-        ← メニューへ戻る
-    </a>
 
-    <h2>学生管理</h2>
+    <!-- 右側メインエリア -->
+    <div class="main-content">
+        
+        <!-- ① 見出し「学生管理」 -->
+        <h2>学生管理</h2>
 
-    <div class="search-box">
-        <form action="<%= request.getContextPath() %>/action/StudentList.action" method="post">
-            <div class="search-row">
+        <div class="search-wrapper">
+            <!-- ⑧ 新規登録リンク（右上に絶対配置） -->
+            <a href="<%= request.getContextPath() %>/action/StudentCreate.action" class="create-link">新規登録</a>
 
-                <label>入学年度</label>
-                <select name="entYear">
-                    <option value="0">--------</option>
-                    <option value="2014">2014</option>
-                    <option value="2015">2015</option>
-                    <option value="2016">2016</option>
-                    <option value="2017">2017</option>
-                    <option value="2018">2018</option>
-                    <option value="2019">2019</option>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                </select>
+            <!-- 検索フォーム -->
+            <form action="<%= request.getContextPath() %>/action/StudentList.action" method="post">
+                <div class="search-row">
 
-                <label>クラス</label>
-                <select name="classNum">
-                    <option value="--------">--------</option>
-                    <option value="101">101</option>
-                    <option value="102">102</option>
-                    <option value="201">201</option>
-                    <option value="202">202</option>
-                </select>
+                    <!-- ②④ 入学年度 -->
+                    <div class="input-item">
+                        <label>入学年度</label>
+                        <select name="entYear">
+                            <option value="0">--------</option>
+                            <option value="2014">2014</option>
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                        </select>
+                    </div>
 
-                <label class="checkbox-label">
-                    <input type="checkbox" name="isAttend" value="true">
-                    在学中
-                </label>
+                    <!-- ③⑤ クラス -->
+                    <div class="input-item">
+                        <label>クラス</label>
+                        <select name="classNum">
+                            <option value="--------">--------</option>
+                            <option value="101">101</option>
+                            <option value="102">102</option>
+                            <option value="201">201</option>
+                            <option value="202">202</option>
+                        </select>
+                    </div>
 
-                <button type="submit">絞り込む</button>
+                    <!-- ⑥⑦ 在学中チェックボックス -->
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="isAttend" value="true">
+                        在学中
+                    </label>
 
-                <a href="<%= request.getContextPath() %>/action/StudentCreate.action" class="create-link">学生登録</a>
+                    <!-- ⑨ 絞込みボタン -->
+                    <button type="submit" class="search-btn">絞込み</button>
 
-            </div>
-        </form>
-    </div>
+                </div>
+            </form>
+        </div>
 
-    <c:if test="${empty studentList}">
-        <p class="error-message">学生情報が存在しませんでした</p>
-    </c:if>
+        <!-- ㉓ 絞り込み条件に該当する学生情報がない時 -->
+        <c:if test="${empty studentList}">
+            <p class="error-message">学生情報が存在しませんでした</p>
+        </c:if>
 
-    <c:if test="${not empty studentList}">
-        <p class="result-count">検索結果：${studentList.size()} 件</p>
+        <!-- ⑪ 学生一覧テーブルエリア -->
+        <c:if test="${not empty studentList}">
+            <!-- ⑩ 検索結果件数 -->
+            <p class="result-count">検索結果：${studentList.size()}件</p>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>入学年度</th>
-                    <th>学生番号</th>
-                    <th>氏名</th>
-                    <th>クラス</th>
-                    <th>在学中</th>
-                    <th>学生情報変更</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="student" items="${studentList}">
+            <table class="student-table">
+                <thead>
                     <tr>
-                        <td>${student.entYear}</td>
-                        <td>${student.no}</td>
-                        <td>${student.name}</td>
-                        <td>${student.classNum}</td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${student.isAttend}">〇</c:when>
-                                <c:otherwise>×</c:otherwise>
-                            </c:choose>
-                        </td>
-                        <td>
-                            <a class="edit-link"
-                               href="<%= request.getContextPath() %>/action/StudentUpdate.action?no=${student.no}">
-                                変更
-                            </a>
-                        </td>
+                        <th>入学年度</th>
+                        <th>学生番号</th>
+                        <th>氏名</th>
+                        <th>クラス</th>
+                        <th>在学中</th>
+                        <th></th> <!-- 「変更」見出しは画像に合わせて空欄に設定 -->
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-    </c:if>
+                </thead>
+                <tbody>
+                    <c:forEach var="student" items="${studentList}">
+                        <tr>
+                            <td>${student.entYear}</td>
+                            <td>${student.no}</td>
+                            <td>${student.name}</td>
+                            <td>${student.classNum}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${student.isAttend}">〇</c:when>
+                                    <c:otherwise>×</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <!-- ㉒ 変更リンク -->
+                                <a class="edit-link"
+                                   href="<%= request.getContextPath() %>/action/StudentUpdate.action?no=${student.no}">
+                                    変更
+                                </a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:if>
 
+    </div>
 </div>
-<footer>
-    &copy; 2026 得点管理システム
-</footer>
+
+<!-- フッターの読み込み（不要な直書きfooterタグを削除） -->
+<%@ include file="/footer.jsp" %>
 
 </body>
 </html>

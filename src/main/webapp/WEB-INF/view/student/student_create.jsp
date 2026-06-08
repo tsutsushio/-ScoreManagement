@@ -7,192 +7,225 @@
 <meta charset="UTF-8">
 <title>得点管理システム - 学生情報登録</title>
 <style>
-body {
-    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-    background-color: #f4f7f9;
-    color: #333;
-    margin: 0;
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    /* 全体レイアウト */
+    body {
+        margin: 0;
+        font-family: "Yu Gothic", sans-serif;
+        background-color: #ffffff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-/* 戻るリンクをカードの幅（450px）に合わせて左側に配置 */
-.back-link { 
-    display: inline-block;
-    margin-bottom: 15px; 
-    text-decoration: none; 
-    color: #3498db; 
-    font-size: 14px;
-    font-weight: bold;
-    transition: color 0.2s;
-    align-self: flex-start; /* 左端に揃えるための設定 */
-    max-width: 450px;
-    width: 100%;
-}
+    /* メインコンテナ（サイドバーとコンテンツの並び） */
+    .container {
+        display: flex;
+        flex: 1;
+    }
 
-.back-link:hover { 
-    color: #2980b9;
-    text-decoration: underline;
-}
+    /* 左側サイドバーメニュー（これまでの画面と共通） */
+    .sidebar {
+        width: 220px;
+        background-color: #ffffff;
+        border-right: 1px solid #ddd;
+        padding: 24px 20px;
+        box-sizing: border-box;
+    }
+    .sidebar ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .sidebar li {
+        margin-bottom: 16px;
+        color: #333;
+        font-weight: bold;
+    }
+    .sidebar a {
+        color: #0066cc;
+        text-decoration: none;
+        font-weight: normal;
+        font-size: 14px;
+    }
+    .sidebar a:hover {
+        text-decoration: underline;
+    }
+    .sub-menu {
+        margin-top: 8px;
+        margin-left: 15px;
+    }
+    .sub-menu li {
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: normal;
+    }
 
-/* タイトルをカードの中に収まるように一旦非表示に */
-h2 {
-    display: none;
-}
+    /* 右側メインエリア */
+    .main-content {
+        flex: 1;
+        padding: 20px 40px;
+        background-color: #ffffff;
+    }
 
-/* フォーム全体を包むカード（中央揃えのメイン枠） */
-.form-container {
-    background: #ffffff;
-    padding: 35px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    width: 100%;
-    max-width: 450px; /* 変更画面と同じ幅に統一 */
-    box-sizing: border-box;
-}
+    /* 見出し「学生情報登録」（グレーの帯） */
+    .main-content h2 {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding: 10px 15px;
+        background-color: #f2f2f2;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-/* カードの先頭にタイトルを美しく配置するための疑似要素 */
-.form-container::before {
-    content: "学生情報登録";
-    display: block;
-    font-size: 22px;
-    font-weight: bold;
-    color: #2c3e50;
-    text-align: center;
-    padding-bottom: 12px;
-    margin-bottom: 25px;
-    border-bottom: 2px solid #f4f7f9;
-}
+    /* フォームコンテナ */
+    .form-container {
+        max-width: 800px;
+        width: 100%;
+    }
 
-.form-group { 
-    margin-bottom: 20px; 
-}
+    /* 各入力項目の縦並びグループ設定 */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 20px;
+    }
 
-.form-group label { 
-    display: inline-block; 
-    font-size: 14px;
-    font-weight: bold; 
-    margin-bottom: 8px; 
-    color: #34495e; 
-}
+    .form-group label {
+        font-size: 13px;
+        color: #666;
+    }
 
-/* テキスト入力・パスワード・セレクトボックスをすべて統一 */
-.form-group input[type="text"], 
-.form-group input[type="password"], 
-.form-group select {
-    width: 100%;
-    height: 42px;
-    padding: 0 12px;
-    font-size: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: #fff;
-    box-sizing: border-box;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
+    /* 入力欄（テキスト・セレクト共通の見た目） */
+    .form-group input[type="text"],
+    .form-group select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+        background-color: #ffffff;
+        color: #333;
+    }
 
-/* プレースホルダーの文字色を少し薄くして見やすく */
-.form-group input::placeholder {
-    color: #b0bec5;
-}
+    /* プレースホルダーの色調整 */
+    .form-group input::placeholder {
+        color: #aaa;
+    }
 
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-    outline: none;
-}
+    /* 「登録して終了」ボタン（グレーの四角ボタン） */
+    .btn-submit {
+        background-color: #6c757d;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-bottom: 15px;
+    }
+    .btn-submit:hover {
+        background-color: #5a6268;
+    }
 
-/* エラーメッセージ（赤文字） */
-.error-msg {
-    color: #e74c3c;
-    font-size: 13px;
-    display: block;
-    margin-top: 6px;
-    font-weight: 500;
-}
+    /* 「戻る」リンク（ボタンの下の青文字下線） */
+    .back-link-box {
+        margin-top: 5px;
+    }
+    .back-link {
+        color: #0066ff;
+        font-size: 14px;
+        text-decoration: underline;
+    }
+    .back-link:hover {
+        color: #0044cc;
+    }
 
-/* 登録ボタン */
-.btn-submit {
-    width: 100%;
-    height: 45px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.2s;
-    margin-top: 10px;
-}
-
-.btn-submit:hover { 
-    background-color: #2980b9; 
-}
-
+    /* エラーメッセージ（バリデーション用） */
+    .error-msg {
+        color: #d9534f;
+        font-size: 12px;
+        margin-top: 2px;
+    }
 </style>
 </head>
 <body>
 
-    <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
+<div class="container">
 
-    <h2>学生情報登録</h2>
 
-    <div class="form-container">
-        <form action="${pageContext.request.contextPath}/action/StudentCreateExecute.action" method="post">
+
+    <!-- 右側メインエリア -->
+    <div class="main-content">
+
+        <!-- 見出し「学生情報登録」 -->
+        <h2>学生情報登録</h2>
+
+        <div class="form-container">
+            <form action="${pageContext.request.contextPath}/action/StudentCreateExecute.action" method="post">
+                
+                <!-- 入学年度 -->
+                <div class="form-group">
+                    <label>入学年度</label>
+                    <select name="entYear">
+                        <option value="0">--------</option>
+                        <c:forEach var="year" items="${entYearList}">
+                            <option value="${year}" ${entYear == year ? 'selected' : ''}>${year}</option>
+                        </c:forEach>
+                    </select>
+                    <c:if test="${not empty errors.entYear}">
+                        <span class="error-msg">${errors.entYear}</span>
+                    </c:if>
+                </div>
+
+                <!-- 学生番号 -->
+                <div class="form-group">
+                    <label>学生番号</label>
+                    <input type="text" name="no" value="${no}" placeholder="学生番号を入力してください">
+                    <c:if test="${not empty errors.no}">
+                        <span class="error-msg">${errors.no}</span>
+                    </c:if>
+                </div>
+
+                <!-- 氏名 -->
+                <div class="form-group">
+                    <label>氏名</label>
+                    <input type="text" name="name" value="${name}" placeholder="氏名を入力してください">
+                    <c:if test="${not empty errors.name}">
+                        <span class="error-msg">${errors.name}</span>
+                    </c:if>
+                </div>
+
+                <!-- クラス -->
+                <div class="form-group">
+                    <label>クラス</label>
+                    <select name="classNum">
+                        <c:forEach var="c" items="${classList}">
+                            <option value="${c}" ${classNum == c ? 'selected' : ''}>${c}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                
+                <!-- パスワード（画面外で必須な場合のための隠し要素。不要なら行ごと削除してOKです） -->
+                <input type="hidden" name="password" value="defaultPassword123">
+
+                <!-- 登録ボタン -->
+                <button type="submit" class="btn-submit">登録して終了</button>
+            </form>
             
-            <div class="form-group">
-                <label>入学年度</label>
-                <select name="entYear">
-                    <option value="0">--------</option>
-                    <c:forEach var="year" items="${entYearList}">
-                        <option value="${year}" ${entYear == year ? 'selected' : ''}>${year}</option>
-                    </c:forEach>
-                </select>
-                <c:if test="${not empty errors.entYear}">
-                    <span class="error-msg">${errors.entYear}</span>
-                </c:if>
+            <!-- 戻るリンク -->
+            <div class="back-link-box">
+                <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label>学生番号</label>
-                <input type="text" name="no" value="${no}" placeholder="学生番号を入力してください">
-                <c:if test="${not empty errors.no}">
-                    <span class="error-msg">${errors.no}</span>
-                </c:if>
-            </div>
-
-            <div class="form-group">
-                <label>氏名</label>
-                <input type="text" name="name" value="${name}" placeholder="氏名を入力してください">
-                <c:if test="${not empty errors.name}">
-                    <span class="error-msg">${errors.name}</span>
-                </c:if>
-            </div>
-
-            <div class="form-group">
-                <label>クラス</label>
-                <select name="classNum">
-                    <c:forEach var="c" items="${classList}">
-                        <option value="${c}" ${classNum == c ? 'selected' : ''}>${c}</option>
-                    </c:forEach>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>パスワード</label>
-                <input type="password" name="password" placeholder="パスワードを入力してください">
-                <c:if test="${not empty errors.password}">
-                    <span class="error-msg">${errors.password}</span>
-                </c:if>
-            </div>
-
-            <button type="submit" class="btn-submit">登録</button>
-        </form>
     </div>
+</div>
+
+<!-- フッターの読み込み -->
+<%@ include file="/footer.jsp" %>
 
 </body>
 </html>
