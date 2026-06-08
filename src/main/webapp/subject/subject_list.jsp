@@ -3,89 +3,38 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ include file="/header.jsp" %>
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<<<<<<< HEAD
-<title>科目管理</title>
-
 <style>
 
-/* =========================
-   全体
-========================= */
-body{
-    margin:0;
-    font-family:"Yu Gothic","Meiryo",sans-serif;
-    color:#333;
-}
-
-/* =========================
-   戻るリンク
-========================= */
-.back-link{
-    padding:10px 20px;
-}
-
-.back-link a{
-    color:#3366cc;
-    text-decoration:none;
-}
-
-.back-link a:hover{
-    text-decoration:underline;
-}
-
-/* =========================
-   メイン領域
-========================= */
+/* メイン */
 .content{
     display:flex;
-    min-height:500px;
+    min-height:600px;
 }
 
-/* =========================
-   左メニュー
-========================= */
-    .sidebar {
-        width: 220px;
-        background-color: #ffffff;
-        border-right: 1px solid #ddd;
-        padding: 24px 20px;
-        box-sizing: border-box;
-    }
+/* 左メニュー */
+.sidebar{
+    width:220px;
+    padding:20px;
+    border-right:1px solid #ddd;
+}
 
-    .sidebar ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
+.sidebar ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
 
-    .sidebar li {
-        margin-bottom: 16px;
-        color: #333;
-        font-weight: bold;
-    }
-
-    .sidebar a {
-        color: #0066cc;
-        text-decoration: none;
-        font-weight: normal;
-    }
-
-    .sidebar a:hover {
-        text-decoration: underline;
-    }
-
+.sidebar > ul > li{
+    margin-bottom:15px;
+}
 
 .sub-menu{
-    margin-top:5px;
     margin-left:15px;
+    margin-top:5px;
 }
 
 .sub-menu li{
-    margin:5px 0;
+    margin-bottom:5px;
 }
 
 .sidebar a{
@@ -97,17 +46,12 @@ body{
     text-decoration:underline;
 }
 
-/* =========================
-   右側コンテンツ
-========================= */
+/* 右側 */
 .list-box{
     flex:1;
-    padding:0 20px;
+    padding:20px;
 }
 
-/* =========================
-   タイトル
-========================= */
 .page-title{
     background:#eeeeee;
     padding:10px 15px;
@@ -116,9 +60,6 @@ body{
     margin-bottom:10px;
 }
 
-/* =========================
-   新規登録
-========================= */
 .create-area{
     text-align:right;
     margin-bottom:10px;
@@ -133,17 +74,15 @@ body{
     text-decoration:underline;
 }
 
-/* =========================
-   テーブル
-========================= */
+/* テーブル */
 table{
     width:100%;
     border-collapse:collapse;
 }
 
 th{
+    background:#f5f5f5;
     text-align:left;
-    background:#fafafa;
     padding:10px;
     border-top:1px solid #ccc;
     border-bottom:1px solid #ccc;
@@ -168,28 +107,7 @@ td{
     text-decoration:underline;
 }
 
-/* =========================
-   フッター
-========================= */
- footer {
-        background-color: #e0e0e0;
-        text-align: center;
-        padding: 14px;
-        font-size: 12px;
-        color: #666;
-    }
-
 </style>
-</head>
-
-<body>
-
-<<<<<<< HEAD
-<div class="back-link">
-    <a href="${pageContext.request.contextPath}/action/Menu.action">
-        ← メインメニューへ戻る
-    </a>
-</div>
 
 <div class="content">
 
@@ -198,7 +116,7 @@ td{
 
         <ul>
 
-            <li>メニュー</li>
+            <li><strong>メニュー</strong></li>
 
             <li>
                 学生管理
@@ -273,7 +191,6 @@ td{
                     <tr>
 
                         <td>${subject.cd}</td>
-
                         <td>${subject.name}</td>
 
                         <td class="action">
@@ -299,10 +216,3 @@ td{
     </div>
 
 </div>
-
-<footer>
-    &copy; 2026 得点管理システム
-</footer>
-
-</body>
-</html>

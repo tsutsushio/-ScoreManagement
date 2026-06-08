@@ -1,90 +1,93 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
+<title>得点管理システム</title>
 
 <style>
+
+/* ===== 全体 ===== */
+body{
+    margin:0;
+    font-family:"Yu Gothic","Meiryo",sans-serif;
+    font-size:14px;
+    color:#333;
+}
+
+/* ===== ヘッダー ===== */
 .header{
     display:flex;
     justify-content:space-between;
     align-items:center;
 
-    background:#e9eef5;
-
-    border-bottom:1px solid #ccc;
-
     padding:20px 30px;
+
+    background:#e9eef5;
+    border-bottom:1px solid #ccc;
 }
 
 .header-title{
-    font-size:36px;
+    font-size:32px;
     font-weight:bold;
 }
 
-.header-menu{
+.nav-right{
     display:flex;
     align-items:center;
-    gap:20px;
+    gap:15px;
 }
 
+.date-display,
 .user-name{
-    color:#333;
+    font-size:14px;
 }
 
-.header-menu a{
+.nav-btn{
     color:#3366cc;
     text-decoration:none;
 }
 
-.header-menu a:hover{
+.nav-btn:hover{
     text-decoration:underline;
 }
 
 </style>
+</head>
 
+<body>
 
 <div class="header">
 
     <div class="header-title">
-<!-- 上部バー -->
-<div class="top-bar">
-    <!-- 左側：タイトル -->
-    <div class="nav-left">
         得点管理システム
     </div>
 
-    <div class="header-menu">
+    <div class="nav-right">
+
+        <span class="date-display">
+            <fmt:formatDate
+                value="<%= new java.util.Date() %>"
+                pattern="yyyy年M月d日(E)"
+                timeZone="Asia/Tokyo"/>
+        </span>
 
         <span class="user-name">
             ${loginUser.name}様
         </span>
 
-        <a href="${pageContext.request.contextPath}/action/Menu.action">
+        <a href="${pageContext.request.contextPath}/action/Menu.action"
+           class="nav-btn">
             ホーム
         </a>
 
-        <a href="${pageContext.request.contextPath}/action/Logout.action">
+        <a href="${pageContext.request.contextPath}/action/Logout.action"
+           class="nav-btn">
             ログアウト
         </a>
 
-    <!-- 右側：ユーザー情報とログアウトボタン -->
-    <div class="nav-right">
-        <span class="date-display">
-            <fmt:formatDate value="<%= new java.util.Date() %>"
-                            pattern="yyyy年M月d日（E）"
-                            timeZone="Asia/Tokyo" />
-        </span>
-        
-        <span>${loginUser.name} 様</span>
-                <a href="${pageContext.request.contextPath}/action/Menu.action" class="nav-btn">
-            ホーム
-        </a>
-        <a href="${pageContext.request.contextPath}/action/Logout.action"  class="nav-btn">
-            ログアウト
-        </a>
     </div>
 
 </div>
