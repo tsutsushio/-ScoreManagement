@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>得点管理システム - 科目管理</title>
+
 
 <style>
 body {
@@ -181,9 +181,6 @@ tbody tr:hover {
 
 <body>
 
-<header>
-    <h1>得点管理システム</h1>
-</header>
 
 <div class="main">
 
