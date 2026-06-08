@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ include file="/header.jsp" %>
 
 <!DOCTYPE html>
 <html>
@@ -214,22 +215,7 @@
 
 <body>
 
-<header>
-    <h1>得点管理システム</h1>
 
-    <div class="user-info">
-        <div class="date-display">
-            <fmt:formatDate value="<%= new java.util.Date() %>"
-                            pattern="yyyy年M月d日（E）"
-                            timeZone="Asia/Tokyo" />
-        </div>
-
-        ${loginUser.name} 様
-        <a href="${pageContext.request.contextPath}/action/Logout.action">
-            ログアウト
-        </a>
-    </div>
-</header>
 
 <div class="container">
 
