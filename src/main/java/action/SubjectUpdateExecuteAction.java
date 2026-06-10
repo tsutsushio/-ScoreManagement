@@ -24,13 +24,23 @@ public String execute(
 
     SchoolBean school = new SchoolBean();
     school.setCd(schoolCd);
-
     subject.setSchool(school);
 
     SubjectDAO dao = new SubjectDAO();
-    dao.update(subject);
 
-    return "/subject/subject_update_done.jsp";
+    try {
+
+        dao.update(subject);
+
+        return "/subject/subject_update_done.jsp";
+
+    } catch (Exception e) {
+
+        request.setAttribute("errorMessage", e.getMessage());
+        request.setAttribute("subject", subject);
+
+        return "/subject/subject_update.jsp";
+    }
 }
 
 }
