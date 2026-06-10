@@ -1,7 +1,7 @@
 package action;
 
 import bean.SubjectBean;
-import bean.TeacherBean; // クラス名はこれで合っています
+import bean.TeacherBean;
 import dao.SubjectDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,19 +15,20 @@ public class SubjectUpdateExecuteAction extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-        // 💡 修正：セッションの属性名を "loginUser" に変更します
         HttpSession session = request.getSession();
         TeacherBean teacher = (TeacherBean) session.getAttribute("loginUser"); 
 
         String cd = request.getParameter("cd");
         String name = request.getParameter("name");
 
-        // SubjectBean を使用
+        // 💡 エラーで戻ったとき、画面の入力欄にこの値を残すためにセット
+        request.setAttribute("cd", cd);
+        request.setAttribute("name", name);
+
         SubjectBean subject = new SubjectBean();
         subject.setCd(cd);
         subject.setName(name);
         
-        // セッションから取得した学校情報をセット
         if (teacher != null) {
             subject.setSchool(teacher.getSchool());
         } else {
@@ -35,11 +36,21 @@ public class SubjectUpdateExecuteAction extends Action {
         }
 
         SubjectDAO dao = new SubjectDAO();
-        dao.update(subject);
 
-        // 更新後の一覧を取得
-        request.setAttribute("subjectList", dao.list());
+        try {
+            // 登録・更新を実行
+            dao.update(subject);
+            
+            // 成功したら一覧を取得して一覧画面へ
+            request.setAttribute("subjectList", dao.list());
+            return "/subject/subject_list.jsp";
 
-        return "/subject/subject_list.jsp";
+        } catch (Exception e) {
+            // 💡 エラーメッセージをリクエストに保存（JSPの ${errorMessage} に入ります）
+            request.setAttribute("errorMessage", e.getMessage());
+            
+            // 🌟 修正ポイント：直接JSPに戻すのではなく、表示用のアクションを経由して戻す
+            return "/action/SubjectUpdate.action"; 
+        }
     }
 }

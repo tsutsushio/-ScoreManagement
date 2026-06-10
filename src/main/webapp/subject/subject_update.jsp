@@ -26,7 +26,7 @@ html, body {
 .main-content {
     flex: 1;
     padding: 40px 20px;
-    background-color: #f4f7fb;
+    background-color: #ffffff; /* 💡 背景を白にしてよりシンプルに */
     display: flex;
     justify-content: center;
 }
@@ -36,77 +36,104 @@ html, body {
     max-width: 600px;
 }
 
+/* 💡 戻るリンクを画像のようなシンプルな青文字に */
 .back-link {
     margin-bottom: 20px;
 }
-
 .back-link a {
-    color: #4a7bd8;
+    color: #007bff;
     text-decoration: none;
-    font-weight: bold;
+    font-size: 14px;
+}
+.back-link a:hover {
+    text-decoration: underline;
 }
 
+/* 💡 タイトルエリアを画像①のようなシンプルなグレー背景に変更 */
 .title-area {
     margin-bottom: 25px;
-    padding: 14px 20px;
-    background: #ffffff;
-    border-left: 6px solid #6ea8ff;
-    border-radius: 10px;
-    font-size: 24px;
+    padding: 12px 20px;
+    background: #f1f3f5;
+    border-radius: 4px;
+    font-size: 20px;
     font-weight: bold;
+    color: #333333;
 }
 
+/* 💡 外枠のシャドウや背景を無くして、極限までシンプルに */
 .form-area {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: transparent;
+    padding: 10px 0;
 }
 
+/* 💡 画像②④のように、ラベルと入力欄をゆったり配置 */
 .form-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .form-row label {
-    width: 120px;
+    display: block;
     font-weight: bold;
+    margin-bottom: 8px;
+    color: #495057;
+    font-size: 15px;
 }
 
-.form-row input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+/* 💡 画像③⑤のような、すっきりした入力フォームのデザイン */
+.form-row input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #ffffff;
 }
 
+/* 💡 読み取り専用（科目コード）の背景を画像③のような薄いグレーに */
 .form-row input[readonly] {
-    background-color: #f1f3f5;
+    background-color: #f8f9fa;
+    color: #495057;
+    border-color: #dee2e6;
 }
 
-.error {
-    background: #ffe5e5;
-    color: #d33;
-    padding: 12px;
-    margin-bottom: 20px;
-    border-left: 5px solid #ff6b6b;
-}
-
+/* 💡 ボタンエリアの配置を左寄せに変更 */
 .button-area {
-    text-align: center;
+    text-align: left;
     margin-top: 30px;
 }
 
+/* 💡 画像⑥のような、パキッとした鮮やかな青色ボタン */
 .button-area input[type="submit"] {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
     padding: 10px 24px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
 }
 
+.button-area input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* 💡 画像⑦のような、ボタンの下に配置するテキストリンクの「戻る」 */
 .button-area a {
-    margin-left: 10px;
+    display: block;
+    margin-top: 15px;
+    color: #007bff;
     text-decoration: none;
+    font-size: 14px;
+}
+
+.button-area a:hover {
+    text-decoration: underline;
 }
 </style>
+
 </head>
 
 <body>
@@ -121,38 +148,50 @@ html, body {
 
         <div class="content-wrapper">
 
-            <div class="back-link">
-                <a href="${pageContext.request.contextPath}/action/SubjectList.action">
-                    ← 戻る
-                </a>
-            </div>
-
             <div class="title-area">
                 科目情報変更
             </div>
 
-            <div class="form-area">
+                        <div class="form-area">
 
                 <form action="${pageContext.request.contextPath}/action/SubjectUpdateExecute.action"
                       method="post">
 
                     <input type="hidden" name="cd" value="${subject.cd}">
 
+                    <!-- 💡 科目コード部分 -->
                     <div class="form-row">
                         <label>科目コード</label>
-                        <input type="text"
-                               value="${subject.cd}"
-                               readonly>
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+                            <input type="text" value="${subject.cd}" readonly>
+                            
+                            <!-- 科目コード用の個別エラー（重複など） -->
+                            <c:if test="${not empty errorMessage and (errorMessage.contains('コード') or errorMessage.contains('重複'))}">
+                                <div style="color: #ff0000; font-size: 0.85em; margin-top: 5px; font-weight: bold;">
+                                    ${errorMessage}
+                                </div>
+                            </c:if>
+                        </div>
                     </div>
 
+                    <!-- 💡 科目名部分 -->
                     <div class="form-row">
                         <label for="name">科目名</label>
-                        <input type="text"
-                               id="name"
-                               name="name"
-                               value="${subject.name}"
-                               maxlength="50"
-                               required>
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+                            <input type="text"
+                                   id="name"
+                                   name="name"
+                                   value="${subject.name}"
+                                   placeholder="科目名を入力してください"
+                                   required>
+                                   
+                            <!-- 科目名用の個別エラー（20文字オーバーなど） -->
+                            <c:if test="${not empty errorMessage and errorMessage.contains('科目名')}">
+                                <div style="color: #ff0000; font-size: 0.85em; margin-top: 5px; font-weight: bold;">
+                                    ${errorMessage}
+                                </div>
+                            </c:if>
+                        </div>
                     </div>
 
                     <div class="button-area">
@@ -166,6 +205,7 @@ html, body {
                 </form>
 
             </div>
+
 
         </div>
 
