@@ -167,11 +167,6 @@ body {
 
 <body>
 
-<header>
-    <h1>得点管理システム</h1>
-
-</header>
-
 <div class="main">
 
     <div class="back-link">
@@ -228,3 +223,4 @@ body {
 
 </body>
 </html>
+<%@ include file="/footer.jsp" %>
