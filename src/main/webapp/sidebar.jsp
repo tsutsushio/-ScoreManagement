@@ -1,111 +1,66 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <style>
+/* サイドバー全体のスタイル */
+.sidebar {
+    width: 220px;          /* 幅を220pxに統一 */
+    background-color: #ffffff;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    box-sizing: border-box; /* パディングを含めた幅にする */
+}
 
-/* 全体 */
-body {
+/* リスト全体の余白リセット */
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
     margin: 0;
-    padding-top: 70px; /* ヘッダー分 */
-    font-family: "Yu Gothic", sans-serif;
-    background: #f8fbff;
 }
 
-/* 上部バー */
-.top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 30px;
-    box-sizing: border-box;
-
-    background: rgba(230, 240, 255, 0.9);
-    backdrop-filter: blur(8px);
-
-    border-bottom: 1px solid #c9dfff;
-
-    z-index: 1000;
-}
-
-/* 左側 */
-.nav-left {
-    font-size: 20px;
+/* メニュー項目ごとの上下の隙間 */
+.sidebar li {
+    margin-bottom: 12px;
+    color: #333333;
     font-weight: bold;
-    color: #2d4f7c;
 }
 
-/* 右側 */
-.nav-right {
-    display: flex;
-    gap: 15px;
-}
-
-/* ボタン */
-.nav-btn {
+/* 各メニューのリンク */
+.sidebar a {
     text-decoration: none;
-
-    padding: 8px 16px;
-
-    background: white;
-    color: #2d4f7c;
-
-    border-radius: 10px;
-    border: 1px solid #bcd6ff;
-
-    font-size: 14px;
-    font-weight: bold;
-
-    transition: 0.2s;
+    color: #0066cc;
+    display: block;
+    padding: 6px 0;
+    font-weight: normal; /* リンクは通常の太さに */
 }
 
-/* ホバー */
-.nav-btn:hover {
-    background: #dbe9ff;
-    transform: translateY(-1px);
+.sidebar a:hover {
+    text-decoration: underline;
+    color: #003399;
 }
 
+/* 成績管理の下にあるサブメニュー */
+.sidebar .sub-menu {
+    margin-left: 15px;
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+.sidebar .sub-menu li {
+    margin-bottom: 5px; /* サブメニュー内の隙間は少し狭く */
+}
 </style>
-</head>
 
-<body>
-
-<!-- 上部バー -->
-<div class="top-bar">
-    <!-- 左側：タイトル -->
-    <div class="nav-left">
-        得点管理システム
-    </div>
-
-    <!-- 右側：ユーザー情報とログアウトボタン -->
-    <div class="nav-right">
-        <span class="date-display">
-            <fmt:formatDate value="<%= new java.util.Date() %>"
-                            pattern="yyyy年M月d日（E）"
-                            timeZone="Asia/Tokyo" />
-        </span>
-        
-        <span>${loginUser.name} 様</span>
-                <a href="${pageContext.request.contextPath}/action/Menu.action" class="nav-btn">
-            ホーム
-        </a>
-        <a href="${pageContext.request.contextPath}/action/Logout.action"  class="nav-btn">
-            ログアウト
-        </a>
-    </div>
+<div class="sidebar">
+    <ul>
+        <li><a href="${pageContext.request.contextPath}/action/Menu.action">メニュー</a></li>
+        <li><a href="${pageContext.request.contextPath}/action/StudentList.action">学生管理</a></li>
+        <li>
+            成績管理
+            <ul class="sub-menu">
+                <li><a href="${pageContext.request.contextPath}/action/TestRegist.action">成績登録</a></li>
+                <li><a href="${pageContext.request.contextPath}/action/TestList.action">成績参照</a></li>
+            </ul>
+        </li>
+        <li><a href="${pageContext.request.contextPath}/action/SubjectList.action">科目管理</a></li>
+    </ul>
 </div>
-</div>
-
-</body>
-</html>

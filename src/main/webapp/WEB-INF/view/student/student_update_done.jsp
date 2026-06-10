@@ -1,26 +1,41 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/header.jsp" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <title>得点管理システム - 学生変更完了</title>
+
 <style>
-    /* 全体レイアウト */
-    body {
+    /* 全体レイアウト：他の画面と共通の縦幅いっぱいベース */
+    html, body {
+        height: 100%;
         margin: 0;
+        padding: 0;
         font-family: "Yu Gothic", sans-serif;
         background-color: #ffffff;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
     }
 
-    /* メインコンテナ（サイドバー無しの単一コンテンツエリア） */
+    body {
+        display: flex;
+        flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+    }
+
+    /* メインコンテナ（サイドバーとコンテンツの横並び） */
+    .container {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        align-items: stretch;
+    }
+
+    /* 右側メインエリア */
     .main-content {
         flex: 1;
         padding: 20px 40px;
         background-color: #ffffff;
+        box-sizing: border-box;
     }
 
     /* ① 見出し「学生情報変更」（グレーの帯） */
@@ -44,7 +59,7 @@
         margin-bottom: 50px; /* 下のリンクとの間隔 */
     }
 
-    /* ③ 学生一覧リンク */
+    /* ③ 学生一覧リンクエリア */
     .link-group {
         font-size: 14px;
     }
@@ -59,25 +74,25 @@
 </head>
 <body>
 
+<%@ include file="/header.jsp" %>
+
+<div class="container">
+
+    <%@ include file="/sidebar.jsp" %>
+
     <div class="main-content">
 
-        <!-- ① 見出し「学生情報変更」 -->
         <h2>学生情報変更</h2>
         
-        <!-- ② 変更完了メッセージ（緑の帯） -->
         <div class="success-alert">
             変更が完了しました
         </div>
         
-        <!-- ③ リンクエリア -->
         <div class="link-group">
-                    <a href="${pageContext.request.contextPath}/action/StudentList.action" class="btn">学生一覧へ</a>
+            <a href="${pageContext.request.contextPath}/action/StudentList.action">学生一覧へ戻る</a>
         </div>
 
-    </div>
-
-    <!-- フッターの読み込み（必要に応じて有効化してください） -->
-   <%@ include file="/footer.jsp" %> 
+    </div> </div> <%@ include file="/footer.jsp" %>
 
 </body>
 </html>

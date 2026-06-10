@@ -1,64 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ include file="/header.jsp" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <title>得点管理システム - 学生一覧</title>
 
 <style>
-    /* 全体レイアウト */
-    body {
+    /* 全体レイアウト：画面の残りの高さをすべて使う基礎構造 */
+    html, body {
+        height: 100%;
         margin: 0;
+        padding: 0;
         font-family: "Yu Gothic", sans-serif;
         background-color: #ffffff;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
     }
 
-    /* メインコンテナ（サイドバーとコンテンツの並び） */
+    body {
+        display: flex;
+        flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+    }
+
+    /* メインコンテナ（サイドバーとコンテンツの横並び） */
     .container {
         display: flex;
         flex: 1;
-    }
-
-    /* 左側サイドバーメニュー */
-    .sidebar {
-        width: 220px;
-        background-color: #ffffff;
-        border-right: 1px solid #ddd;
-        padding: 24px 20px;
-        box-sizing: border-box;
-    }
-    .sidebar ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    .sidebar li {
-        margin-bottom: 16px;
-        color: #333;
-        font-weight: bold;
-    }
-    .sidebar a {
-        color: #0066cc;
-        text-decoration: none;
-        font-weight: normal;
-        font-size: 14px;
-    }
-    .sidebar a:hover {
-        text-decoration: underline;
-    }
-    .sub-menu {
-        margin-top: 8px;
-        margin-left: 15px;
-    }
-    .sub-menu li {
-        margin-bottom: 8px;
-        font-size: 14px;
-        font-weight: normal;
+        width: 100%;
+        align-items: stretch;
     }
 
     /* 右側メインエリア */
@@ -66,6 +35,7 @@
         flex: 1;
         padding: 20px 40px;
         background-color: #ffffff;
+        box-sizing: border-box;
     }
 
     /* ① 見出し「学生管理」（グレーの帯） */
@@ -79,7 +49,7 @@
         font-weight: bold;
     }
 
-    /* 検索ボックスと登録リンクの親 */
+    /* 検索ボックスと登録リンクの親（リモート側の位置をキープ） */
     .search-wrapper {
         position: relative;
         margin-bottom: 20px;
@@ -130,6 +100,7 @@
         font-size: 13px;
         color: #333;
         margin-top: 18px; /* 入力欄のラベル分、下へ下げる */
+        cursor: pointer;
     }
 
     /* ⑨ 絞込みボタン */
@@ -142,6 +113,7 @@
         font-size: 13px;
         cursor: pointer;
         margin-top: 18px; /* 入力欄のラベル分、下へ下げる */
+        transition: background-color 0.2s;
     }
     .search-btn:hover {
         background-color: #333333;
@@ -154,7 +126,7 @@
         margin: 15px 0 10px 0;
     }
 
-    /* ⑪ テーブルスタイル（クリアなフラットデザイン） */
+    /* ⑪ テーブルスタイル */
     .student-table {
         width: 100%;
         border-collapse: collapse;
@@ -175,11 +147,15 @@
         font-size: 14px;
         color: #333;
         vertical-align: middle;
+        border-bottom: 1px solid #eee;
     }
     /* ㉒ 変更リンク */
     .edit-link {
         color: #0066ff;
         text-decoration: underline;
+    }
+    .edit-link:hover {
+        color: #003399;
     }
 
     /* ㉓ 該当データがない時のメッセージ */
@@ -192,24 +168,22 @@
 </head>
 <body>
 
+<%@ include file="/header.jsp" %>
+
 <div class="container">
 
+    <%@ include file="/sidebar.jsp" %>
 
-    <!-- 右側メインエリア -->
     <div class="main-content">
         
-        <!-- ① 見出し「学生管理」 -->
         <h2>学生管理</h2>
 
         <div class="search-wrapper">
-            <!-- ⑧ 新規登録リンク（右上に絶対配置） -->
-            <a href="<%= request.getContextPath() %>/action/StudentCreate.action" class="create-link">新規登録</a>
+            <a href="${pageContext.request.contextPath}/action/StudentCreate.action" class="create-link">新規登録</a>
 
-            <!-- 検索フォーム -->
-            <form action="<%= request.getContextPath() %>/action/StudentList.action" method="post">
+            <form action="${pageContext.request.contextPath}/action/StudentList.action" method="post">
                 <div class="search-row">
 
-                    <!-- ②④ 入学年度 -->
                     <div class="input-item">
                         <label>入学年度</label>
                         <select name="entYear">
@@ -228,7 +202,6 @@
                         </select>
                     </div>
 
-                    <!-- ③⑤ クラス -->
                     <div class="input-item">
                         <label>クラス</label>
                         <select name="classNum">
@@ -240,27 +213,22 @@
                         </select>
                     </div>
 
-                    <!-- ⑥⑦ 在学中チェックボックス -->
                     <label class="checkbox-label">
                         <input type="checkbox" name="isAttend" value="true">
                         在学中
                     </label>
 
-                    <!-- ⑨ 絞込みボタン -->
                     <button type="submit" class="search-btn">絞込み</button>
 
                 </div>
             </form>
         </div>
 
-        <!-- ㉓ 絞り込み条件に該当する学生情報がない時 -->
         <c:if test="${empty studentList}">
             <p class="error-message">学生情報が存在しませんでした</p>
         </c:if>
 
-        <!-- ⑪ 学生一覧テーブルエリア -->
         <c:if test="${not empty studentList}">
-            <!-- ⑩ 検索結果件数 -->
             <p class="result-count">検索結果：${studentList.size()}件</p>
 
             <table class="student-table">
@@ -270,27 +238,24 @@
                         <th>学生番号</th>
                         <th>氏名</th>
                         <th>クラス</th>
-                        <th>在学中</th>
-                        <th></th> <!-- 「変更」見出しは画像に合わせて空欄に設定 -->
-                    </tr>
+                        <th style="text-align: center;">在学中</th>
+                        <th></th> </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="student" items="${studentList}">
                         <tr>
                             <td>${student.entYear}</td>
                             <td>${student.no}</td>
-                            <td>${student.name}</td>
+                            <td><c:out value="${student.name}"/></td>
                             <td>${student.classNum}</td>
-                            <td>
+                            <td style="text-align: center;">
                                 <c:choose>
                                     <c:when test="${student.isAttend}">〇</c:when>
                                     <c:otherwise>×</c:otherwise>
                                 </c:choose>
                             </td>
                             <td>
-                                <!-- ㉒ 変更リンク -->
-                                <a class="edit-link"
-                                   href="<%= request.getContextPath() %>/action/StudentUpdate.action?no=${student.no}">
+                                <a class="edit-link" href="${pageContext.request.contextPath}/action/StudentUpdate.action?no=${student.no}">
                                     変更
                                 </a>
                             </td>
@@ -300,9 +265,7 @@
             </table>
         </c:if>
 
-    </div>
-</div>
+    </div> </div> <%@ include file="/footer.jsp" %>
 
 </body>
 </html>
-<%@ include file="/footer.jsp" %>
