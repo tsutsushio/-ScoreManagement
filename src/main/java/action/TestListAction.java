@@ -7,6 +7,7 @@ import bean.SchoolBean;
 import bean.TeacherBean;
 import bean.TestBean;
 import dao.ClassNumDAO;
+import dao.StudentDAO;
 import dao.SubjectDAO;
 import dao.TestDAO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -89,7 +90,18 @@ extends Action {
                     "f"
                 );
 
+        /* =========================
+         * 科目検索
+         * ========================= */
+        /* =========================
+         * 科目検索
+         * ========================= */
         if ("sj".equals(f)) {
+
+            req.setAttribute(
+                    "searchType",
+                    "sj"
+            );
 
             String entYear =
                     req.getParameter(
@@ -105,12 +117,12 @@ extends Action {
                     req.getParameter(
                         "f3"
                     );
-            String studentNo =
-                    req.getParameter(
-                        "f4"
-                    );
 
-            // 必須チェック
+            // 学生検索条件クリア
+            req.setAttribute(
+                    "f4",
+                    ""
+            );
             if (
                 entYear == null
                 || entYear.isEmpty()
@@ -121,8 +133,8 @@ extends Action {
             ) {
 
                 req.setAttribute(
-                    "error",
-                    "科目情報を選択してください"
+                        "error",
+                        "科目情報を選択してください"
                 );
 
             } else {
@@ -132,36 +144,118 @@ extends Action {
 
                 List<TestBean>
                     testList =
-                    		dao.searchBySubject(
-                    			    Integer.parseInt(
-                    			        entYear
-                    			    ),
-                    			    classNum,
-                    			    subjectCd,
-                    			    studentNo,
-                    			    school
-                    			);
+                        dao.searchBySubject(
+                                Integer.parseInt(
+                                        entYear
+                                ),
+                                classNum,
+                                subjectCd,
+                                null,
+                                school
+                        );
 
                 if (
-                    testList
-                    .isEmpty()
+                    testList.isEmpty()
                 ) {
 
                     req.setAttribute(
-                        "error",
-                        "学生情報が存在しませんでした"
+                            "error",
+                            "成績情報が存在しませんでした"
                     );
 
                 } else {
 
                     req.setAttribute(
-                        "testList",
-                        testList
+                            "testList",
+                            testList
                     );
                 }
             }
         }
 
+        /* =========================
+         * 学生検索
+         * ========================= */
+        else if ("st".equals(f)) {
+
+            req.setAttribute(
+                    "searchType",
+                    "st"
+            );
+
+            System.out.println(
+                    "学生検索に入りました"
+            );
+            String studentNo =
+                    req.getParameter(
+                        "f4"
+                    );
+
+            // 科目条件クリア
+            req.setAttribute(
+                    "f1",
+                    ""
+            );
+
+            req.setAttribute(
+                    "f2",
+                    ""
+            );
+
+            req.setAttribute(
+                    "f3",
+                    ""
+            );
+
+            if (
+                studentNo == null
+                || studentNo.isEmpty()
+            ) {
+
+                req.setAttribute(
+                        "error",
+                        "学生番号を入力してください"
+                );
+
+            } else {
+
+                StudentDAO studentDao =
+                        new StudentDAO();
+
+                TestDAO testDao =
+                        new TestDAO();
+
+                List<TestBean> testList =
+                        testDao.searchByStudent(
+                                studentNo,
+                                school
+                        );
+
+                if (
+                    testList.isEmpty()
+                ) {
+
+                    req.setAttribute(
+                            "error",
+                            "成績情報が存在しませんでした"
+                    );
+
+                } else {
+
+                    req.setAttribute(
+                            "testList",
+                            testList
+                    );
+
+                    req.setAttribute(
+                            "student",
+                            studentDao.get(
+                                    studentNo
+                            )
+                    );
+                }
+            }
+        }
         return
             "/WEB-INF/view/test/test-list.jsp";
     }

@@ -343,4 +343,144 @@ public class TestDAO extends DAO {
 
         return isSuccess;
     }
+    
+ // =========================================================
+ // 学生検索
+ // =========================================================
+
+ public List<TestBean> searchByStudent(
+         String studentNo,
+         SchoolBean school
+ ) throws Exception {
+
+     List<TestBean> list =
+             new ArrayList<>();
+
+     String sql =
+    		    "SELECT "
+    		  + "ST.ENT_YEAR, "
+    		  + "ST.CLASS_NUM, "
+    		  + "ST.NO AS STUDENT_NO, "
+    		  + "ST.NAME AS STUDENT_NAME, "
+    		  + "T.SUBJECT_CD, "
+    		  + "S.NAME AS SUBJECT_NAME, "
+    		  + "T.NO, "
+    		  + "T.POINT "
+    		  + "FROM TEST T "
+    		  + "JOIN STUDENT ST "
+    		  + "ON T.STUDENT_NO = ST.NO "
+    		  + "AND T.SCHOOL_CD = ST.SCHOOL_CD "
+    		  + "JOIN SUBJECT S "
+    		  + "ON T.SUBJECT_CD = S.CD "
+    		  + "AND T.SCHOOL_CD = S.SCHOOL_CD "
+    		  + "WHERE T.STUDENT_NO = ? "
+    		  + "AND T.SCHOOL_CD = ? "
+    		  + "ORDER BY T.SUBJECT_CD, T.NO";
+
+     try (
+         Connection con =
+             getConnection();
+
+         PreparedStatement st =
+             con.prepareStatement(sql)
+     ) {
+
+         st.setString(
+                 1,
+                 studentNo
+         );
+
+         st.setString(
+                 2,
+                 school.getCd()
+         );
+
+         try (
+             ResultSet rs =
+                 st.executeQuery()
+         ) {
+
+             while (
+                 rs.next()
+             ) {
+
+                 TestBean test =
+                         new TestBean();
+
+                 test.setNo(
+                         rs.getInt(
+                                 "NO"
+                         )
+                 );
+
+                 test.setPoint(
+                         rs.getInt(
+                                 "POINT"
+                         )
+                 );
+
+                 SubjectBean subject =
+                         new SubjectBean();
+
+                 subject.setCd(
+                         rs.getString(
+                                 "SUBJECT_CD"
+                         )
+                 );
+
+                 subject.setName(
+                         rs.getString(
+                                 "SUBJECT_NAME"
+                         )
+                 );
+
+                 test.setSubject(
+                         subject
+                 );
+
+                 list.add(
+                         test
+                 );
+                 StudentBean student =
+                	        new StudentBean();
+
+                	student.setNo(
+                	        rs.getString(
+                	                "STUDENT_NO"
+                	        )
+                	);
+
+                	student.setName(
+                	        rs.getString(
+                	                "STUDENT_NAME"
+                	        )
+                	);
+
+                	student.setEntYear(
+                	        rs.getInt(
+                	                "ENT_YEAR"
+                	        )
+                	);
+
+                	student.setClassNum(
+                	        rs.getString(
+                	                "CLASS_NUM"
+                	        )
+                	);
+
+                	test.setStudent(
+                	        student
+                	);
+
+                	test.setClassNum(
+                	        rs.getString(
+                	                "CLASS_NUM"
+                	        )
+                	);
+             }
+         }
+     }
+
+     return list;
+ }
 }

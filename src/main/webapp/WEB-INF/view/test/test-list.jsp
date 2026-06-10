@@ -92,7 +92,7 @@
 
             <h3>学生情報</h3>
             <form action="TestList.action" method="post" class="student-form">
-                <input type="hidden" name="f" value="sj">
+                <input type="hidden" name="f" value="st">
                 <input type="hidden" name="f1" value="${param.f1}">
                 <input type="hidden" name="f2" value="${param.f2}">
                 <input type="hidden" name="f3" value="${param.f3}">
@@ -112,10 +112,18 @@
             <p class="error">${error}</p>
         </c:if>
 
-        <c:if test="${not empty testList}">
+        <!-- 科目検索結果 -->
+        <c:if test="${searchType == 'sj' && not empty testList}">
             <table>
                 <thead>
-                    <tr><th>入学年度</th><th>クラス</th><th>学生番号</th><th>氏名</th><th>回数</th><th>点数</th></tr>
+                    <tr>
+                        <th>入学年度</th>
+                        <th>クラス</th>
+                        <th>学生番号</th>
+                        <th>氏名</th>
+                        <th>回数</th>
+                        <th>点数</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <c:forEach items="${testList}" var="test">
@@ -131,8 +139,39 @@
                 </tbody>
             </table>
         </c:if>
-    </div>
-</div>
+
+        <!-- 学生検索結果 -->
+        <c:if test="${searchType == 'st' && not empty testList}">
+            <c:if test="${not empty student}">
+                <p>
+                    学生番号：${student.no}
+                    &nbsp;&nbsp;
+                    氏名：${student.name}
+                </p>
+            </c:if>
+            <table>
+                <thead>
+                    <tr>
+                        <th>科目名</th>
+                        <th>科目コード</th>
+                        <th>回数</th>
+                        <th>点数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${testList}" var="test">
+                        <tr>
+                            <td>${test.subject.name}</td>
+                            <td>${test.subject.cd}</td>
+                            <td>${test.no}</td>
+                            <td>${test.point}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:if>
+    </div> <!-- .main-content の閉じタグ -->
+</div> <!-- .container の閉じタグ -->
 
 <%@ include file="/footer.jsp" %>
 </body>
