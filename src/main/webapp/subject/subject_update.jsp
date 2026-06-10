@@ -133,11 +133,9 @@ html, body {
 
             <div class="form-area">
 
-                <form action="${pageContext.request.contextPath}/action/SubjectUpdateExecute.action"
-                      method="post">
-
-                    <input type="hidden" name="cd" value="${subject.cd}">
-
+                <form action="${pageContext.request.contextPath}/action/SubjectUpdateExecute.action"method="post">
+                <input type="hidden" name="cd" value="${subject.cd}">
+                <input type="hidden"name="schoolCd"value="${subject.school.cd}">
                     <div class="form-row">
                         <label>科目コード</label>
                         <input type="text"
