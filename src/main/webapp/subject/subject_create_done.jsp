@@ -133,10 +133,14 @@ body {
                 <a href="${pageContext.request.contextPath}/action/SubjectCreate.action">
                     続けて登録
                 </a>
-
                 <a href="${pageContext.request.contextPath}/action/SubjectList.action">
                     一覧へ戻る
                 </a>
             </div>
-        </div> </div> </div> </body>
+        </div>
+    </div>
+</div>
+
+<%@ include file="/footer.jsp" %>
+</body>
 </html>
