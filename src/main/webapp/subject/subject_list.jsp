@@ -1,144 +1,113 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ include file="/header.jsp" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>科目管理</title>
+<title>得点管理システム - 科目管理</title>
 
 <style>
-/* 全体のベーススタイル */
-body {
-    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-    background-color: #ffffff;
-    color: #333333;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* フッターを下部に固定 */
-    box-sizing: border-box;
-}
+    /* 全体レイアウト：他の画面と共通の縦幅いっぱいベース */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: "Yu Gothic", sans-serif;
+        background-color: #ffffff;
+    }
 
-/* メインレイアウト（左メニューと右コンテンツ） */
-.content {
-    display: flex;
-    flex: 1;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
-    gap: 40px; /* メニューとコンテンツの間の隙間 */
-}
+    body {
+        display: flex;
+        flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+    }
 
+    /* メインコンテナ（サイドバーとコンテンツの並び） */
+    .container {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        align-items: stretch;
+    }
 
-/* ーーー 右側メインコンテンツ ーーー */
-.list-box {
-    flex: 1;
-}
+    /* 右側メインエリア */
+    .main-content {
+        flex: 1;
+        padding: 20px 40px;
+        background-color: #ffffff;
+        box-sizing: border-box;
+    }
 
-/* 画面タイトル (科目管理) */
-.page-title {
-    font-size: 20px;
-    font-weight: bold;
-    background-color: #f1f1f1;
-    padding: 12px 20px;
-    margin: 0 0 20px 0;
-    border-radius: 4px;
-    color: #333333;
-}
+    /* ① 見出し「科目管理」（グレーの帯） */
+    .main-content h2 {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding: 10px 15px;
+        background-color: #f2f2f2;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-/* 新規登録エリア */
-.create-area {
-    margin-bottom: 15px;
-}
+    /* 新規登録リンク（右上に配置） */
+    .create-wrapper {
+        margin-bottom: 10px;
+        text-align: right;
+    }
+    .create-link {
+        color: #0066ff;
+        font-size: 14px;
+        text-decoration: underline;
+    }
 
-.create-link {
-    color: #0066cc;
-    text-decoration: underline;
-    font-size: 14px;
-}
+    /* テーブルスタイル（フラットデザイン） */
+    .subject-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+    }
+    .subject-table th {
+        border-bottom: 2px solid #333;
+        padding: 10px;
+        text-align: left;
+        font-size: 14px;
+        color: #333;
+    }
+    .subject-table td {
+        padding: 10px;
+        font-size: 14px;
+        color: #333;
+        border-bottom: 1px solid #eee;
+    }
 
-.create-link:hover {
-    color: #0033aa;
-}
-
-/* ーーー テーブル ーーー */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-/* ヘッダー行 */
-th {
-    background: transparent; /* 背景グレーを無くして画像通りに */
-    text-align: left;
-    padding: 12px 10px;
-    font-weight: bold;
-    color: #333333;
-    border-top: none;
-    border-bottom: 2px solid #333333; /* 下線を太く */
-}
-
-/* データ行 */
-td {
-    padding: 12px 10px;
-    border-bottom: 1px solid #eeeeee; /* 薄いシャープな下線 */
-    color: #555555;
-    vertical-align: middle;
-}
-
-/* アクション列（変更・削除） */
-.action {
-    width: 60px;
-    text-align: center;
-}
-
-.action a {
-    color: #0066cc;
-    text-decoration: underline;
-}
-
-.action a:hover {
-    color: #0033aa;
-}
-
-/* ーーー フッター ーーー */
-footer, #footer {
-    width: 100%;
-    background-color: #f1f1f1;
-    padding: 15px 0;
-    text-align: center;
-    font-size: 13px;
-    color: #666666;
-    margin-top: auto; /* コンテンツが少なくても最下部に固定 */
-    border-top: 1px solid #e0e0e0;
-    box-sizing: border-box;
-}
+    /* 操作リンク */
+    .action-link {
+        color: #0066ff;
+        text-decoration: underline;
+    }
+    .delete-link {
+        color: #d9534f;
+        text-decoration: underline;
+    }
 </style>
-
 </head>
 <body>
 
-<div class="content">
+<%@ include file="/header.jsp" %>
 
+<div class="container">
 
-    <!-- 右側 -->
-    <div class="list-box">
-        <div class="page-title">
-            科目管理
+    <%@ include file="/sidebar.jsp" %>
+
+    <div class="main-content">
+
+        <h2>科目管理</h2>
+
+        <div class="create-wrapper">
+            <a href="${pageContext.request.contextPath}/action/SubjectCreate.action" class="create-link">新規登録</a>
         </div>
 
-        <div class="create-area">
-            <a href="${pageContext.request.contextPath}/action/SubjectCreate.action" class="create-link">
-                新規登録
-            </a>
-        </div>
-
-        <table>
+        <table class="subject-table">
             <thead>
                 <tr>
                     <th>科目コード</th>
@@ -150,16 +119,16 @@ footer, #footer {
             <tbody>
                 <c:forEach var="subject" items="${subjectList}">
                     <tr>
-                        <td>${subject.cd}</td>
-                        <td>${subject.name}</td>
-                        <td class="action">
-                            <a href="${pageContext.request.contextPath}/action/SubjectUpdate.action?cd=${subject.cd}">
+                        <td><c:out value="${subject.cd}"/></td>
+                        <td><c:out value="${subject.name}"/></td>
+                        <td>
+                            <a href="${pageContext.request.contextPath}/action/SubjectUpdate.action?cd=${subject.cd}" class="action-link">
                                 変更
                             </a>
                         </td>
-                        <td class="action">
+                        <td>
                             <a href="${pageContext.request.contextPath}/action/SubjectDelete.action?cd=${subject.cd}"
-                               onclick="return confirm('削除しますか？');">
+                               onclick="return confirm('本当に削除しますか？');" class="delete-link">
                                 削除
                             </a>
                         </td>
@@ -167,10 +136,8 @@ footer, #footer {
                 </c:forEach>
             </tbody>
         </table>
-    </div>
 
-</div>
+    </div> </div> <%@ include file="/footer.jsp" %>
 
-<%@ include file="/footer.jsp" %>
 </body>
 </html>

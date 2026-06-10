@@ -1,62 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/header.jsp" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <title>得点管理システム - 学生登録完了</title>
+
 <style>
-    /* 全体レイアウト */
-    body {
+    /* 全体レイアウト：他の画面と共通の縦幅いっぱいベース */
+    html, body {
+        height: 100%;
         margin: 0;
+        padding: 0;
         font-family: "Yu Gothic", sans-serif;
         background-color: #ffffff;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
     }
 
-    /* メインコンテナ（サイドバーとコンテンツの並び） */
+    body {
+        display: flex;
+        flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+    }
+
+    /* メインコンテナ（サイドバーとコンテンツの横並び） */
     .container {
         display: flex;
         flex: 1;
-    }
-
-    /* 左側サイドバーメニュー（共通メニュー） */
-    .sidebar {
-        width: 220px;
-        background-color: #ffffff;
-        border-right: 1px solid #ddd;
-        padding: 24px 20px;
-        box-sizing: border-box;
-    }
-    .sidebar ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    .sidebar li {
-        margin-bottom: 16px;
-        color: #333;
-        font-weight: bold;
-    }
-    .sidebar a {
-        color: #0066cc;
-        text-decoration: none;
-        font-weight: normal;
-        font-size: 14px;
-    }
-    .sidebar a:hover {
-        text-decoration: underline;
-    }
-    .sub-menu {
-        margin-top: 8px;
-        margin-left: 15px;
-    }
-    .sub-menu li {
-        margin-bottom: 8px;
-        font-size: 14px;
-        font-weight: normal;
+        width: 100%;
+        align-items: stretch;
     }
 
     /* 右側メインエリア */
@@ -64,6 +35,7 @@
         flex: 1;
         padding: 20px 40px;
         background-color: #ffffff;
+        box-sizing: border-box;
     }
 
     /* ① 見出し「学生情報登録」（グレーの帯） */
@@ -104,32 +76,27 @@
 </head>
 <body>
 
+<%@ include file="/header.jsp" %>
+
 <div class="container">
-    <!-- 右側メインエリア -->
+
+    <%@ include file="/sidebar.jsp" %>
+
     <div class="main-content">
 
-        <!-- ① 見出し「学生情報登録」 -->
         <h2>学生情報登録</h2>
         
-        <!-- ② 登録完了メッセージ（緑の帯） -->
         <div class="success-alert">
             登録が完了しました
         </div>
         
-        <!-- リンクグループ -->
         <div class="link-group">
-            <!-- ③ 戻るリンク（続けて登録する画面へ） -->
             <a href="${pageContext.request.contextPath}/action/StudentCreate.action">戻る</a>
             
-            <!-- ④ 学生一覧リンク -->
             <a href="${pageContext.request.contextPath}/action/StudentList.action">学生一覧</a>
         </div>
 
-    </div>
-</div>
-
-<!-- フッターの読み込み -->
-<%@ include file="/footer.jsp" %>
+    </div> </div> <%@ include file="/footer.jsp" %>
 
 </body>
 </html>

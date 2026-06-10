@@ -6,23 +6,48 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>学生ポータルサイト - メニュー</title>
+    <title>得点管理システム - 学生ポータルメニュー</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* 全体の基本設定 */
-        body {
+        /* 全体：他の画面と共通の縦幅いっぱいベースを作る */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
             font-family: 'Noto Sans JP', Arial, sans-serif;
             background-color: #f0f2f5;
-            margin: 0;
-            padding: 30px;
             color: #334155;
         }
+
+        body {
+            display: flex;
+            flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+        }
+
+        /* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
         .container {
+            display: flex;
+            flex: 1;            /* 画面の残りの高さをすべて使う */
+            width: 100%;
+            align-items: stretch;
+        }
+
+        /* メインエリア（学生用のポータルコンテンツを包むラッパー） */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #f0f2f5;
+            overflow-y: auto; /* コンテンツが長い場合に右側だけスクロール可能にする */
+        }
+
+        /* コンテンツ内の最大幅を維持するインナーコンテナ */
+        .portal-inner {
             max-width: 1000px;
             margin: 0 auto;
         }
         
-        /* 🌟 ヘッダー部分（Flexboxで左右に振り分け） */
+        /* 🌟 ヘッダー部分 */
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -34,7 +59,7 @@
             color: #1e293b;
             border-left: 6px solid #4f46e5;
             padding-left: 15px;
-            margin: 0; /* Flex配置のためデフォルトマージンをリセット */
+            margin: 0;
         }
         .header-actions {
             display: flex;
@@ -171,7 +196,7 @@
             border-color: #4f46e5;
         }
 
-        /* トグルで開閉する詳細コンテナ */
+        /* トグルで開閉する詳細コンテナ（重要：JavaScriptの切り替え対象なのでdisplayはそのまま） */
         .detail-container {
             display: none;
             background-color: #f8fafc;
@@ -232,171 +257,161 @@
             white-space: nowrap;
         }
     </style>
-
 </head>
-
 <body>
 
+<%@ include file="/header.jsp" %>
+
 <div class="container">
-    
-    <div class="header-container">
-        <h1 class="header-title">学生用ポータルサイト</h1>
-        <div class="header-actions">
-            <a href="../action/StudentPasswordEdit.action" class="btn-password">
-                <i class="fa-solid fa-key"></i> パスワード変更
-            </a>
-            <a href="../login/login.jsp" class="btn-logout">
-                <i class="fa-solid fa-right-from-bracket"></i> ログアウト
-            </a>
-        </div>
-    </div>
 
-    <div class="pasted-card">
-        <p style="font-size: 18px; margin: 0 0 15px 0;">ようこそ、<strong style="color: #4f46e5;">${loginStudent.name}</strong> さん！</p>
-        <div class="profile-grid">
-            <div class="profile-item">
-                <div class="profile-label">学籍番号</div>
-                <div class="profile-value">${loginStudent.no}</div>
-            </div>
-            <div class="profile-item">
-                <div class="profile-label">氏名</div>
-                <div class="profile-value">${loginStudent.name}</div>
-            </div>
-            <div class="profile-item">
-                <div class="profile-label">入学年度</div>
-                <div class="profile-value">${loginStudent.entYear} 年度</div>
-            </div>
-            <div class="profile-item">
-                <div class="profile-label">クラス</div>
-                <div class="profile-value">${loginStudent.classNum}</div>
-            </div>
-        </div>
-    </div>
+    <%@ include file="/sidebar.jsp" %>
 
+    <div class="main-content">
+        <div class="portal-inner">
+            
+            <div class="header-container">
+                <h1 class="header-title">学生用ポータルサイト</h1>
+                <div class="header-actions">
+                    <a href="../action/StudentPasswordEdit.action" class="btn-password">
+                        <i class="fa-solid fa-key"></i> パスワード変更
+                    </a>
+                    <a href="../login/login.jsp" class="btn-logout">
+                        <i class="fa-solid fa-right-from-bracket"></i> ログアウト
+                    </a>
+                </div>
+            </div>
 
-    <!-- 最新成績 -->
-    <h2>最新のテスト成績</h2>
+            <div class="pasted-card">
+                <p style="font-size: 18px; margin: 0 0 15px 0;">ようこそ、<strong style="color: #4f46e5;">${loginStudent.name}</strong> さん！</p>
+                <div class="profile-grid">
+                    <div class="profile-item">
+                        <div class="profile-label">学籍番号</div>
+                        <div class="profile-value">${loginStudent.no}</div>
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-label">氏名</div>
+                        <div class="profile-value">${loginStudent.name}</div>
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-label">入学年度</div>
+                        <div class="profile-value">${loginStudent.entYear} 年度</div>
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-label">クラス</div>
+                        <div class="profile-value">${loginStudent.classNum}</div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="pasted-card" style="padding: 10px 0 0 0; overflow: hidden;">
-        <table class="score-table">
-            <thead>
-                <tr>
-                    <th style="padding-left: 20px;">科目コード</th>
-                    <th>科目名</th>
-                    <th>あなたの得点</th>
-                    <th style="text-align: center;">詳細情報</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="test" items="${latestScores}" varStatus="status">
-                    <tr>
-                        <td style="padding-left: 20px;">${test.subject.cd}</td>
-                        <td>${test.subject.name}</td>
-                        <td class="my-point">${test.point} 点</td>
-                        <td style="text-align: center;">
-                            <button class="detail-btn" onclick="toggleDetail('detail-${status.index}')">詳細を見る</button>
-                        </td>
-                    </tr>
-                    
-                    <tr id="detail-${status.index}" class="detail-container">
-                        <td colspan="4">
-                            <div class="detail-summary-box">
-                                <div class="summary-item">学内順位: <strong>${test.rank} 位</strong></div>
-                                <div class="summary-item">科目平均点: <strong>${test.averagePoint} 点</strong></div>
-                                <div class="summary-item">最高点: <strong>${test.maxPoint} 点</strong></div>
-                            </div>
+            <h2>最新のテスト成績</h2>
+
+            <div class="pasted-card" style="padding: 10px 0 0 0; overflow: hidden;">
+                <table class="score-table">
+                    <thead>
+                        <tr>
+                            <th style="padding-left: 20px;">科目コード</th>
+                            <th>科目名</th>
+                            <th>あなたの得点</th>
+                            <th style="text-align: center;">詳細情報</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="test" items="${latestScores}" varStatus="status">
+                            <tr>
+                                <td style="padding-left: 20px;">${test.subject.cd}</td>
+                                <td>${test.subject.name}</td>
+                                <td class="my-point">${test.point} 点</td>
+                                <td style="text-align: center;">
+                                    <button class="detail-btn" onclick="toggleDetail('detail-${status.index}')">詳細を見る</button>
+                                </td>
+                            </tr>
                             
-                            <div class="histogram-title"><i class="fa-solid fa-chart-bar"></i> 得点分布（ヒストグラム）</div>
-                            <div class="histogram">
-                                <div class="bar ${test.point >= 0 && test.point <= 10 ? 'highlight' : ''}" style="height: 10%;" data-range="0-"></div>
-                                <div class="bar ${test.point > 10 && test.point <= 20 ? 'highlight' : ''}" style="height: 25%;" data-range="10-"></div>
-                                <div class="bar ${test.point > 20 && test.point <= 30 ? 'highlight' : ''}" style="height: 40%;" data-range="20-"></div>
-                                <div class="bar ${test.point > 30 && test.point <= 40 ? 'highlight' : ''}" style="height: 55%;" data-range="30-"></div>
-                                <div class="bar ${test.point > 40 && test.point <= 50 ? 'highlight' : ''}" style="height: 75%;" data-range="40-"></div>
-                                <div class="bar ${test.point > 50 && test.point <= 60 ? 'highlight' : ''}" style="height: 90%;" data-range="50-"></div>
-                                <div class="bar ${test.point > 60 && test.point <= 70 ? 'highlight' : ''}" style="height: 65%;" data-range="60-"></div>
-                                <div class="bar ${test.point > 70 && test.point <= 80 ? 'highlight' : ''}" style="height: 80%;" data-range="70-"></div>
-                                <div class="bar ${test.point > 80 && test.point <= 90 ? 'highlight' : ''}" style="height: 45%;" data-range="80-"></div>
-                                <div class="bar ${test.point > 90 && test.point <= 100 ? 'highlight' : ''}" style="height: 20%;" data-range="90-"></div>
-                            </div>
-                            <div style="margin-top: 30px; font-size: 12px; color: #64748b; text-align: center;">
-                                ※オレンジ色のバーがあなたの得点圏内です。
-                            </div>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                            <tr id="detail-${status.index}" class="detail-container">
+                                <td colspan="4">
+                                    <div class="detail-summary-box">
+                                        <div class="summary-item">学内順位: <strong>${test.rank} 位</strong></div>
+                                        <div class="summary-item">科目平均点: <strong>${test.averagePoint} 点</strong></div>
+                                        <div class="summary-item">最高点: <strong>${test.maxPoint} 点</strong></div>
+                                    </div>
+                                    
+                                    <div class="histogram-title"><i class="fa-solid fa-chart-bar"></i> 得点分布（ヒストグラム）</div>
+                                    <div class="histogram">
+                                        <div class="bar ${test.point >= 0 && test.point <= 10 ? 'highlight' : ''}" style="height: 10%;" data-range="0-"></div>
+                                        <div class="bar ${test.point > 10 && test.point <= 20 ? 'highlight' : ''}" style="height: 25%;" data-range="10-"></div>
+                                        <div class="bar ${test.point > 20 && test.point <= 30 ? 'highlight' : ''}" style="height: 40%;" data-range="20-"></div>
+                                        <div class="bar ${test.point > 30 && test.point <= 40 ? 'highlight' : ''}" style="height: 55%;" data-range="30-"></div>
+                                        <div class="bar ${test.point > 40 && test.point <= 50 ? 'highlight' : ''}" style="height: 75%;" data-range="40-"></div>
+                                        <div class="bar ${test.point > 50 && test.point <= 60 ? 'highlight' : ''}" style="height: 90%;" data-range="50-"></div>
+                                        <div class="bar ${test.point > 60 && test.point <= 70 ? 'highlight' : ''}" style="height: 65%;" data-range="60-"></div>
+                                        <div class="bar ${test.point > 70 && test.point <= 80 ? 'highlight' : ''}" style="height: 80%;" data-range="70-"></div>
+                                        <div class="bar ${test.point > 80 && test.point <= 90 ? 'highlight' : ''}" style="height: 45%;" data-range="80-"></div>
+                                        <div class="bar ${test.point > 90 && test.point <= 100 ? 'highlight' : ''}" style="height: 20%;" data-range="90-"></div>
+                                    </div>
+                                    <div style="margin-top: 30px; font-size: 12px; color: #64748b; text-align: center;">
+                                        ※オレンジ色のバーがあなたの得点圏内です。
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
 
-    </div>
+            <h2>過去の成績履歴</h2>
 
-
-
-    <!-- 過去成績 -->
-    <h2>過去の成績履歴</h2>
-
-    <div class="pasted-card" style="padding: 10px 0 0 0; overflow: hidden;">
-        <table class="score-table">
-            <thead>
-                <tr>
-                    <th style="padding-left: 20px;">回数</th>
-                    <th>科目名</th>
-                    <th>あなたの得点</th>
-                    <th style="text-align: center;">詳細情報</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="history" items="${allScores}" varStatus="status">
-
-                    <tr>
-
-                        <td style="padding-left: 20px;">第 ${history.no} 回</td>
-                        <td>${history.subject.name}</td>
-                        <td class="my-point" style="color: #334155;">${history.point} 点</td>
-                        <td style="text-align: center;">
-                            <button class="detail-btn" onclick="toggleDetail('history-detail-${status.index}')">詳細を見る</button>
-                        </td>
-
-                    </tr>
-
-                    
-                    <tr id="history-detail-${status.index}" class="detail-container">
-                        <td colspan="4">
-                            <div class="detail-summary-box">
-                                <div class="summary-item">学内順位: <strong>${history.rank} 位</strong></div>
-                                <div class="summary-item">科目平均点: <strong>${history.averagePoint} 点</strong></div>
-                                <div class="summary-item">最高点: <strong>${history.maxPoint} 点</strong></div>
-                            </div>
+            <div class="pasted-card" style="padding: 10px 0 0 0; overflow: hidden;">
+                <table class="score-table">
+                    <thead>
+                        <tr>
+                            <th style="padding-left: 20px;">回数</th>
+                            <th>科目名</th>
+                            <th>あなたの得点</th>
+                            <th style="text-align: center;">詳細情報</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="history" items="${allScores}" varStatus="status">
+                            <tr>
+                                <td style="padding-left: 20px;">第 ${history.no} 回</td>
+                                <td>${history.subject.name}</td>
+                                <td class="my-point" style="color: #334155;">${history.point} 点</td>
+                                <td style="text-align: center;">
+                                    <button class="detail-btn" onclick="toggleDetail('history-detail-${status.index}')">詳細を見る</button>
+                                </td>
+                            </tr>
                             
-                            <div class="histogram-title"><i class="fa-solid fa-chart-bar"></i> 得点分布（ヒストグラム）</div>
-                            <div class="histogram">
-                                <div class="bar ${history.point >= 0 && history.point <= 10 ? 'highlight' : ''}" style="height: 10%;" data-range="0-"></div>
-                                <div class="bar ${history.point > 10 && history.point <= 20 ? 'highlight' : ''}" style="height: 25%;" data-range="10-"></div>
-                                <div class="bar ${history.point > 20 && history.point <= 30 ? 'highlight' : ''}" style="height: 40%;" data-range="20-"></div>
-                                <div class="bar ${history.point > 30 && history.point <= 40 ? 'highlight' : ''}" style="height: 55%;" data-range="30-"></div>
-                                <div class="bar ${history.point > 40 && history.point <= 50 ? 'highlight' : ''}" style="height: 75%;" data-range="40-"></div>
-                                <div class="bar ${history.point > 50 && history.point <= 60 ? 'highlight' : ''}" style="height: 90%;" data-range="50-"></div>
-                                <div class="bar ${history.point > 60 && history.point <= 70 ? 'highlight' : ''}" style="height: 65%;" data-range="60-"></div>
-                                <div class="bar ${history.point > 70 && history.point <= 80 ? 'highlight' : ''}" style="height: 80%;" data-range="70-"></div>
-                                <div class="bar ${history.point > 80 && history.point <= 90 ? 'highlight' : ''}" style="height: 45%;" data-range="80-"></div>
-                                <div class="bar ${history.point > 90 && history.point <= 100 ? 'highlight' : ''}" style="height: 20%;" data-range="90-"></div>
-                            </div>
-                            <div style="margin-top: 30px; font-size: 12px; color: #64748b; text-align: center;">
-                                ※オレンジ色のバーがあなたの得点圏内です。
-                            </div>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-    </div>
+                            <tr id="history-detail-${status.index}" class="detail-container">
+                                <td colspan="4">
+                                    <div class="detail-summary-box">
+                                        <div class="summary-item">学内順位: <strong>${history.rank} 位</strong></div>
+                                        <div class="summary-item">科目平均点: <strong>${history.averagePoint} 点</strong></div>
+                                        <div class="summary-item">最高点: <strong>${history.maxPoint} 点</strong></div>
+                                    </div>
+                                    
+                                    <div class="histogram-title"><i class="fa-solid fa-chart-bar"></i> 得点分布（ヒストグラム）</div>
+                                    <div class="histogram">
+                                        <div class="bar ${history.point >= 0 && history.point <= 10 ? 'highlight' : ''}" style="height: 10%;" data-range="0-"></div>
+                                        <div class="bar ${history.point > 10 && history.point <= 20 ? 'highlight' : ''}" style="height: 25%;" data-range="10-"></div>
+                                        <div class="bar ${history.point > 20 && history.point <= 30 ? 'highlight' : ''}" style="height: 40%;" data-range="20-"></div>
+                                        <div class="bar ${history.point > 30 && history.point <= 40 ? 'highlight' : ''}" style="height: 55%;" data-range="30-"></div>
+                                        <div class="bar ${history.point > 40 && history.point <= 50 ? 'highlight' : ''}" style="height: 75%;" data-range="40-"></div>
+                                        <div class="bar ${history.point > 50 && history.point <= 60 ? 'highlight' : ''}" style="height: 90%;" data-range="50-"></div>
+                                        <div class="bar ${history.point > 60 && history.point <= 70 ? 'highlight' : ''}" style="height: 65%;" data-range="60-"></div>
+                                        <div class="bar ${history.point > 70 && history.point <= 80 ? 'highlight' : ''}" style="height: 80%;" data-range="70-"></div>
+                                        <div class="bar ${history.point > 80 && history.point <= 90 ? 'highlight' : ''}" style="height: 45%;" data-range="80-"></div>
+                                        <div class="bar ${history.point > 90 && history.point <= 100 ? 'highlight' : ''}" style="height: 20%;" data-range="90-"></div>
+                                    </div>
+                                    <div style="margin-top: 30px; font-size: 12px; color: #64748b; text-align: center;">
+                                        ※オレンジ色のバーがあなたの得点圏内です。
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
 
-
-
-</div>
-
-
-<script>
+        </div> </div> </div> <script>
 function toggleDetail(id) {
     const detailRow = document.getElementById(id);
     if (detailRow.style.display === 'table-row') {
@@ -406,7 +421,6 @@ function toggleDetail(id) {
     }
 }
 </script>
-
 
 </body>
 </html>

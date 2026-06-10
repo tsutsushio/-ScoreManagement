@@ -1,70 +1,41 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ include file="/header.jsp" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <title>得点管理システム - 学生情報登録</title>
+
 <style>
-    /* 全体レイアウト */
-    body {
+    /* 全体レイアウト：画面の残りの高さをすべて使う基礎構造 */
+    html, body {
+        height: 100%;
         margin: 0;
+        padding: 0;
         font-family: "Yu Gothic", sans-serif;
         background-color: #ffffff;
-        min-height: 100vh;
+    }
+
+    body {
         display: flex;
-        flex-direction: column;
+        flex-direction: column; /* 上からヘッダー、コンテンツの順 */
     }
 
     /* メインコンテナ（サイドバーとコンテンツの並び） */
     .container {
         display: flex;
         flex: 1;
+        width: 100%;
+        align-items: stretch;
     }
 
-    /* 左側サイドバーメニュー（これまでの画面と共通） */
-    .sidebar {
-        width: 220px;
-        background-color: #ffffff;
-        border-right: 1px solid #ddd;
-        padding: 24px 20px;
-        box-sizing: border-box;
-    }
-    .sidebar ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    .sidebar li {
-        margin-bottom: 16px;
-        color: #333;
-        font-weight: bold;
-    }
-    .sidebar a {
-        color: #0066cc;
-        text-decoration: none;
-        font-weight: normal;
-        font-size: 14px;
-    }
-    .sidebar a:hover {
-        text-decoration: underline;
-    }
-    .sub-menu {
-        margin-top: 8px;
-        margin-left: 15px;
-    }
-    .sub-menu li {
-        margin-bottom: 8px;
-        font-size: 14px;
-        font-weight: normal;
-    }
-
-    /* 右側メインエリア */
+    /* 左側サイドバーから独立した、右側メインエリア */
     .main-content {
         flex: 1;
         padding: 20px 40px;
         background-color: #ffffff;
+        box-sizing: border-box;
     }
 
     /* 見出し「学生情報登録」（グレーの帯） */
@@ -95,10 +66,12 @@
     .form-group label {
         font-size: 13px;
         color: #666;
+        font-weight: bold;
     }
 
     /* 入力欄（テキスト・セレクト共通の見た目） */
     .form-group input[type="text"],
+    .form-group input[type="password"],
     .form-group select {
         width: 100%;
         padding: 8px 12px;
@@ -115,16 +88,18 @@
         color: #aaa;
     }
 
-    /* 「登録して終了」ボタン（グレーの四角ボタン） */
+    /* 「登録して終了」ボタン（グレーの四角ボタン仕様） */
     .btn-submit {
         background-color: #6c757d;
         color: #ffffff;
         border: none;
         border-radius: 4px;
-        padding: 8px 16px;
+        padding: 10px 24px;
         font-size: 14px;
+        font-weight: bold;
         cursor: pointer;
         margin-bottom: 15px;
+        transition: background-color 0.2s;
     }
     .btn-submit:hover {
         background-color: #5a6268;
@@ -143,30 +118,30 @@
         color: #0044cc;
     }
 
-    /* エラーメッセージ（バリデーション用） */
+    /* エラーメッセージ（バリデーション赤文字） */
     .error-msg {
         color: #d9534f;
-        font-size: 12px;
-        margin-top: 2px;
+        font-size: 13px;
+        margin-top: 4px;
+        font-weight: bold;
     }
 </style>
 </head>
 <body>
 
+<%@ include file="/header.jsp" %>
+
 <div class="container">
 
+    <%@ include file="/sidebar.jsp" %>
 
-
-    <!-- 右側メインエリア -->
     <div class="main-content">
 
-        <!-- 見出し「学生情報登録」 -->
         <h2>学生情報登録</h2>
 
         <div class="form-container">
             <form action="${pageContext.request.contextPath}/action/StudentCreateExecute.action" method="post">
                 
-                <!-- 入学年度 -->
                 <div class="form-group">
                     <label>入学年度</label>
                     <select name="entYear">
@@ -176,29 +151,26 @@
                         </c:forEach>
                     </select>
                     <c:if test="${not empty errors.entYear}">
-                        <span class="error-msg">${errors.entYear}</span>
+                        <div class="error-msg">${errors.entYear}</div>
                     </c:if>
                 </div>
 
-                <!-- 学生番号 -->
                 <div class="form-group">
                     <label>学生番号</label>
                     <input type="text" name="no" value="${no}" placeholder="学生番号を入力してください">
                     <c:if test="${not empty errors.no}">
-                        <span class="error-msg">${errors.no}</span>
+                        <div class="error-msg">${errors.no}</div>
                     </c:if>
                 </div>
 
-                <!-- 氏名 -->
                 <div class="form-group">
                     <label>氏名</label>
                     <input type="text" name="name" value="${name}" placeholder="氏名を入力してください">
                     <c:if test="${not empty errors.name}">
-                        <span class="error-msg">${errors.name}</span>
+                        <div class="error-msg">${errors.name}</div>
                     </c:if>
                 </div>
 
-                <!-- クラス -->
                 <div class="form-group">
                     <label>クラス</label>
                     <select name="classNum">
@@ -208,24 +180,23 @@
                     </select>
                 </div>
                 
-                <!-- パスワード（画面外で必須な場合のための隠し要素。不要なら行ごと削除してOKです） -->
-                <input type="hidden" name="password" value="defaultPassword123">
+                <div class="form-group">
+                    <label>パスワード</label>
+                    <input type="password" name="password" placeholder="パスワードを入力してください（必要な場合）">
+                    <c:if test="${not empty errors.password}">
+                        <div class="error-msg">${errors.password}</div>
+                    </c:if>
+                </div>
 
-                <!-- 登録ボタン -->
                 <button type="submit" class="btn-submit">登録して終了</button>
             </form>
             
-            <!-- 戻るリンク -->
             <div class="back-link-box">
                 <a href="${pageContext.request.contextPath}/action/StudentList.action" class="back-link">戻る</a>
             </div>
         </div>
 
-    </div>
-</div>
-
-<!-- フッターの読み込み -->
-<%@ include file="/footer.jsp" %>
+    </div> </div> <%@ include file="/footer.jsp" %>
 
 </body>
 </html>

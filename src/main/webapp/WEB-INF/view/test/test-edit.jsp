@@ -1,181 +1,171 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ include file="/header.jsp" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>成績編集</title>
+<title>得点管理システム - 成績編集</title>
 
 <style>
-/* 全体のレイアウト（システム共通） */
-body {
-    font-family: "Yu Gothic", "Meiryo", sans-serif;
-    background-color: #f5f7fb;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 30px 0;
-}
+    /* 全体レイアウト：他の画面と共通の縦幅いっぱいベース */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: "Yu Gothic", sans-serif;
+        background-color: #ffffff;
+    }
 
-/* 白いカード */
-.container {
-    background: white;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    width: 600px;
-    box-sizing: border-box;
-}
+    body {
+        display: flex;
+        flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+    }
 
-/* タイトル */
-h2 {
-    color: #4a90e2;
-    margin-top: 0;
-    margin-bottom: 25px;
-    text-align: center;
-    font-size: 24px;
-}
+    /* メインコンテナ（サイドバーとコンテンツの並び） */
+    .container {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        align-items: stretch;
+    }
 
-/* フォームの各項目を囲むエリア */
-.form-group {
-    margin-bottom: 25px;
-}
+    /* 右側メインエリア */
+    .main-content {
+        flex: 1;
+        padding: 20px 40px;
+        background-color: #ffffff;
+        box-sizing: border-box;
+    }
 
-/* ラベル */
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
-    font-size: 14px;
-}
+    /* ① 見出し「成績編集」（グレーの帯） */
+    .main-content h2 {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding: 10px 15px;
+        background-color: #f2f2f2;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+    }
 
-/* 入力フォーム */
-input[type="text"],
-input[type="number"],
-select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #dce4ec;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 16px;
-    background-color: #fff;
-    transition: border-color 0.2s;
-}
+    /* フォームコンテナ */
+    .form-container {
+        max-width: 800px;
+        width: 100%;
+    }
 
-input:focus,
-select:focus {
-    outline: none;
-    border-color: #66a3ff;
-}
+    /* 各入力項目の縦並びグループ設定 */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 20px;
+    }
 
-/* 登録ボタン */
-.submit-btn {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-}
+    .form-group label {
+        font-size: 13px;
+        color: #333;
+        font-weight: bold;
+    }
 
-button[type="submit"] {
-    padding: 12px 20px;
-    background: #66a3ff;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-    width: 100%;
-}
+    /* 入力欄（テキスト・数字・セレクト共通の見た目） */
+    input[type="text"],
+    input[type="number"],
+    select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+        background-color: #ffffff;
+        color: #333;
+    }
 
-button[type="submit"]:hover {
-    background: #4d8cff;
-}
+    /* 登録ボタン（共通の青いボタン仕様） */
+    .btn-submit {
+        background-color: #0066ff;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 15px;
+        transition: background-color 0.2s;
+    }
+    .btn-submit:hover {
+        background-color: #0044cc;
+    }
 
-/* 戻るリンク */
-.back-link {
-    margin-bottom: 20px;
-    text-decoration: none;
-    color: #4a90e2;
-    font-size: 14px;
-}
-
-.back-link:hover {
-    text-decoration: underline;
-}
-
-/* エラーメッセージ（入力欄の下に出す用） */
-.error-text {
-    color: #e74c3c;
-    font-size: 13px;
-    font-weight: bold;
-    margin-top: 5px;
-}
+    /* エラーメッセージ（バリデーション赤文字） */
+    .error-msg {
+        color: #d9534f;
+        font-size: 13px;
+        margin-top: 4px;
+        font-weight: bold;
+    }
 </style>
-
 </head>
-
 <body>
 
-<a href="${pageContext.request.contextPath}/action/Menu.action" class="back-link">
-    ← メニューへ戻る
-</a>
+<%@ include file="/header.jsp" %>
 
 <div class="container">
-    <h2>成績編集</h2>
 
-    <form action="TestEditExecute.action" method="post">
+    <%@ include file="/sidebar.jsp" %>
 
-        <div class="form-group">
-            <label>学生番号</label>
-            <input type="text" name="studentNo" value="${studentNo}" maxlength="10" required>
-            <div class="error-text">${errors.studentNo}</div>
+    <div class="main-content">
+
+        <h2>成績編集</h2>
+
+        <div class="form-container">
+            <form action="${pageContext.request.contextPath}/action/TestEditExecute.action" method="post">
+
+                <div class="form-group">
+                    <label>学生番号</label>
+                    <input type="text" name="studentNo" value="${studentNo}" maxlength="10" required>
+                    <div class="error-msg">${errors.studentNo}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>科目</label>
+                    <select name="subjectCd" required>
+                        <option value="">--選択--</option>
+                        <c:forEach var="subject" items="${subjectList}">
+                            <option value="${subject.cd}" <c:if test="${subject.cd == subjectCd}">selected</c:if>>
+                                ${subject.name}
+                            </option>
+                        </c:forEach>
+                    </select>
+                    <div class="error-msg">${errors.subjectCd}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>回数</label>
+                    <input type="number" name="no" value="${no}" min="1" required>
+                    <div class="error-msg">${errors.no}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>点数</label>
+                    <input type="number" name="point" value="${point}" min="0" max="100" required>
+                    <div class="error-msg">${errors.point}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>クラス番号</label>
+                    <input type="text" name="classNum" value="${classNum}" maxlength="5" required>
+                    <div class="error-msg">${errors.classNum}</div>
+                </div>
+
+                <button type="submit" class="btn-submit">更新する</button>
+            </form>
         </div>
 
-        <div class="form-group">
-            <label>科目</label>
-            <select name="subjectCd" required>
-                <option value="">--選択--</option>
-                
-                <c:forEach var="subject" items="${subjectList}">
-                    <option value="${subject.cd}" <c:if test="${subject.cd == subjectCd}">selected</c:if>>
-                        ${subject.name}
-                    </option>
-                </c:forEach>
-                
-            </select>
-            <div class="error-text">${errors.subjectCd}</div>
-        </div>
+    </div> </div> <%@ include file="/footer.jsp" %>
 
-        <div class="form-group">
-            <label>回数</label>
-            <input type="number" name="no" value="${no}" min="1" required>
-            <div class="error-text">${errors.no}</div>
-        </div>
-
-        <div class="form-group">
-            <label>点数</label>
-            <input type="number" name="point" value="${point}" min="0" max="100" required>
-            <div class="error-text">${errors.point}</div>
-        </div>
-
-        <div class="form-group">
-            <label>クラス番号</label>
-            <input type="text" name="classNum" value="${classNum}" maxlength="5" required>
-            <div class="error-text">${errors.classNum}</div>
-        </div>
-
-        <div class="submit-btn">
-            <button type="submit">更新する</button>
-        </div>
-        
-    </form>
-</div>
-    <%@ include file="/footer.jsp" %>
 </body>
 </html>

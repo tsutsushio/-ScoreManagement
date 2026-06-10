@@ -4,23 +4,46 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>パスワード変更完了</title>
+    <title>得点管理システム - パスワード変更完了</title>
     <style>
-body {
+/* 全体：他の画面と共通の縦幅いっぱいベースを作る */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
     font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
     background-color: #f4f7f9;
     color: #333;
-    margin: 0;
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 80vh; /* 画面の中央に配置します */
-    box-sizing: border-box;
 }
 
+body {
+    display: flex;
+    flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+}
+
+/* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
 .container {
+    display: flex;
+    flex: 1;            /* 画面の残りの高さをすべて使う */
+    width: 100%;
+    align-items: stretch;
+}
+
+/* メインエリア：この中でメッセージボックスを画面の真ん中に寄せる */
+.main-content {
+    flex: 1;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    background-color: #f4f7f9;
+
+    /* メッセージボックスを中央に配置するための設定 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* メッセージボックス（元の.containerのスタイルを流用、クラス名競合防止のため変更） */
+.message-box {
     background: #ffffff;
     padding: 40px 30px;
     border-radius: 8px;
@@ -67,17 +90,24 @@ a:hover {
 br {
     display: none; /* 余計な空白を消して美しく整えます */
 }
-
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="success-msg">パスワードの変更が完了しました。</div>
-        <p>次回ログイン時からは、新しいパスワードをご利用ください。</p>
-        <br>
-        <p><a href="../action/StudentMenu.action">学生メニューへ戻る</a></p>
-    </div>
+<%@ include file="/header.jsp" %>
 
-</body>
+<div class="container">
+
+    <%@ include file="/sidebar.jsp" %>
+
+    <div class="main-content">
+
+        <div class="message-box">
+            <div class="success-msg">パスワードの変更が完了しました。</div>
+            <p>次回ログイン時からは、新しいパスワードをご利用ください。</p>
+            <br>
+            <p><a href="../action/StudentMenu.action">学生メニューへ戻る</a></p>
+        </div>
+
+    </div> </div> </body>
 </html>
