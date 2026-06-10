@@ -45,8 +45,9 @@ public class SubjectDAO extends DAO {
     // =========================================================
     public int insert(SubjectBean subject) throws Exception {
         
-        if (subject.getCd() != null && subject.getCd().length() != 3) {
-            throw new Exception("科目コードは3文字で入力してください。");
+        // 🛠 【修正】!= 3 から > 3 に変更（3文字以下なら正常に通るようにします）
+        if (subject.getCd() != null && subject.getCd().length() > 3) {
+            throw new Exception("科目コードは3文字以内で入力してください。");
         }
         if (subject.getName() != null && subject.getName().length() > 20) {
             throw new Exception("科目名は20文字以内で入力してください。");
