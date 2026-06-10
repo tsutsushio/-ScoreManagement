@@ -127,11 +127,12 @@
                             </a>
                         </td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/action/SubjectDelete.action?cd=${subject.cd}"
-                               onclick="return confirm('本当に削除しますか？');" class="delete-link">
-                                削除
-                            </a>
-                        </td>
+						    <!-- onclickを消して、純粋に確認アクション(SubjectDelete)を呼び出すようにします -->
+						    <a href="${pageContext.request.contextPath}/action/SubjectDelete.action?cd=${subject.cd}" class="delete-link">
+						        削除
+						    </a>
+						</td>
+
                     </tr>
                 </c:forEach>
             </tbody>
@@ -141,3 +142,4 @@
 
 </body>
 </html>
+
