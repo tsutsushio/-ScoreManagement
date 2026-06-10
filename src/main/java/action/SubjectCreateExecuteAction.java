@@ -45,6 +45,18 @@ public class SubjectCreateExecuteAction extends Action {
             return "/subject/subject_create.jsp";
         }
         
+        // 【追加】科目コードの文字数チェック（画像①の対策）
+        if (cd.length() > 3) {
+
+            request.setAttribute(
+                    "errorMessage",
+                    "科目コードは3文字以内で入力してください。"
+            );
+
+            return "/subject/subject_create.jsp";
+        }
+        
+        // 科目名の文字数チェック
         if (name.length() > 20) {
 
             request.setAttribute(
@@ -58,12 +70,12 @@ public class SubjectCreateExecuteAction extends Action {
 
         SubjectDAO dao = new SubjectDAO();
 
-        // 重複チェック
+        // 重複チェック（画像②の対策）
         SubjectBean existing = dao.get(cd);
         if (existing != null) {
             request.setAttribute(
                     "errorMessage",
-                    "その科目コードはすでに登録されています。"
+                    "科目コードが重複しています。"
             );
 
             return "/subject/subject_create.jsp";

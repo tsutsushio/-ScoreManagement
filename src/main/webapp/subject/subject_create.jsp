@@ -38,10 +38,10 @@ body {
 .main-content h2 {
     margin-top: 0;
     margin-bottom: 25px;
-    padding: 10px 15px;
+    padding: 12px 15px;
     background-color: #f2f2f2;
     color: #333;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
 }
 
@@ -58,18 +58,23 @@ body {
 }
 
 .form-group label {
-    font-size: 13px;
+    font-size: 14px;
     color: #333;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .form-group input[type="text"] {
     width: 100%;
-    padding: 8px 12px;
+    padding: 10px 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
     box-sizing: border-box;
+}
+
+.form-group input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
 }
 
 .form-group input::placeholder {
@@ -77,18 +82,19 @@ body {
 }
 
 .btn-submit {
-    background-color: #6c757d;
+    background-color: #007bff;
     color: #ffffff;
     border: none;
     border-radius: 4px;
-    padding: 10px 24px;
+    padding: 8px 16px;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: normal;
     cursor: pointer;
+    margin-bottom: 15px;
 }
 
 .btn-submit:hover {
-    background-color: #5a6268;
+    background-color: #0056b3;
 }
 
 .back-link-box {
@@ -96,24 +102,24 @@ body {
 }
 
 .back-link {
-    color: #0066ff;
+    color: #007bff;
     font-size: 14px;
     text-decoration: underline;
 }
 
 .back-link:hover {
-    color: #0044cc;
+    color: #0056b3;
+    text-decoration: none;
 }
 
 .error-msg {
-    color: #d9534f;
-    font-size: 13px;
+    color: #ff0000;
+    font-size: 14px;
     margin-top: 4px;
-    font-weight: bold;
-    background: #ffe5e5;
-    border-left: 5px solid #ff6b6b;
-    padding: 10px 14px;
-    border-radius: 4px;
+    font-weight: normal;
+    background: none;
+    border-left: none;
+    padding: 0;
 }
 </style>
 </head>
@@ -131,29 +137,38 @@ body {
 
         <div class="form-container">
 
-            <c:if test="${not empty errorMessage}">
-                <div class="error-msg">
-                    ${errorMessage}
-                </div>
-                <br>
-            </c:if>
-
             <form action="${pageContext.request.contextPath}/action/SubjectCreateExecute.action" method="post">
 
                 <div class="form-group">
                     <label for="cd">科目コード</label>
+                    <!-- maxlength="3" を削除 -->
                     <input type="text" id="cd" name="cd"
-                           value="${cd}" maxlength="3"
-                           placeholder="3文字の科目コードを入力してください"
+                           value="${cd}"
+                           placeholder="科目コードを入力してください"
                            required>
+                    
+                    <!-- メッセージに「コード」または「重複」が含まれる場合は科目コードの下に表示 -->
+                    <c:if test="${not empty errorMessage and (errorMessage.contains('コード') or errorMessage.contains('重複'))}">
+                        <div class="error-msg">
+                            ${errorMessage}
+                        </div>
+                    </c:if>
                 </div>
 
                 <div class="form-group">
                     <label for="name">科目名</label>
+                    <!-- maxlength="20" を削除 -->
                     <input type="text" id="name" name="name"
-                           value="${name}" maxlength="20"
+                           value="${name}"
                            placeholder="科目名を入力してください"
                            required>
+                    
+                    <!-- メッセージに「科目名」が含まれる場合は科目名の下に表示 -->
+                    <c:if test="${not empty errorMessage and errorMessage.contains('科目名')}">
+                        <div class="error-msg">
+                            ${errorMessage}
+                        </div>
+                    </c:if>
                 </div>
 
                 <button type="submit" class="btn-submit">登録</button>
