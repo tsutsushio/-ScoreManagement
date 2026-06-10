@@ -154,6 +154,23 @@ body {
                         </div>
                     </c:if>
                 </div>
+
+                <div class="form-group">
+                    <label for="name">科目名</label>
+                    <!-- maxlength="20" を削除 -->
+                    <input type="text" id="name" name="name"
+                           value="${name}"
+                           placeholder="科目名を入力してください"
+                           required>
+                    
+                    <!-- メッセージに「科目名」が含まれる場合は科目名の下に表示 -->
+                    <c:if test="${not empty errorMessage and errorMessage.contains('科目名')}">
+                        <div class="error-msg">
+                            ${errorMessage}
+                        </div>
+                    </c:if>
+                </div>
+
                 <button type="submit" class="btn-submit">登録</button>
 
             </form>
