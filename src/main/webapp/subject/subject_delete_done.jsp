@@ -5,66 +5,86 @@
 <%@ include file="/header.jsp" %>
 
 <style>
-
-.content{
-    max-width:600px;
-    margin:40px auto;
+/* 全体レイアウト（もし他画面と合わせるためのコンテナが必要な場合はここに記述） */
+.container {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    align-items: stretch;
 }
 
-.page-title{
-    background:#eeeeee;
-    padding:12px 15px;
-    font-size:24px;
-    font-weight:bold;
-    margin-bottom:20px;
+/* メインコンテンツ（左寄せ・登録画面などと同じ余白設定） */
+.main-content {
+    flex: 1;
+    padding: 20px 40px;
+    box-sizing: border-box;
+    background-color: #ffffff;
 }
 
-.message-box{
-    border:1px solid #cccccc;
-    padding:30px;
-    background:#fafafa;
-    text-align:center;
+/* タイトルエリア（①） */
+.main-content h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    padding: 12px 15px;
+    background-color: #f2f2f2; /* 画像の薄いグレー */
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
 }
 
-.message{
-    font-size:18px;
-    margin-bottom:25px;
+/* 削除完了メッセージ帯（②） */
+.done-message {
+    font-size: 14px;
+    color: #333;
+    background-color: #8cc6a5; /* 画像と同じ鮮やかで落ち着いた緑色 */
+    padding: 10px 15px;
+    margin-bottom: 25px;
+    box-sizing: border-box;
 }
 
-.back-btn{
-    display:inline-block;
-    padding:10px 20px;
-    background:#3366cc;
-    color:white;
-    text-decoration:none;
-    border-radius:4px;
+/* リンクエリア（③） */
+.back-link-box {
+    margin-top: 5px;
+    text-align: left;
 }
 
-.back-btn:hover{
-    background:#264d99;
+/* リンクのテキスト装飾（③） */
+.back-link {
+    color: #007bff;              /* リンクの青色 */
+    text-decoration: underline;  /* 下線を表示 */
+    font-size: 14px;
+    font-weight: normal;         /* 太字を解除 */
 }
 
+.back-link:hover {
+    color: #0056b3;
+    text-decoration: none;       /* ホバー時は下線を消す */
+}
 </style>
 
-<div class="content">
+<!-- 他の画面と同じくサイドバーを挟むためのレイアウト構造 -->
+<div class="container">
 
-    <div class="page-title">
-        科目削除
-    </div>
+    <%@ include file="/sidebar.jsp" %>
 
-    <div class="message-box">
+    <div class="main-content">
 
-        <div class="message">
-            科目を削除しました。
+        <!-- タイトル（①） -->
+        <h2>科目情報削除</h2>
+
+        <!-- 削除完了メッセージ（②） -->
+        <div class="done-message">
+            削除が完了しました
         </div>
 
-        <a href="${pageContext.request.contextPath}/action/SubjectList.action"
-           class="back-btn">
-            科目一覧へ戻る
-        </a>
+        <!-- 科目一覧へのリンク（③） -->
+        <div class="back-link-box">
+            <a href="${pageContext.request.contextPath}/action/SubjectList.action" class="back-link">
+                科目一覧
+            </a>
+        </div>
 
     </div>
-
 </div>
 
 <%@ include file="/footer.jsp" %>
