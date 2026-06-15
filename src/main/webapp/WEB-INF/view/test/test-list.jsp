@@ -113,17 +113,25 @@
         </c:if>
 
         <c:if test="${not empty testList}">
+            <%-- もし学生番号での検索（f4がある）なら、見出しを画像に合わせて変更 --%>
+            <c:if test="${not empty param.f4}">
+                <p>氏名：${testList[0].student.name} (${testList[0].student.no})</p>
+            </c:if>
+
             <table>
                 <thead>
-                    <tr><th>入学年度</th><th>クラス</th><th>学生番号</th><th>氏名</th><th>回数</th><th>点数</th></tr>
+                    <tr>
+                        <th>科目名</th>
+                        <th>科目コード</th>
+                        <th>回数</th>
+                        <th>点数</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <c:forEach items="${testList}" var="test">
                         <tr>
-                            <td>${test.student.entYear}</td>
-                            <td>${test.classNum}</td>
-                            <td>${test.student.no}</td>
-                            <td>${test.student.name}</td>
+                            <td>${test.subject.name}</td>
+                            <td>${test.subject.cd}</td>
                             <td>${test.no}</td>
                             <td>${test.point}</td>
                         </tr>

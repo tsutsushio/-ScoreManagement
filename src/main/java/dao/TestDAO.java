@@ -128,30 +128,35 @@ public class TestDAO extends DAO {
         return list;
     }
 
-    public List<TestBean> searchBySubject(int entYear, String classNum, String subjectCd, String studentNo, SchoolBean school) throws Exception {
+    public List<TestBean> searchBySubject(Integer entYear, String classNum, String subjectCd, String studentNo, SchoolBean school) throws Exception {
         List<TestBean> list = new ArrayList<>();
-        String sql = 
-            "SELECT ST.NO AS STUDENT_NO, ST.NAME AS STUDENT_NAME, ST.ENT_YEAR, ST.CLASS_NUM, T.NO, T.POINT " +
-            "FROM TEST T " +
-            "JOIN STUDENT ST ON T.STUDENT_NO = ST.NO AND T.SCHOOL_CD = ST.SCHOOL_CD " +
-            "WHERE ST.ENT_YEAR = ? AND ST.CLASS_NUM = ? AND T.SUBJECT_CD = ? AND T.SCHOOL_CD = ? ";
+        
+        StringBuilder sql = new StringBuilder(
+                "SELECT ST.NO AS STUDENT_NO, ST.NAME AS STUDENT_NAME, ST.ENT_YEAR, ST.CLASS_NUM, " +
+                "T.NO, T.POINT, T.SUBJECT_CD, S.NAME AS SUBJECT_NAME " +
+                "FROM TEST T " +
+                "JOIN STUDENT ST ON T.STUDENT_NO = ST.NO AND T.SCHOOL_CD = ST.SCHOOL_CD " +
+                "JOIN SUBJECT S ON T.SUBJECT_CD = S.CD AND T.SCHOOL_CD = S.SCHOOL_CD " +
+                "WHERE T.SCHOOL_CD = ? "
+        );
 
-        if (studentNo != null && !studentNo.isEmpty()) {
-            sql += " AND ST.NO = ?";
-        }
-        sql += " ORDER BY ST.NO, T.NO";
+        if (entYear != null) { sql.append(" AND ST.ENT_YEAR = ? "); }
+        if (classNum != null && !classNum.isEmpty()) { sql.append(" AND ST.CLASS_NUM = ? "); }
+        if (subjectCd != null && !subjectCd.isEmpty()) { sql.append(" AND T.SUBJECT_CD = ? "); }
+        if (studentNo != null && !studentNo.isEmpty()) { sql.append(" AND ST.NO = ? "); }
+        
+        sql.append(" ORDER BY ST.NO, T.NO");
 
         try (Connection con = getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+             PreparedStatement st = con.prepareStatement(sql.toString())) {
 
-            st.setInt(1, entYear);
-            st.setString(2, classNum);
-            st.setString(3, subjectCd);
-            st.setString(4, school.getCd());
+            int idx = 1;
+            st.setString(idx++, school.getCd());
 
-            if (studentNo != null && !studentNo.isEmpty()) {
-                st.setString(5, studentNo);
-            }
+            if (entYear != null) { st.setInt(idx++, entYear); }
+            if (classNum != null && !classNum.isEmpty()) { st.setString(idx++, classNum); }
+            if (subjectCd != null && !subjectCd.isEmpty()) { st.setString(idx++, subjectCd); }
+            if (studentNo != null && !studentNo.isEmpty()) { st.setString(idx++, studentNo); }
 
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
@@ -160,12 +165,19 @@ public class TestDAO extends DAO {
                     test.setPoint(rs.getInt("POINT"));
                     test.setClassNum(rs.getString("CLASS_NUM"));
 
+                    // 学生情報のセット
                     StudentBean student = new StudentBean();
                     student.setNo(rs.getString("STUDENT_NO"));
                     student.setName(rs.getString("STUDENT_NAME"));
                     student.setEntYear(rs.getInt("ENT_YEAR"));
                     student.setClassNum(rs.getString("CLASS_NUM"));
                     test.setStudent(student);
+
+                    // 科目情報のセット（これが追加されたことでJSP側で科目名が表示可能になります）
+                    SubjectBean subject = new SubjectBean();
+                    subject.setCd(rs.getString("SUBJECT_CD"));
+                    subject.setName(rs.getString("SUBJECT_NAME"));
+                    test.setSubject(subject);
 
                     list.add(test);
                 }

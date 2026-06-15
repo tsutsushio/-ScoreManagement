@@ -109,16 +109,15 @@ extends Action {
                     req.getParameter(
                         "f4"
                     );
+            
+            boolean isStudentSearch = (studentNo != null && !studentNo.isEmpty());
 
             // 必須チェック
-            if (
-                entYear == null
-                || entYear.isEmpty()
-                || classNum == null
-                || classNum.isEmpty()
-                || subjectCd == null
-                || subjectCd.isEmpty()
-            ) {
+            if (!isStudentSearch && (
+                entYear == null || entYear.isEmpty() ||
+                classNum == null || classNum.isEmpty() ||
+                subjectCd == null || subjectCd.isEmpty()
+            )) {
 
                 req.setAttribute(
                     "error",
@@ -129,13 +128,13 @@ extends Action {
 
                 TestDAO dao =
                         new TestDAO();
+                
+                Integer year = (entYear != null && !entYear.isEmpty()) ? Integer.parseInt(entYear) : null;
 
                 List<TestBean>
                     testList =
                     		dao.searchBySubject(
-                    			    Integer.parseInt(
-                    			        entYear
-                    			    ),
+                    			    year,
                     			    classNum,
                     			    subjectCd,
                     			    studentNo,
