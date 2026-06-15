@@ -13,7 +13,7 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: "Yu Gothic", sans-serif;
-    background-color: #f4f7fb;
+    background-color: #ffffff; /* 画面全体の背景を白に変更 */
     color: #333333;
 }
 
@@ -32,108 +32,112 @@ body {
     box-sizing: border-box;
 }
 
-/* ログインカード（システム共通のモダンな影と角丸） */
+/* ログインカード：①の外枠グレー線、角丸なし、幅広め、影なし */
 .login-container {
     width: 100%;
-    max-width: 420px;
+    max-width: 500px;
     background: #ffffff;
-    padding: 40px;
-    border-radius: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid #dcdcdc; /* 薄いグレーの枠線 */
     box-sizing: border-box;
 }
 
-h1 {
-    margin: 0 0 25px;
-    color: #4a7bd8;
-    font-size: 24px;
+/* ①「ログイン」のヘッダータイトル部分 */
+.login-container h1 {
+    margin: 0;
+    background-color: #f5f5f5; /* グレーの背景 */
+    color: #333333;
+    font-size: 18px;
     text-align: center;
     font-weight: bold;
+    padding: 12px;
+    border-bottom: 1px solid #dcdcdc;
 }
 
-/* 入力グループ */
+/* フォーム全体のパディング（中身を白枠内に収める） */
+form {
+    padding: 30px;
+}
+
+/* 入力グループ：②、③の青い背景と枠線 */
 .input-group {
     margin-bottom: 20px;
+    background-color: #ebf2fe; /* 薄い青色の背景 */
+    border: 1px solid #c2d6fc; /* 青系の枠線 */
+    border-radius: 6px;
+    padding: 6px 12px;
+    position: relative;
 }
 
+/* ラベル：入力欄内の上部に小さく配置 */
 .input-group label {
     display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #444;
+    font-size: 11px;
+    color: #666666;
+    margin-bottom: 2px;
 }
 
+/* 入力欄本体：背景を透明にして枠線を消去 */
 .input-group input[type="text"],
 .input-group input[type="password"] {
     width: 100%;
-    padding: 11px 14px;
+    padding: 2px 0;
     box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-    background-color: #fff;
-    transition: 0.2s;
+    border: none;
+    background-color: transparent;
+    font-size: 14px;
+    color: #333333;
 }
 
+/* フォーカス時のアウトラインを無効化 */
 .input-group input[type="text"]:focus,
 .input-group input[type="password"]:focus {
     outline: none;
-    border-color: #6ea8ff;
-    box-shadow: 0 0 0 3px rgba(110,168,255,0.2);
 }
 
-/* パスワードを表示チェックボックス */
+/* パスワードを表示チェックボックス（④、⑤） */
 .checkbox-group {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
-    margin-bottom: 25px;
+    margin-top: 15px;
+    margin-bottom: 20px;
     font-size: 14px;
-    color: #555;
-    cursor: pointer;
+    color: #333333;
 }
 
 .checkbox-group input {
-    margin-right: 8px;
-    cursor: pointer;
+    margin-right: 6px;
+    transform: scale(1.1);
 }
 
-.checkbox-group label {
-    cursor: pointer;
-    user-select: none;
-}
-
-/* ログインボタン（システム共通の鮮やかなグラデーション） */
+/* ⑥ログインボタン：鮮やかな青の単色 */
 .login-btn {
     display: block;
-    width: 60%;
+    width: 30%;
     margin: 0 auto;
-    padding: 11px;
+    padding: 10px;
     border: none;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #6ea8ff, #4a7bd8);
+    border-radius: 6px;
+    background: #0066ff; /* 鮮やかな青色単色 */
     color: #ffffff;
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.2s;
     text-align: center;
 }
 
 .login-btn:hover {
-    box-shadow: 0 4px 10px rgba(74,123,216,0.35);
+    background: #0052cc;
 }
 
-/* エラーメッセージ（共通のエラースタイルに準拠） */
+/* エラーメッセージ */
 .error-msg {
     background: #ffe5e5;
     color: #d33;
     border-left: 5px solid #ff6b6b;
     padding: 12px;
     border-radius: 8px;
-    margin-bottom: 20px;
+    margin: 15px 30px 0 30px;
     font-weight: bold;
     font-size: 14px;
     text-align: center;
@@ -148,7 +152,7 @@ h1 {
 
     <div class="login-container">
         
-        <h1>得点管理システム</h1>
+        <h1>ログイン</h1>
         
         <c:if test="${not empty error}">
             <div class="error-msg">${error}</div>
@@ -174,7 +178,10 @@ h1 {
             <input type="submit" value="ログイン" class="login-btn">
         </form>
         
-    </div> </div> <%@ include file="/footer.jsp" %>
+    </div>
+</div>
+
+<%@ include file="/footer.jsp" %>
 
 <script>
     // チェックボックスの変更イベントで表示/非表示を切り替える
