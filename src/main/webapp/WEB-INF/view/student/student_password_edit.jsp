@@ -171,11 +171,9 @@ br {
 </head>
 <body>
 
-<%@ include file="/header.jsp" %>
 
 <div class="container">
 
-    <%@ include file="/sidebar.jsp" %>
 
     <div class="main-content">
 
