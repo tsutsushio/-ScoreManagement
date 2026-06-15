@@ -44,7 +44,6 @@
     <%@ include file="/sidebar.jsp" %>
 
     <div class="main-content">
-        <a href="${pageContext.request.contextPath}/action/Menu.action" class="back-link">← メニューへ戻る</a>
         <h2>成績登録</h2>
 
         <form action="TestSearch.action" method="post" class="search-form">
