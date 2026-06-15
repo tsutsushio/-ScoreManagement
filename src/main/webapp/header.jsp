@@ -2,9 +2,6 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <style>
-/* header.jsp内でのbodyへのmargin/padding指定は、
-   読み込み先のメイン画面全体を破壊する原因になるため削除しました 
-*/
 /* 上部バー（普通に上部に配置し、横幅100%） */
 .top-bar {
     width: 100%;
@@ -17,8 +14,8 @@
     padding: 0 30px;
     box-sizing: border-box;
 
-    background: rgba(230, 240, 255, 0.9);
-    backdrop-filter: blur(8px);
+    /* 背景色を不透明な薄い青に統一 */
+    background: #e6f0ff; 
 
     border-bottom: 1px solid #c9dfff;
     z-index: 1000;
@@ -31,6 +28,9 @@
     color: #2d4f7c;
     margin: 0;
     padding: 0;
+    /* 他のCSSファイルからの干渉を防ぐため、背景を強制的に透明にする */
+    background: transparent !important; 
+    border: none !important;
 }
 
 /* 右側：ユーザー名とログアウトの並び */
@@ -57,6 +57,7 @@
     color: #003399;
 }
 </style>
+
 
 <div class="top-bar">
 

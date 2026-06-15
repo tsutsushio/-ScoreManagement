@@ -16,7 +16,7 @@
         margin: 0;
         padding: 0;
         font-family: "Yu Gothic", sans-serif;
-        background-color: #f5f7fb;
+        background-color: #ffffff; /* 画面全体の背景を白に変更 */
     }
 
     body {
@@ -30,15 +30,15 @@
         flex: 1;          /* 画面の余った縦幅をすべてこれに使う */
         width: 100%;      /* 横幅いっぱい */
         align-items: stretch; /* 子要素（サイドバーとメイン）の高さを統一する */
+        background-color: #ffffff; /* コンテナ背景も白に変更 */
     }
 
     /* メインエリア */
     .main-content {
         flex: 1;
         padding: 40px;
-        background-color: #f5f7fb;
+        background-color: #ffffff; /* メインコンテンツ背景も白に変更 */
         box-sizing: border-box;
-
     }
 
     /* ① メニュー見出し（グレーの帯） */
