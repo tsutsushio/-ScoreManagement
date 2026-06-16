@@ -121,8 +121,8 @@
                         <th>クラス</th>
                         <th>学生番号</th>
                         <th>氏名</th>
-                        <th>回数</th>
-                        <th>点数</th>
+                        <th>1回</th>
+						<th>2回</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,8 +132,8 @@
                             <td>${test.classNum}</td>
                             <td>${test.student.no}</td>
                             <td>${test.student.name}</td>
-                            <td>${test.no}</td>
-                            <td>${test.point}</td>
+                            <td>${empty test.point1 ? "-" : test.point1}</td>
+							<td>${empty test.point2 ? "-" : test.point2}</td>
                         </tr>
                     </c:forEach>
                 </tbody>

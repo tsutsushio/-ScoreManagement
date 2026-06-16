@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import bean.SchoolBean;
 import bean.StudentBean;
@@ -154,21 +156,87 @@ public class TestDAO extends DAO {
             }
 
             try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) {
-                    TestBean test = new TestBean();
-                    test.setNo(rs.getInt("NO"));
-                    test.setPoint(rs.getInt("POINT"));
-                    test.setClassNum(rs.getString("CLASS_NUM"));
+            	Map<String, TestBean> map =
+            	        new LinkedHashMap<>();
 
-                    StudentBean student = new StudentBean();
-                    student.setNo(rs.getString("STUDENT_NO"));
-                    student.setName(rs.getString("STUDENT_NAME"));
-                    student.setEntYear(rs.getInt("ENT_YEAR"));
-                    student.setClassNum(rs.getString("CLASS_NUM"));
-                    test.setStudent(student);
+            	while (rs.next()) {
 
-                    list.add(test);
-                }
+            	    String studentNoKey =
+            	            rs.getString("STUDENT_NO");
+
+            	    TestBean test =
+            	            map.get(studentNoKey);
+
+            	    if (test == null) {
+
+            	        test = new TestBean();
+
+            	        StudentBean student =
+            	                new StudentBean();
+
+            	        student.setNo(
+            	                rs.getString(
+            	                        "STUDENT_NO"
+            	                )
+            	        );
+
+            	        student.setName(
+            	                rs.getString(
+            	                        "STUDENT_NAME"
+            	                )
+            	        );
+
+            	        student.setEntYear(
+            	                rs.getInt(
+            	                        "ENT_YEAR"
+            	                )
+            	        );
+
+            	        student.setClassNum(
+            	                rs.getString(
+            	                        "CLASS_NUM"
+            	                )
+            	        );
+
+            	        test.setStudent(
+            	                student
+            	        );
+
+            	        test.setClassNum(
+            	                rs.getString(
+            	                        "CLASS_NUM"
+            	                )
+            	        );
+
+            	        map.put(
+            	                studentNoKey,
+            	                test
+            	        );
+            	    }
+
+            	    int no =
+            	            rs.getInt("NO");
+
+            	    int point =
+            	            rs.getInt("POINT");
+
+            	    if (no == 1) {
+
+            	        test.setPoint1(
+            	                point
+            	        );
+
+            	    } else if (no == 2) {
+
+            	        test.setPoint2(
+            	                point
+            	        );
+            	    }
+            	}
+
+            	list.addAll(
+            	        map.values()
+            	);
             }
         }
         return list;
@@ -400,87 +468,118 @@ public class TestDAO extends DAO {
                  st.executeQuery()
          ) {
 
-             while (
-                 rs.next()
-             ) {
+        	 while (rs.next()) {
 
-                 TestBean test =
-                         new TestBean();
+        		    String subjectCd =
+        		            rs.getString(
+        		                    "SUBJECT_CD"
+        		            );
 
-                 test.setNo(
-                         rs.getInt(
-                                 "NO"
-                         )
-                 );
+        		    TestBean test =
+        		            null;
 
-                 test.setPoint(
-                         rs.getInt(
-                                 "POINT"
-                         )
-                 );
+        		    for (TestBean t : list) {
 
-                 SubjectBean subject =
-                         new SubjectBean();
+        		        if (
+        		            t.getSubject()
+        		             .getCd()
+        		             .equals(subjectCd)
+        		        ) {
 
-                 subject.setCd(
-                         rs.getString(
-                                 "SUBJECT_CD"
-                         )
-                 );
+        		            test = t;
+        		            break;
+        		        }
+        		    }
 
-                 subject.setName(
-                         rs.getString(
-                                 "SUBJECT_NAME"
-                         )
-                 );
+        		    if (test == null) {
 
-                 test.setSubject(
-                         subject
-                 );
+        		        test =
+        		            new TestBean();
 
-                 list.add(
-                         test
-                 );
-                 StudentBean student =
-                	        new StudentBean();
+        		        SubjectBean subject =
+        		                new SubjectBean();
 
-                	student.setNo(
-                	        rs.getString(
-                	                "STUDENT_NO"
-                	        )
-                	);
+        		        subject.setCd(
+        		                subjectCd
+        		        );
 
-                	student.setName(
-                	        rs.getString(
-                	                "STUDENT_NAME"
-                	        )
-                	);
+        		        subject.setName(
+        		                rs.getString(
+        		                        "SUBJECT_NAME"
+        		                )
+        		        );
 
-                	student.setEntYear(
-                	        rs.getInt(
-                	                "ENT_YEAR"
-                	        )
-                	);
+        		        test.setSubject(
+        		                subject
+        		        );
 
-                	student.setClassNum(
-                	        rs.getString(
-                	                "CLASS_NUM"
-                	        )
-                	);
+        		        StudentBean student =
+        		                new StudentBean();
 
-                	test.setStudent(
-                	        student
-                	);
+        		        student.setNo(
+        		                rs.getString(
+        		                        "STUDENT_NO"
+        		                )
+        		        );
 
-                	test.setClassNum(
-                	        rs.getString(
-                	                "CLASS_NUM"
-                	        )
-                	);
-             }
+        		        student.setName(
+        		                rs.getString(
+        		                        "STUDENT_NAME"
+        		                )
+        		        );
+
+        		        student.setEntYear(
+        		                rs.getInt(
+        		                        "ENT_YEAR"
+        		                )
+        		        );
+
+        		        student.setClassNum(
+        		                rs.getString(
+        		                        "CLASS_NUM"
+        		                )
+        		        );
+
+        		        test.setStudent(
+        		                student
+        		        );
+
+        		        test.setClassNum(
+        		                rs.getString(
+        		                        "CLASS_NUM"
+        		                )
+        		        );
+
+        		        list.add(
+        		                test
+        		        );
+        		    }
+
+        		    int testNo =
+        		            rs.getInt(
+        		                    "NO"
+        		            );
+
+        		    int point =
+        		            rs.getInt(
+        		                    "POINT"
+        		            );
+
+        		    if (testNo == 1) {
+
+        		        test.setPoint1(
+        		                point
+        		        );
+
+        		    } else if (testNo == 2) {
+
+        		        test.setPoint2(
+        		                point
+        		        );
+        		    }	
+        	 }
          }
      }
-
      return list;
  }
-}
+ }
