@@ -103,7 +103,7 @@ body {
         <!-- 各種リンク（③「戻る」、④「科目一覧」） -->
         <div class="button-area">
             <a href="${pageContext.request.contextPath}/action/SubjectCreate.action">
-                戻る
+                続けて登録
             </a>
             <a href="${pageContext.request.contextPath}/action/SubjectList.action">
                 科目一覧
