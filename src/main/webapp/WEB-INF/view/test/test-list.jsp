@@ -113,7 +113,8 @@
         </c:if>
 
         <!-- 科目検索結果 -->
-        <c:if test="${searchType == 'sj' && not empty testList}">
+        <c:if test="${searchType eq 'sj' and not empty testList}">
+        <p>searchType=${searchType}</p>
             <table>
                 <thead>
                     <tr>
@@ -141,7 +142,7 @@
         </c:if>
 
         <!-- 学生検索結果 -->
-        <c:if test="${searchType == 'st' && not empty testList}">
+        <c:if test="${searchType eq 'st' and not empty testList}">
             <c:if test="${not empty student}">
                 <p>
                     学生番号：${student.no}

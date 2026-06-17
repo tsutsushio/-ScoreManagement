@@ -470,114 +470,57 @@ public class TestDAO extends DAO {
 
         	 while (rs.next()) {
 
-        		    String subjectCd =
-        		            rs.getString(
-        		                    "SUBJECT_CD"
-        		            );
-
         		    TestBean test =
-        		            null;
-
-        		    for (TestBean t : list) {
-
-        		        if (
-        		            t.getSubject()
-        		             .getCd()
-        		             .equals(subjectCd)
-        		        ) {
-
-        		            test = t;
-        		            break;
-        		        }
-        		    }
-
-        		    if (test == null) {
-
-        		        test =
         		            new TestBean();
 
-        		        SubjectBean subject =
-        		                new SubjectBean();
+        		    test.setNo(
+        		            rs.getInt("NO")
+        		    );
 
-        		        subject.setCd(
-        		                subjectCd
-        		        );
+        		    test.setPoint(
+        		            rs.getInt("POINT")
+        		    );
 
-        		        subject.setName(
-        		                rs.getString(
-        		                        "SUBJECT_NAME"
-        		                )
-        		        );
+        		    SubjectBean subject =
+        		            new SubjectBean();
 
-        		        test.setSubject(
-        		                subject
-        		        );
+        		    subject.setCd(
+        		            rs.getString("SUBJECT_CD")
+        		    );
 
-        		        StudentBean student =
-        		                new StudentBean();
+        		    subject.setName(
+        		            rs.getString("SUBJECT_NAME")
+        		    );
 
-        		        student.setNo(
-        		                rs.getString(
-        		                        "STUDENT_NO"
-        		                )
-        		        );
+        		    test.setSubject(subject);
 
-        		        student.setName(
-        		                rs.getString(
-        		                        "STUDENT_NAME"
-        		                )
-        		        );
+        		    StudentBean student =
+        		            new StudentBean();
 
-        		        student.setEntYear(
-        		                rs.getInt(
-        		                        "ENT_YEAR"
-        		                )
-        		        );
+        		    student.setNo(
+        		            rs.getString("STUDENT_NO")
+        		    );
 
-        		        student.setClassNum(
-        		                rs.getString(
-        		                        "CLASS_NUM"
-        		                )
-        		        );
+        		    student.setName(
+        		            rs.getString("STUDENT_NAME")
+        		    );
 
-        		        test.setStudent(
-        		                student
-        		        );
+        		    student.setEntYear(
+        		            rs.getInt("ENT_YEAR")
+        		    );
 
-        		        test.setClassNum(
-        		                rs.getString(
-        		                        "CLASS_NUM"
-        		                )
-        		        );
+        		    student.setClassNum(
+        		            rs.getString("CLASS_NUM")
+        		    );
 
-        		        list.add(
-        		                test
-        		        );
-        		    }
+        		    test.setStudent(student);
 
-        		    int testNo =
-        		            rs.getInt(
-        		                    "NO"
-        		            );
+        		    test.setClassNum(
+        		            rs.getString("CLASS_NUM")
+        		    );
 
-        		    int point =
-        		            rs.getInt(
-        		                    "POINT"
-        		            );
-
-        		    if (testNo == 1) {
-
-        		        test.setPoint1(
-        		                point
-        		        );
-
-        		    } else if (testNo == 2) {
-
-        		        test.setPoint2(
-        		                point
-        		        );
-        		    }	
-        	 }
+        		    list.add(test);
+        		}
          }
      }
      return list;
