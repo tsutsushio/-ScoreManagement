@@ -52,7 +52,13 @@
 
     <div class="main-content">
         
-        <h2>成績参照</h2>
+        <h2>
+    成績参照
+    <c:choose>
+        <c:when test="${searchType eq 'sj'}">（科目）</c:when>
+        <c:when test="${searchType eq 'st'}">（学生）</c:when>
+    </c:choose>
+</h2>
 
         <div class="search-box">
             <h3>科目情報</h3>
@@ -113,7 +119,10 @@
         </c:if>
 
         <!-- 科目検索結果 -->
-        <c:if test="${searchType == 'sj' && not empty testList}">
+        <c:if test="${searchType eq 'sj' and not empty testList}">
+        <p>
+    科目：${subjectName}
+</p>
             <table>
                 <thead>
                     <tr>
@@ -121,8 +130,8 @@
                         <th>クラス</th>
                         <th>学生番号</th>
                         <th>氏名</th>
-                        <th>回数</th>
-                        <th>点数</th>
+                        <th>1回</th>
+						<th>2回</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,8 +141,8 @@
                             <td>${test.classNum}</td>
                             <td>${test.student.no}</td>
                             <td>${test.student.name}</td>
-                            <td>${test.no}</td>
-                            <td>${test.point}</td>
+                            <td>${empty test.point1 ? "-" : test.point1}</td>
+							<td>${empty test.point2 ? "-" : test.point2}</td>
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -141,7 +150,7 @@
         </c:if>
 
         <!-- 学生検索結果 -->
-        <c:if test="${searchType == 'st' && not empty testList}">
+        <c:if test="${searchType eq 'st' and not empty testList}">
             <c:if test="${not empty student}">
                 <p>
                     学生番号：${student.no}

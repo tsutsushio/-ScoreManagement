@@ -16,6 +16,8 @@ public class TestBean implements Serializable {
     private int rank;           // 順位
     private int maxPoint;       // 最高点
     private double averagePoint;// 平均点
+    private Integer point1;
+    private Integer point2;
 
     // --- 基本のゲッター・セッター ---
     public StudentBean getStudent() { return student; }
@@ -44,4 +46,20 @@ public class TestBean implements Serializable {
 
     public double getAveragePoint() { return averagePoint; }
     public void setAveragePoint(double averagePoint) { this.averagePoint = averagePoint; }
+    
+    public Integer getPoint1() {
+        return point1;
+    }
+
+    public void setPoint1(Integer point1) {
+        this.point1 = point1;
+    }
+
+    public Integer getPoint2() {
+        return point2;
+    }
+
+    public void setPoint2(Integer point2) {
+        this.point2 = point2;
+    }
 }

@@ -17,5 +17,5 @@ footer{
 </style>
 
 <footer>
-    &copy; 2026 得点管理システム
+    &copy; 2026 大原学園
 </footer>
