@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bean.SchoolBean;
+import bean.SubjectBean;
 import bean.TeacherBean;
 import bean.TestBean;
 import dao.ClassNumDAO;
@@ -93,9 +94,6 @@ extends Action {
         /* =========================
          * 科目検索
          * ========================= */
-        /* =========================
-         * 科目検索
-         * ========================= */
         if ("sj".equals(f)) {
 
             req.setAttribute(
@@ -169,6 +167,20 @@ extends Action {
                             "testList",
                             testList
                     );
+                    for (SubjectBean sub : sDao.filter(school.getCd())) {
+
+                        if (
+                            sub.getCd().equals(subjectCd)
+                        ) {
+
+                            req.setAttribute(
+                                    "subjectName",
+                                    sub.getName()
+                            );
+
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -183,9 +195,6 @@ extends Action {
                     "st"
             );
 
-            System.out.println(
-                    "学生検索に入りました"
-            );
             String studentNo =
                     req.getParameter(
                         "f4"

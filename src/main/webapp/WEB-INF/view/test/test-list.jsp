@@ -52,7 +52,13 @@
 
     <div class="main-content">
         
-        <h2>成績参照</h2>
+        <h2>
+    成績参照
+    <c:choose>
+        <c:when test="${searchType eq 'sj'}">（科目）</c:when>
+        <c:when test="${searchType eq 'st'}">（学生）</c:when>
+    </c:choose>
+</h2>
 
         <div class="search-box">
             <h3>科目情報</h3>
@@ -114,7 +120,9 @@
 
         <!-- 科目検索結果 -->
         <c:if test="${searchType eq 'sj' and not empty testList}">
-        <p>searchType=${searchType}</p>
+        <p>
+    科目：${subjectName}
+</p>
             <table>
                 <thead>
                     <tr>
