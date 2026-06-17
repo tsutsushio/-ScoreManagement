@@ -162,12 +162,12 @@ form {
             
             <div class="input-group">
                 <label for="id">ユーザーID</label>
-                <input type="text" id="id" name="id" placeholder="IDを入力" required>
+                <input type="text" id="id" name="id" placeholder="IDを入力" maxlength="10" required>
             </div>
 
             <div class="input-group">
                 <label for="password">パスワード</label>
-                <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
+                <input type="password" id="password" name="password" placeholder="パスワードを入力" maxlength="30" required>
             </div>
 
             <div class="checkbox-group">
