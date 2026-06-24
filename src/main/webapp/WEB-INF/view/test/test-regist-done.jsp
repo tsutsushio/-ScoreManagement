@@ -17,8 +17,8 @@
     /* ① 見出し「登録完了」（グレーの帯） */
     h2 { font-size: 18px; font-weight: bold; background-color: #f2f2f2; padding: 10px 15px; margin: 0 0 20px 0; color: #333; }
 
-    /* ② 緑色のメッセージボックス */
-    .success-msg { background-color: #d4edda; color: #155724; padding: 15px; margin-bottom: 25px; border-radius: 4px; font-size: 14px; font-weight: bold; }
+    /* ② 緑色のメッセージボックス（pタグにスタイルを適用） */
+    p.success-msg { background-color: #d4edda; color: #155724; padding: 15px; margin: 0 0 25px 0; border-radius: 4px; font-size: 14px; font-weight: bold; }
 
     /* ③ リンクボタン */
     .link-group { display: flex; gap: 40px; }
@@ -33,15 +33,18 @@
     <%@ include file="/sidebar.jsp" %>
 
     <div class="main-content">
+        <!-- No1: 画面タイトル -->
         <h2>登録完了</h2>
 
-        <div class="success-msg">
-            成績を登録しました！
-        </div>
+        <!-- No2: 登録完了メッセージ（要件に合わせ p タグに変更） -->
+        <p class="success-msg">成績を登録しました！</p>
 
         <div class="link-group">
-            <a href="${pageContext.request.contextPath}/action/Menu.action">メニューへ戻る</a>
-            <a href="${pageContext.request.contextPath}/action/TestRegist.action">続けて登録</a>
+            <!-- No3: 戻るリンク（備考：成績管理一覧画面＝成績登録の初期表示へ遷移） -->
+            <a href="${pageContext.request.contextPath}/action/TestRegist.action">戻る</a>
+            
+            <!-- No4: 成績参照リンク（備考：成績参照検索画面へ遷移） -->
+            <a href="${pageContext.request.contextPath}/action/TestList.action">成績参照</a>
         </div>
     </div>
 </div>

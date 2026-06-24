@@ -37,9 +37,17 @@ public class TestRegistExecuteAction extends Action {
         SchoolBean school = loginUser.getSchool();
         TestDAO dao = new TestDAO();
         List<TestBean> list = new ArrayList<>();
-        
-        // 🌟 エラーメッセージ格納用のMap
         Map<String, String> errors = new HashMap<>();
+
+        // 🌟【修正】新しいhiddenパラメータ（f2, f3, f4）から取得
+        String classNum = req.getParameter("f2");
+        String subjectCd = req.getParameter("f3");
+        String noStr = req.getParameter("f4");
+
+        int no = 0;
+        if (noStr != null && !noStr.isEmpty()) {
+            no = Integer.parseInt(noStr);
+        }
 
         Enumeration<String> parameterNames = req.getParameterNames();
 
@@ -50,24 +58,27 @@ public class TestRegistExecuteAction extends Action {
                 String studentNo = paramName.replace("point_", "");
                 String pointStr = req.getParameter(paramName);
 
-                if (pointStr == null || pointStr.isEmpty()) {
+                // 🌟 要件定義：「空っぽOK」
+                if (pointStr == null || pointStr.trim().isEmpty()) {
                     continue;
                 }
 
                 int point = 0;
-                // 🌟【例外処理 1】数字以外の文字が入力された場合のクラッシュを防ぐ
                 try {
                     point = Integer.parseInt(pointStr);
+                    
+                    // 🌟 要件定義：「入力する場合は0〜100のみ有効、それ以外はエラーメッセージ」
+                    if (point < 0 || point > 100) {
+                        errors.put("point", "点数は0〜100の範囲内で入力してください。");
+                        break;
+                    }
                 } catch (NumberFormatException e) {
-                    errors.put("point", "点数は半角数字で入力してください。（対象学生: " + studentNo + "）");
-                    break; // 1つでもエラーがあればループを抜ける
+                    // 🌟 要件定義：有効でない入力へのエラーハンドリング
+                    errors.put("point", "点数は半角数字で入力してください。");
+                    break;
                 }
 
-                String subjectCd = req.getParameter("subjectCd");
-                int no = Integer.parseInt(req.getParameter("no"));
-                String classNum = req.getParameter("classNum");
-
-                // ===== Bean生成 =====
+                // Bean生成とマッピング
                 StudentBean student = new StudentBean();
                 student.setNo(studentNo);
 
@@ -86,22 +97,20 @@ public class TestRegistExecuteAction extends Action {
             }
         }
 
-        // 入力値（数字以外）のエラーがあった場合は元の画面に戻す
+        // バリデーションエラー時はリストを再構築して画面を復旧させる
         if (!errors.isEmpty()) {
             req.setAttribute("errors", errors);
-            setDropdownLists(req, school.getCd()); // ドロップダウンを再準備
+            restoreSearchContext(req, school.getCd(), classNum, subjectCd, no, list);
             return "/WEB-INF/view/test/test-regist.jsp";
         }
 
-        // 🌟【例外処理 2】DAOでの保存処理（0〜100の範囲外チェック等）を受け止める
+        // DAOへの保存
         try {
             dao.save(list);
         } catch (Exception e) {
-            // DAOが投げた例外メッセージを取得して画面に返す
             errors.put("point", e.getMessage());
             req.setAttribute("errors", errors);
-            setDropdownLists(req, school.getCd()); // ドロップダウンを再準備
-            
+            restoreSearchContext(req, school.getCd(), classNum, subjectCd, no, list);
             return "/WEB-INF/view/test/test-regist.jsp";
         }
 
@@ -109,15 +118,21 @@ public class TestRegistExecuteAction extends Action {
     }
     
     /**
-     * 🌟 エラーで元の画面に戻る際に、ドロップダウンのリストを再生成するヘルパーメソッド
-     * （TestRegistAction と同じ処理を行い、画面の表示崩れを防ぐ）
+     * エラー発生時に、JSPの一覧テーブルやセレクトボックス、科目名を完全に復旧させるメソッド
      */
-    private void setDropdownLists(HttpServletRequest req, String schoolCd) throws Exception {
-        // 科目一覧
+    private void restoreSearchContext(HttpServletRequest req, String schoolCd, String classNum, String subjectCd, int no, List<TestBean> currentList) throws Exception {
         SubjectDAO subjectDAO = new SubjectDAO();
         req.setAttribute("subjectList", subjectDAO.filter(schoolCd));
 
-        // 入学年度
+        String subjectName = "";
+        for (SubjectBean sub : subjectDAO.filter(schoolCd)) {
+            if (sub.getCd().equals(subjectCd)) {
+                subjectName = sub.getName();
+                break;
+            }
+        }
+        req.setAttribute("subjectName", subjectName);
+
         List<Integer> entYearList = new ArrayList<>();
         int currentYear = Year.now().getValue();
         for (int i = currentYear; i >= 2020; i--) {
@@ -125,13 +140,47 @@ public class TestRegistExecuteAction extends Action {
         }
         req.setAttribute("entYearList", entYearList);
 
-        // クラス一覧
         StudentDAO studentDAO = new StudentDAO();
-        List<StudentBean> studentList = studentDAO.filter(schoolCd, 0, null, true);
+        List<StudentBean> allStudentList = studentDAO.filter(schoolCd, 0, null, true);
         Set<String> classSet = new TreeSet<>();
-        for (StudentBean student : studentList) {
+        for (StudentBean student : allStudentList) {
             classSet.add(student.getClassNum());
         }
         req.setAttribute("classList", classSet);
+
+        List<Integer> noList = new ArrayList<>();
+        noList.add(1);
+        noList.add(2);
+        req.setAttribute("noList", noList);
+
+        // 入力中のデータを保持してテーブルを再表示（学生マスターから不足情報を補完）
+        if (currentList.isEmpty() && classNum != null) {
+            // リストが空でエラーが起きた場合は、検索条件を元に空枠を再取得
+            String f1 = req.getParameter("f1");
+            int entYear = (f1 != null && !f1.isEmpty()) ? Integer.parseInt(f1) : 0;
+            List<StudentBean> studentList = studentDAO.filter(schoolCd, entYear, classNum, true);
+            for (StudentBean student : studentList) {
+                TestBean test = new TestBean();
+                test.setStudent(student);
+                test.setClassNum(classNum);
+                currentList.add(test);
+            }
+        } else {
+            // すでに点数オブジェクトがある場合は学生オブジェクトのマスター情報を紐付け直す
+            for (TestBean test : currentList) {
+                StudentBean fullStudent = studentDAO.get(test.getStudent().getNo());
+                if (fullStudent != null) {
+                    test.setStudent(fullStudent);
+                }
+            }
+        }
+
+        req.setAttribute("testList", currentList);
+        
+        String f1 = req.getParameter("f1");
+        req.setAttribute("fEntYear", (f1 != null && !f1.isEmpty()) ? Integer.parseInt(f1) : 0);
+        req.setAttribute("fClassNum", classNum);
+        req.setAttribute("fSubjectCd", subjectCd);
+        req.setAttribute("fNo", no);
     }
 }

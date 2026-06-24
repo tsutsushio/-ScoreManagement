@@ -22,232 +22,104 @@ import tool.Action;
 public class TestSearchAction extends Action {
 
     @Override
-    public String execute(
-            HttpServletRequest req,
-            HttpServletResponse res
-    ) throws Exception {
+    public String execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-        HttpSession session =
-                req.getSession();
+        HttpSession session = req.getSession();
+        TeacherBean loginUser = (TeacherBean) session.getAttribute("loginUser");
 
-        TeacherBean loginUser =
-                (TeacherBean)
-                session.getAttribute(
-                        "loginUser"
-                );
-
-        // ログイン確認
         if (loginUser == null) {
-
-            return
-                "/login/login.jsp";
+            return "/login/login.jsp";
         }
 
-        String schoolCd =
-                loginUser
-                .getSchool()
-                .getCd();
+        String schoolCd = loginUser.getSchool().getCd();
 
-        // ========= 検索条件取得 =========
-        int entYear =
-                Integer.parseInt(
-                        req.getParameter(
-                                "entYear"
-                        )
-                );
+        // 🌟【修正】要件定義のname属性（f1〜f4）から取得
+        String entYearStr = req.getParameter("f1");
+        String classNum = req.getParameter("f2");
+        String subjectCd = req.getParameter("f3");
+        String noStr = req.getParameter("f4");
 
-        String classNum =
-                req.getParameter(
-                        "classNum"
-                );
+        int entYear = 0;
+        if (entYearStr != null && !entYearStr.isEmpty()) {
+            entYear = Integer.parseInt(entYearStr);
+        }
 
-        String subjectCd =
-                req.getParameter(
-                        "subjectCd"
-                );
+        int no = 0;
+        if (noStr != null && !noStr.isEmpty()) {
+            no = Integer.parseInt(noStr);
+        }
 
-        int no =
-                Integer.parseInt(
-                        req.getParameter(
-                                "no"
-                        )
-                );
+        StudentDAO studentDAO = new StudentDAO();
+        TestDAO testDAO = new TestDAO();
+        List<TestBean> testList = new ArrayList<>();
+        String subjectName = "";
 
-        StudentDAO studentDAO =
-                new StudentDAO();
+        // 検索条件が揃っている場合のみ実行
+        if (entYear > 0 && classNum != null && !classNum.isEmpty() && subjectCd != null && !subjectCd.isEmpty() && no > 0) {
+            
+            List<StudentBean> studentList = studentDAO.filter(schoolCd, entYear, classNum, true);
+            SubjectBean subject = new SubjectBean();
+            subject.setCd(subjectCd);
+            SchoolBean school = loginUser.getSchool();
 
-        TestDAO testDAO =
-                new TestDAO();
+            for (StudentBean student : studentList) {
+                TestBean test = testDAO.get(student, subject, school, no);
 
-        // ========= 学生一覧取得 =========
-        List<StudentBean>
-            studentList =
-                studentDAO.filter(
-                        schoolCd,
-                        entYear,
-                        classNum,
-                        true
-                );
+                if (test == null) {
+                    test = new TestBean();
+                    test.setPoint(0);
+                }
 
-        List<TestBean>
-            testList =
-                new ArrayList<>();
+                test.setStudent(student);
+                test.setSubject(subject);
+                test.setSchool(school);
+                test.setClassNum(student.getClassNum());
+                test.setNo(no);
 
-        // ========= 科目作成 =========
-        SubjectBean subject =
-                new SubjectBean();
-
-        subject.setCd(
-                subjectCd
-        );
-
-        // ========= 学校情報 =========
-        SchoolBean school =
-                loginUser
-                .getSchool();
-
-        // ========= 学生ごとに点数取得 =========
-        for (
-            StudentBean student
-            : studentList
-        ) {
-
-            TestBean test =
-                    testDAO.get(
-                            student,
-                            subject,
-                            school,
-                            no
-                    );
-
-            // 点数未登録の場合
-            if (test == null) {
-
-                test =
-                    new TestBean();
-
-                test.setPoint(0);
+                testList.add(test);
             }
 
-            // Beanセット
-            test.setStudent(
-                    student
-            );
-
-            test.setSubject(
-                    subject
-            );
-
-            test.setSchool(
-                    school
-            );
-
-            test.setClassNum(
-                    student.getClassNum()
-            );
-
-            test.setNo(
-                    no
-            );
-
-            testList.add(
-                    test
-            );
+            // 🌟【追加】要件定義にある「科目名」の表示用データを取得
+            SubjectDAO subjectDAO = new SubjectDAO();
+            for (SubjectBean sub : subjectDAO.filter(schoolCd)) {
+                if (sub.getCd().equals(subjectCd)) {
+                    subjectName = sub.getName();
+                    break;
+                }
+            }
         }
 
-        // ========= 科目一覧 =========
-        SubjectDAO subjectDAO =
-                new SubjectDAO();
+        // ドロップダウン再設定
+        SubjectDAO subjectDAO = new SubjectDAO();
+        req.setAttribute("subjectList", subjectDAO.filter(schoolCd));
 
-        req.setAttribute(
-                "subjectList",
-                subjectDAO.filter(
-                        schoolCd
-                )
-        );
-
-        // ========= 入学年度 =========
-        List<Integer>
-            entYearList =
-                new ArrayList<>();
-
-        int currentYear =
-                Year.now()
-                .getValue();
-
-        for (
-            int i = currentYear;
-            i >= 2020;
-            i--
-        ) {
-
-            entYearList.add(
-                    i
-            );
+        List<Integer> entYearList = new ArrayList<>();
+        int currentYear = Year.now().getValue();
+        for (int i = currentYear; i >= 2020; i--) {
+            entYearList.add(i);
         }
+        req.setAttribute("entYearList", entYearList);
 
-        req.setAttribute(
-                "entYearList",
-                entYearList
-        );
-
-        // ========= クラス一覧 =========
-        List<StudentBean>
-            allStudentList =
-                studentDAO.filter(
-                        schoolCd,
-                        0,
-                        null,
-                        true
-                );
-
-        Set<String>
-            classSet =
-                new TreeSet<>();
-
-        for (
-            StudentBean student
-            : allStudentList
-        ) {
-
-            classSet.add(
-                    student.getClassNum()
-            );
+        List<StudentBean> allStudentList = studentDAO.filter(schoolCd, 0, null, true);
+        Set<String> classSet = new TreeSet<>();
+        for (StudentBean student : allStudentList) {
+            classSet.add(student.getClassNum());
         }
+        req.setAttribute("classList", classSet);
 
-        req.setAttribute(
-                "classList",
-                classSet
-        );
+        List<Integer> noList = new ArrayList<>();
+        noList.add(1);
+        noList.add(2);
+        req.setAttribute("noList", noList);
 
-        // ========= 検索結果 =========
-        req.setAttribute(
-                "testList",
-                testList
-        );
+        // 画面に渡すスコープ変数
+        req.setAttribute("testList", testList);
+        req.setAttribute("subjectName", subjectName); // 科目名表示用
+        req.setAttribute("fEntYear", entYear);
+        req.setAttribute("fClassNum", classNum);
+        req.setAttribute("fSubjectCd", subjectCd);
+        req.setAttribute("fNo", no);
 
-        // ========= 検索条件保持 =========
-        req.setAttribute(
-                "fEntYear",
-                entYear
-        );
-
-        req.setAttribute(
-                "fClassNum",
-                classNum
-        );
-
-        req.setAttribute(
-                "fSubjectCd",
-                subjectCd
-        );
-
-        req.setAttribute(
-                "fNo",
-                no
-        );
-
-        return
-            "/WEB-INF/view/test/test-regist.jsp";
+        return "/WEB-INF/view/test/test-regist.jsp";
     }
 }
