@@ -51,6 +51,7 @@
 </style>
 
 <div class="sidebar">
+  <c:if test="${not empty sessionScope.loginUser and not empty sessionScope.loginUser.name and sessionScope.loginUser.name != 'null'}">
     <ul>
         <li><a href="${pageContext.request.contextPath}/action/Menu.action">メニュー</a></li>
         <li><a href="${pageContext.request.contextPath}/action/StudentList.action">学生管理</a></li>
@@ -63,4 +64,5 @@
         </li>
         <li><a href="${pageContext.request.contextPath}/action/SubjectList.action">科目管理</a></li>
     </ul>
+  </c:if>
 </div>

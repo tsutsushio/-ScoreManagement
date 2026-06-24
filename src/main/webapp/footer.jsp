@@ -14,8 +14,14 @@ footer{
     box-sizing:border-box;
     margin-top:auto;
 }
+
+footer p{
+    margin: 0;
+    padding: 0;
+}
 </style>
 
 <footer>
-    &copy; 2026 大原学園
+    <p>&copy; 2026</p>
+    <p> 大原学園 </p>
 </footer>
