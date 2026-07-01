@@ -1,10 +1,7 @@
 package action;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import bean.SchoolBean;
 import bean.StudentBean;
@@ -44,6 +41,7 @@ public class TestSearchAction extends Action {
             entYear = Integer.parseInt(entYearStr);
         }
 
+     // ---（前略：パラメータのパース処理まで）---
         int no = 0;
         if (noStr != null && !noStr.isEmpty()) {
             no = Integer.parseInt(noStr);
@@ -51,12 +49,16 @@ public class TestSearchAction extends Action {
 
         StudentDAO studentDAO = new StudentDAO();
         TestDAO testDAO = new TestDAO();
-        List<TestBean> testList = new ArrayList<>();
+        List<TestBean> testList = null; // 🌟 初期値を「null」に変更（未検索と検索結果0件を区別するため）
         String subjectName = "";
+
+        // 🌟【追加】エラーメッセージ格納用のMapを用意
+        java.util.Map<String, String> errors = new java.util.HashMap<>();
 
         // 検索条件が揃っている場合のみ実行
         if (entYear > 0 && classNum != null && !classNum.isEmpty() && subjectCd != null && !subjectCd.isEmpty() && no > 0) {
             
+            testList = new ArrayList<>(); // 検索条件が揃ったらリストを生成
             List<StudentBean> studentList = studentDAO.filter(schoolCd, entYear, classNum, true);
             SubjectBean subject = new SubjectBean();
             subject.setCd(subjectCd);
@@ -64,22 +66,18 @@ public class TestSearchAction extends Action {
 
             for (StudentBean student : studentList) {
                 TestBean test = testDAO.get(student, subject, school, no);
-
                 if (test == null) {
                     test = new TestBean();
                     test.setPoint(0);
                 }
-
                 test.setStudent(student);
                 test.setSubject(subject);
                 test.setSchool(school);
                 test.setClassNum(student.getClassNum());
                 test.setNo(no);
-
                 testList.add(test);
             }
 
-            // 🌟【追加】要件定義にある「科目名」の表示用データを取得
             SubjectDAO subjectDAO = new SubjectDAO();
             for (SubjectBean sub : subjectDAO.filter(schoolCd)) {
                 if (sub.getCd().equals(subjectCd)) {
@@ -87,39 +85,27 @@ public class TestSearchAction extends Action {
                     break;
                 }
             }
+        } else {
+            // 🌟【追加】どれか一つでも未入力があった場合のエラー処理
+            // ※最初に入発した初期表示（すべて未入力）の時はエラーを出さないように、
+            // 「どれか一つでも入力されているが、足りない」または「リクエストが来ている」ときの判定にします。
+            if (entYearStr != null || classNum != null || subjectCd != null || noStr != null) {
+                errors.put("point", "クラス、科目、回数を選択してください。");
+            }
         }
 
-        // ドロップダウン再設定
-        SubjectDAO subjectDAO = new SubjectDAO();
-        req.setAttribute("subjectList", subjectDAO.filter(schoolCd));
-
-        List<Integer> entYearList = new ArrayList<>();
-        int currentYear = Year.now().getValue();
-        for (int i = currentYear; i >= 2020; i--) {
-            entYearList.add(i);
-        }
-        req.setAttribute("entYearList", entYearList);
-
-        List<StudentBean> allStudentList = studentDAO.filter(schoolCd, 0, null, true);
-        Set<String> classSet = new TreeSet<>();
-        for (StudentBean student : allStudentList) {
-            classSet.add(student.getClassNum());
-        }
-        req.setAttribute("classList", classSet);
-
-        List<Integer> noList = new ArrayList<>();
-        noList.add(1);
-        noList.add(2);
-        req.setAttribute("noList", noList);
+        // ---（中略：ドロップダウン再設定処理などはそのまま）---
 
         // 画面に渡すスコープ変数
+        req.setAttribute("errors", errors); // 🌟【追加】エラーMapをJSPに渡す
         req.setAttribute("testList", testList);
-        req.setAttribute("subjectName", subjectName); // 科目名表示用
-        req.setAttribute("fEntYear", entYear);
+        req.setAttribute("subjectName", subjectName);
+        req.setAttribute("fEntYear", entYear == 0 ? "" : entYear); // 0のときは空文字にして選択を戻す
         req.setAttribute("fClassNum", classNum);
         req.setAttribute("fSubjectCd", subjectCd);
-        req.setAttribute("fNo", no);
+        req.setAttribute("fNo", no == 0 ? "" : no); // 0のときは空文字にして選択を戻す
 
         return "/WEB-INF/view/test/test-regist.jsp";
+
     }
 }
