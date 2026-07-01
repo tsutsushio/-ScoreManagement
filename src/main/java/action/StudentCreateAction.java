@@ -28,13 +28,15 @@ public class StudentCreateAction extends Action {
         // 現在の年から3年前までのリストを動的に作成します
         int currentYear = LocalDate.now().getYear();
         List<Integer> entYearList = new ArrayList<>();
-        for (int i = currentYear - 3; i <= currentYear + 1; i++) {
+        for (int i = currentYear - 10; i <= currentYear + 10; i++) {
             entYearList.add(i);
         }
         
         List<String> classList = new ArrayList<>();
         classList.add("101");
+        classList.add("102");
         classList.add("201");
+        classList.add("202");
 
         // 3. JSPへデータを渡す
         req.setAttribute("entYearList", entYearList);

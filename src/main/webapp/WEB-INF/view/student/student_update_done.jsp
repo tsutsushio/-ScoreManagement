@@ -89,7 +89,7 @@
         </div>
         
         <div class="link-group">
-            <a href="${pageContext.request.contextPath}/action/StudentList.action">学生一覧へ戻る</a>
+            <a href="${pageContext.request.contextPath}/action/StudentList.action">学生一覧</a>
         </div>
 
     </div> </div> <%@ include file="/footer.jsp" %>
