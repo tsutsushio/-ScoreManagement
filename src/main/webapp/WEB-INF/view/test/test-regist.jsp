@@ -20,8 +20,7 @@ h2.main-title {
     background-color: #f2f2f2; 
     padding: 10px 15px; 
     margin: 0 0 20px 0; 
-    color: #333; 
-    border-radius: 4px; /* 必要に応じて少し丸みを持たせる */
+    color: #333; /* 必要に応じて少し丸みを持たせる */
 }
 
 /* ② テーブル上部の「科目：Python1（1回）」（帯なし・すっきりした文字） */

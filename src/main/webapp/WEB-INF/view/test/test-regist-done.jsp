@@ -18,7 +18,7 @@
     h2 { font-size: 18px; font-weight: bold; background-color: #f2f2f2; padding: 10px 15px; margin: 0 0 20px 0; color: #333; }
 
     /* ② 緑色のメッセージボックス（pタグにスタイルを適用） */
-    p.success-msg { background-color: #d4edda; color: #155724; padding: 15px; margin: 0 0 25px 0; border-radius: 4px; font-size: 14px; font-weight: bold; }
+	p.success-msg {background-color: #8cc3a9;padding: 15px; margin: 0 0 25px 0; border-radius: 0; font-size: 14px; font-weight: bold; text-align: center;}
 
     /* ③ リンクボタン */
     .link-group { display: flex; gap: 40px; }
@@ -37,7 +37,7 @@
         <h2>成績管理</h2>
 
         <!-- No2: 登録完了メッセージ（要件に合わせ p タグに変更） -->
-        <p class="success-msg">成績を登録しました！</p>
+        <p class="success-msg">登録が完了しました</p>
 
         <div class="link-group">
             <!-- No3: 戻るリンク（備考：成績管理一覧画面＝成績登録の初期表示へ遷移） -->
