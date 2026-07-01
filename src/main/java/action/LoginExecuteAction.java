@@ -38,6 +38,7 @@ public class LoginExecuteAction extends Action {
 
 	        } else {
 	            req.setAttribute("error", "IDまたはパスワードが間違っています");
+	            req.setAttribute("id", id);
 	            return "/login/login.jsp";
 	        }
 

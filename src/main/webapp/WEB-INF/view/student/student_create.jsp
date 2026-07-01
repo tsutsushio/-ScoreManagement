@@ -157,7 +157,7 @@
 
                 <div class="form-group">
                     <label>学生番号</label>
-                    <input type="text" name="no" value="${no}" placeholder="学生番号を入力してください">
+                    <input type="text" name="no" value="${no}" placeholder="学生番号を入力してください" required>
                     <c:if test="${not empty errors.no}">
                         <div class="error-msg">${errors.no}</div>
                     </c:if>
@@ -165,7 +165,7 @@
 
                 <div class="form-group">
                     <label>氏名</label>
-                    <input type="text" name="name" value="${name}" placeholder="氏名を入力してください">
+                    <input type="text" name="name" value="${name}" placeholder="氏名を入力してください" required>
                     <c:if test="${not empty errors.name}">
                         <div class="error-msg">${errors.name}</div>
                     </c:if>
