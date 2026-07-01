@@ -34,7 +34,9 @@ public class StudentCreateAction extends Action {
         
         List<String> classList = new ArrayList<>();
         classList.add("101");
+        classList.add("102");
         classList.add("201");
+        classList.add("202");
 
         // 3. JSPへデータを渡す
         req.setAttribute("entYearList", entYearList);

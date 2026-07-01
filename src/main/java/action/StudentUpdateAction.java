@@ -32,7 +32,9 @@ public class StudentUpdateAction extends Action {
         // 4. クラスのドロップダウンリスト用のデータを準備（登録機能と同じ）
         List<String> classList = new ArrayList<>();
         classList.add("101");
+        classList.add("102");
         classList.add("201");
+        classList.add("202");
 
         // 5. 取得した学生データとクラスリストをリクエストスコープに保存してJSPへ渡す
         req.setAttribute("student", student);
