@@ -33,6 +33,18 @@ h2.subject-title {
     color: #333; 
 }
 
+/* 入力欄の下に表示するエラーメッセージのスタイル */
+.input-error-msg {
+    color: #f0ad4e;       /* 画像のような少し暗めのオレンジ色 */
+    font-size: 12px;      /* 文字を少し小さく */
+    margin-top: 4px;      /* 入力欄との間のスキマ */
+    display: block;       /* 必ず入力欄の下に回り込ませる */
+    background: none;     /* 背景はなし */
+    border: none;         /* 枠線もなし */
+    padding: 0;           /* 余白もなし */
+}
+
+
     /* 検索・結果エリア */
     .search-form { display: flex; align-items: flex-end; gap: 15px; flex-wrap: wrap; background-color: #ffffff; border: 1px solid #ccc; border-radius: 4px; padding: 20px; margin-bottom: 30px; }
     .search-item { display: flex; flex-direction: column; gap: 6px; }
@@ -65,15 +77,15 @@ h2.subject-title {
 
         <!-- 検索フォーム -->
         <form action="TestSearch.action" method="post" class="search-form">
-            <div class="search-item">
-                <label>入学年度</label>
-                <select name="f1">
-                    <option value="">--------</option>
-                    <c:forEach var="year" items="${entYearList}">
-                        <option value="${year}" ${year == fEntYear ? 'selected' : ''}>${year}</option>
-                    </c:forEach>
-                </select>
-            </div>
+				<div class="search-item">
+				    <label>入学年度</label>
+				    <select name="f1">
+				        <option value="">--------</option>
+				        <c:forEach var="year" items="${entYearList}">
+				            <option value="${year}" ${year == fEntYear ? 'selected' : ''}>${year}</option>
+				        </c:forEach>
+				    </select>
+				</div>
             <div class="search-item">
                 <label>クラス</label>
                 <select name="f2">
@@ -133,9 +145,16 @@ h2.subject-title {
                             <td>${test.student.no}</td>
                             <td>${test.student.name}</td>
                             <td>
-                                <!-- 🌟 定義書通りのname属性: point_${学生番号} -->
-                                <input type="text" name="point_${test.student.no}" value="${test.point != 0 ? test.point : ''}">
-                            </td>
+							    <input type="text"
+							           name="point_${test.student.no}"
+							           value="${test.point != 0 ? test.point : ''}">
+							
+							    <c:if test="${not empty errors[test.student.no]}">
+							        <div class="input-error-msg">
+							            ${errors[test.student.no]}
+							        </div>
+							    </c:if>
+							</td>
                         </tr>
                     </c:forEach>
                 </table>

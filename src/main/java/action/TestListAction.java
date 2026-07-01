@@ -66,9 +66,13 @@ public class TestListAction extends Action {
             req.setAttribute("f3", subjectCd);
             req.setAttribute("f4", ""); // 学生番号クリア
 
-            if (entYear == null || entYear.isEmpty() || classNum == null || classNum.isEmpty() || subjectCd == null || subjectCd.isEmpty()) {
-                req.setAttribute("error", "科目情報を選択してください");
-            } else {
+            if (entYear == null || entYear.isEmpty() ||
+            	    classNum == null || classNum.isEmpty() ||
+            	    subjectCd == null || subjectCd.isEmpty()) {
+
+            	    req.setAttribute("inputError", "入学年度とクラスと科目を選択してください");
+
+            	} else {
                 TestDAO dao = new TestDAO();
                 
                 // 🌟【確認完了】DAOに実在するオーバーロードされたメソッドを呼び出す
@@ -76,7 +80,7 @@ public class TestListAction extends Action {
                 List<TestBean> testList = dao.searchBySubject(Integer.parseInt(entYear), classNum, subjectCd, null, school);
 
                 if (testList.isEmpty()) {
-                    req.setAttribute("error", "成績情報が存在しませんでした");
+                    req.setAttribute("message", "成績情報が存在しませんでした");
                 } else {
                     req.setAttribute("testList", testList);
 
@@ -106,8 +110,8 @@ public class TestListAction extends Action {
             req.setAttribute("f4", studentNo);
 
             if (studentNo == null || studentNo.isEmpty()) {
-                req.setAttribute("error", "学生番号を入力してください");
-            } else {
+            	req.setAttribute("inputError", "学生番号を入力してください");
+            	} else {
                 StudentDAO studentDao = new StudentDAO();
                 TestDAO testDao = new TestDAO();
 
@@ -115,8 +119,8 @@ public class TestListAction extends Action {
                 List<TestBean> testList = testDao.searchByStudent(studentNo, school);
 
                 if (testList.isEmpty()) {
-                    req.setAttribute("error", "成績情報が存在しませんでした");
-                } else {
+                	req.setAttribute("message", "成績情報が存在しませんでした");
+                	} else {
                     req.setAttribute("testList", testList);
                     req.setAttribute("student", studentDao.get(studentNo));
                 }

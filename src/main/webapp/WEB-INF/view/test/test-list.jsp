@@ -36,6 +36,17 @@
     table th { border-bottom: 2px solid #333; padding: 10px; text-align: left; color: #333; }
     table td { border-bottom: 1px solid #eee; padding: 10px; color: #555; }
     .initial-msg { color: #0066cc; font-size: 13px; }
+.input-error{
+    color:#f0ad4e;
+    font-size:13px;
+    margin:8px 0;
+}
+
+.message-box{
+    color:#333;
+    font-size:13px;
+    margin-bottom:15px;
+}
 </style>
 </head>
 <body>
@@ -54,6 +65,7 @@
                 <c:when test="${searchType eq 'st'}">（学生）</c:when>
             </c:choose>
         </h2>
+
 
         <!-- No2: 科目情報ブロック -->
         <div class="search-box">
@@ -90,6 +102,11 @@
                 </div>
                 <button type="submit">検索</button>
             </form>
+            
+            <!-- 科目検索エラー -->
+<c:if test="${not empty inputError}">
+    <p class="input-error">${inputError}</p>
+</c:if>
 
             <hr class="divider">
 
@@ -111,17 +128,11 @@
         </div>
 
         <!-- 科目エラー・共通エラー表示エリア -->
-        <c:if test="${not empty error}">
-            <div style="color: #d9534f; font-size: 13px; font-weight: bold; background: #fbebeb; border: 1px solid #f5c6cb; padding: 10px; margin-bottom: 15px;">
-                ${error}
-            </div>
-        </c:if>
-        <c:if test="${not empty errors}">
-            <div style="color: #d9534f; font-size: 13px; font-weight: bold; background: #fbebeb; border: 1px solid #f5c6cb; padding: 10px; margin-bottom: 15px;">
-                <c:forEach var="err" items="${errors}"><div>${err.value}</div></c:forEach>
-            </div>
-        </c:if>
-
+<c:if test="${not empty message}">
+    <div class="message-box">
+        ${message}
+    </div>
+</c:if>
         <!-- No14: 利用方法案内メッセージ（未検索かつエラーなし時） -->
         <c:if test="${empty testList and empty error and empty errors}">
             <p class="initial-msg">科目情報を選択または学生情報を入力して検索ボタンをクリックしてください</p>

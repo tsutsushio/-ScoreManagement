@@ -41,7 +41,7 @@ public class TestSearchAction extends Action {
             entYear = Integer.parseInt(entYearStr);
         }
 
-     // ---（前略：パラメータのパース処理まで）---
+        // ---（前略：パラメータのパース処理まで）---
         int no = 0;
         if (noStr != null && !noStr.isEmpty()) {
             no = Integer.parseInt(noStr);
@@ -49,6 +49,7 @@ public class TestSearchAction extends Action {
 
         StudentDAO studentDAO = new StudentDAO();
         TestDAO testDAO = new TestDAO();
+        SubjectDAO subjectDAO = new SubjectDAO(); // 🌟 重複を避けるため、DAOのインスタンス化をここにまとめました
         List<TestBean> testList = null; // 🌟 初期値を「null」に変更（未検索と検索結果0件を区別するため）
         String subjectName = "";
 
@@ -78,7 +79,7 @@ public class TestSearchAction extends Action {
                 testList.add(test);
             }
 
-            SubjectDAO subjectDAO = new SubjectDAO();
+            // 🌟 修正：上部で宣言した subjectDAO をそのまま利用（再宣言を削除）
             for (SubjectBean sub : subjectDAO.filter(schoolCd)) {
                 if (sub.getCd().equals(subjectCd)) {
                     subjectName = sub.getName();
@@ -87,25 +88,53 @@ public class TestSearchAction extends Action {
             }
         } else {
             // 🌟【追加】どれか一つでも未入力があった場合のエラー処理
-            // ※最初に入発した初期表示（すべて未入力）の時はエラーを出さないように、
-            // 「どれか一つでも入力されているが、足りない」または「リクエストが来ている」ときの判定にします。
             if (entYearStr != null || classNum != null || subjectCd != null || noStr != null) {
                 errors.put("point", "クラス、科目、回数を選択してください。");
             }
         }
 
-        // ---（中略：ドロップダウン再設定処理などはそのまま）---
-
         // 画面に渡すスコープ変数
-        req.setAttribute("errors", errors); // 🌟【追加】エラーMapをJSPに渡す
+        req.setAttribute("errors", errors);
         req.setAttribute("testList", testList);
         req.setAttribute("subjectName", subjectName);
-        req.setAttribute("fEntYear", entYear == 0 ? "" : entYear); // 0のときは空文字にして選択を戻す
+     // 数値を文字列に変換して渡す（未選択なら空文字 ""）
+        req.setAttribute("fEntYear", entYear == 0 ? "" : String.valueOf(entYear));
+
         req.setAttribute("fClassNum", classNum);
         req.setAttribute("fSubjectCd", subjectCd);
-        req.setAttribute("fNo", no == 0 ? "" : no); // 0のときは空文字にして選択を戻す
+        req.setAttribute("fNo", no == 0 ? "" : no);
+
+        // ====================================================================
+        // ★ここを追加：検索後もプルダウンの選択肢（リスト）を維持するための再設定処理
+        // ====================================================================
+        // 1. 入学年度リスト
+        java.util.List<Integer> entYearList = new java.util.ArrayList<>();
+        int currentYear = java.time.LocalDate.now().getYear();
+        for (int i = currentYear; i >= currentYear - 10; i--) {
+            entYearList.add(i);
+        }
+        req.setAttribute("entYearList", entYearList);
+
+        // 2. クラス番号リスト（ClassNumDAO を利用して取得）
+        dao.ClassNumDAO classNumDAO = new dao.ClassNumDAO();
+        // 引数に文字列ではなく、ログインユーザーの学校オブジェクト（SchoolBean）を渡します
+        List<String> classList = classNumDAO.filter(loginUser.getSchool()); 
+        req.setAttribute("classList", classList);
+
+
+
+        // 3. 科目リスト（🌟 修正：すでにインスタンス化されている subjectDAO を利用）
+        List<SubjectBean> subjectList = subjectDAO.filter(schoolCd);
+        req.setAttribute("subjectList", subjectList);
+
+        // 4. 回数リスト
+        List<Integer> noList = new java.util.ArrayList<>();
+        for (int i = 1; i <= 2; i++) {
+            noList.add(i);
+        }
+        req.setAttribute("noList", noList);
+        // ====================================================================
 
         return "/WEB-INF/view/test/test-regist.jsp";
-
     }
 }

@@ -58,27 +58,7 @@ public class TestRegistExecuteAction extends Action {
                 String studentNo = paramName.replace("point_", "");
                 String pointStr = req.getParameter(paramName);
 
-                // 🌟 要件定義：「空っぽOK」
-                if (pointStr == null || pointStr.trim().isEmpty()) {
-                    continue;
-                }
-
-                int point = 0;
-                try {
-                    point = Integer.parseInt(pointStr);
-                    
-                    // 🌟 要件定義：「入力する場合は0〜100のみ有効、それ以外はエラーメッセージ」
-                    if (point < 0 || point > 100) {
-                        errors.put("point", "点数は0〜100の範囲内で入力してください。");
-                        break;
-                    }
-                } catch (NumberFormatException e) {
-                    // 🌟 要件定義：有効でない入力へのエラーハンドリング
-                    errors.put("point", "点数は半角数字で入力してください。");
-                    break;
-                }
-
-                // Bean生成とマッピング
+                // Bean生成とマッピング（ここで器を作っておく）
                 StudentBean student = new StudentBean();
                 student.setNo(studentNo);
 
@@ -90,12 +70,46 @@ public class TestRegistExecuteAction extends Action {
                 test.setSubject(subject);
                 test.setSchool(school);
                 test.setNo(no);
-                test.setPoint(point);
                 test.setClassNum(classNum);
 
+                // 🌟 空文字の場合は0点をセットしてリストへ追加（エラーにはしない）
+                if (pointStr == null || pointStr.trim().isEmpty()) {
+                    test.setPoint(0);
+                    list.add(test);
+                    continue;
+                }
+
+                int point = 0;
+                try {
+                    point = Integer.parseInt(pointStr);
+                    
+                    // 🌟 学生番号をキーにしてエラーメッセージを格納
+                    if (point < 0 || point > 100) {
+                        errors.put(studentNo, "0〜100の範囲で入力してください");
+                    }
+                } catch (NumberFormatException e) {
+                    // 🌟 学生番号をキーにしてエラーメッセージを格納
+                    errors.put(studentNo, "0〜100の範囲で入力してください");
+                }
+
+                // 変換後の点数をセットしてリストへ追加
+                test.setPoint(point);
                 list.add(test);
             }
         }
+
+        // 🌟【重要】ここを追加！
+        // 今回の修正で list は空にならなくなりました。
+        // エラーがある場合は、画面復旧メソッド（restoreSearchContext）が正しく動くように
+        // リストを一度クリア（空に）して、検索条件からリロードさせます。
+        if (!errors.isEmpty()) {
+            list.clear(); 
+            req.setAttribute("errors", errors);
+            restoreSearchContext(req, school.getCd(), classNum, subjectCd, no, list);
+            return "/WEB-INF/view/test/test-regist.jsp";
+        }
+
+
 
         // バリデーションエラー時はリストを再構築して画面を復旧させる
         if (!errors.isEmpty()) {
