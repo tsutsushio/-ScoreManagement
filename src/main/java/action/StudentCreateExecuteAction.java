@@ -124,9 +124,7 @@ public class StudentCreateExecuteAction extends Action {
         }
         List<String> classList = new ArrayList<>();
         classList.add("101");
-        classList.add("102");
         classList.add("201");
-        classList.add("202");
         req.setAttribute("entYearList", entYearList);
         req.setAttribute("classList", classList);
     }
