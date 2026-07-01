@@ -110,11 +110,15 @@
             </form>
         </div>
 
-        <c:if test="${empty testList and empty error}">
-            <p class="initial-msg">科目情報を選択または学生情報を入力して検索ボタンをクリックしてください</p>
-        </c:if>
-
         <c:if test="${not empty error}">
+            <c:if test="${not empty student}">
+                <p>
+                    学生番号：${student.no}
+                    &nbsp;&nbsp;
+                    氏名：${student.name}
+                </p>
+            </c:if>
+
             <p class="error">${error}</p>
         </c:if>
 

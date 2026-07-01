@@ -36,7 +36,6 @@ extends Action {
 
         // 未ログイン対策
         if (loginUser == null) {
-
             return
                 "/login/login.jsp";
         }
@@ -75,7 +74,6 @@ extends Action {
             i <= 2030;
             i++
         ) {
-
             yearList.add(i);
         }
 
@@ -195,26 +193,16 @@ extends Action {
                     "st"
             );
 
+            // studentNoをここで定義（スコープを広くする）
             String studentNo =
                     req.getParameter(
                         "f4"
                     );
 
             // 科目条件クリア
-            req.setAttribute(
-                    "f1",
-                    ""
-            );
-
-            req.setAttribute(
-                    "f2",
-                    ""
-            );
-
-            req.setAttribute(
-                    "f3",
-                    ""
-            );
+            req.setAttribute("f1", "");
+            req.setAttribute("f2", "");
+            req.setAttribute("f3", "");
 
             if (
                 studentNo == null
@@ -240,6 +228,9 @@ extends Action {
                                 school
                         );
 
+                // 成績の有無に関わらず、学生情報を取得してセット
+                req.setAttribute("student", studentDao.get(studentNo));
+
                 if (
                     testList.isEmpty()
                 ) {
@@ -254,13 +245,6 @@ extends Action {
                     req.setAttribute(
                             "testList",
                             testList
-                    );
-
-                    req.setAttribute(
-                            "student",
-                            studentDao.get(
-                                    studentNo
-                            )
                     );
                 }
             }
