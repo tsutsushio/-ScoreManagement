@@ -160,6 +160,7 @@ h2.subject-title {
                 </table>
 
                 <!-- 次のActionに検索条件を引き継ぐための隠しパラメータ（f2〜f4） -->
+                <input type="hidden" name="f1" value="${fEntYear}">
                 <input type="hidden" name="f2" value="${fClassNum}">
                 <input type="hidden" name="f3" value="${fSubjectCd}">
                 <input type="hidden" name="f4" value="${fNo}">
