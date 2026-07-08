@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bean.SchoolBean;
+import bean.StudentBean; // StudentBeanのインポートを追加してください
 import bean.SubjectBean;
 import bean.TeacherBean;
 import bean.TestBean;
@@ -60,31 +61,26 @@ public class TestListAction extends Action {
             String classNum = req.getParameter("f2");
             String subjectCd = req.getParameter("f3");
 
-            // 🌟【要件】科目情報を選択保持し、学生側の検索条件（f4）はクリアして画面に返す
             req.setAttribute("f1", entYear);
             req.setAttribute("f2", classNum);
             req.setAttribute("f3", subjectCd);
             req.setAttribute("f4", ""); // 学生番号クリア
 
             if (entYear == null || entYear.isEmpty() ||
-            	    classNum == null || classNum.isEmpty() ||
-            	    subjectCd == null || subjectCd.isEmpty()) {
+                classNum == null || classNum.isEmpty() ||
+                subjectCd == null || subjectCd.isEmpty()) {
 
-            	    req.setAttribute("inputError", "入学年度とクラスと科目を選択してください");
+                req.setAttribute("inputError", "入学年度とクラスと科目を選択してください");
 
-            	} else {
+            } else {
                 TestDAO dao = new TestDAO();
-                
-                // 🌟【確認完了】DAOに実在するオーバーロードされたメソッドを呼び出す
-                // DAOが内部で自動的に横並び（point1, point2）にマージしたリストを返してくれます
                 List<TestBean> testList = dao.searchBySubject(Integer.parseInt(entYear), classNum, subjectCd, null, school);
 
                 if (testList.isEmpty()) {
-                    req.setAttribute("message", "成績情報が存在しませんでした");
+                    req.setAttribute("message", "学生情報が存在しませんでした");
                 } else {
                     req.setAttribute("testList", testList);
 
-                    // 画面表示用の科目名を取得
                     for (SubjectBean sub : sDao.filter(school.getCd())) {
                         if (sub.getCd().equals(subjectCd)) {
                             req.setAttribute("subjectName", sub.getName());
@@ -103,26 +99,33 @@ public class TestListAction extends Action {
 
             String studentNo = req.getParameter("f4");
 
-            // 🌟【要件】学生情報を保持し、科目側の検索条件（f1〜f3）はクリアして画面に返す
             req.setAttribute("f1", "");
             req.setAttribute("f2", "");
             req.setAttribute("f3", "");
             req.setAttribute("f4", studentNo);
 
             if (studentNo == null || studentNo.isEmpty()) {
-            	req.setAttribute("inputError", "学生番号を入力してください");
-            	} else {
+                req.setAttribute("inputError", "学生番号を入力してください");
+            } else {
                 StudentDAO studentDao = new StudentDAO();
                 TestDAO testDao = new TestDAO();
 
-                // 🌟【確認完了】DAOに実在する「searchByStudent」を正しく呼び出す
-                List<TestBean> testList = testDao.searchByStudent(studentNo, school);
+                // 1. 学生が存在するか先に確認
+                StudentBean student = studentDao.get(studentNo);
+                
+                if (student == null) {
+                    // 学生が存在しない場合
+                    req.setAttribute("message", "学生情報が存在しませんでした");
+                } else {
+                    // 2. 学生が存在する場合のみ成績検索
+                    List<TestBean> testList = testDao.searchByStudent(studentNo, school);
 
-                if (testList.isEmpty()) {
-                	req.setAttribute("message", "成績情報が存在しませんでした");
-                	} else {
-                    req.setAttribute("testList", testList);
-                    req.setAttribute("student", studentDao.get(studentNo));
+                    if (testList.isEmpty()) {
+                        req.setAttribute("message", "成績情報が存在しませんでした");
+                    } else {
+                        req.setAttribute("testList", testList);
+                        req.setAttribute("student", student);
+                    }
                 }
             }
         }

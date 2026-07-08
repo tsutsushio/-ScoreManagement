@@ -89,7 +89,7 @@ public class TestSearchAction extends Action {
         } else {
             // 🌟【追加】どれか一つでも未入力があった場合のエラー処理
             if (entYearStr != null || classNum != null || subjectCd != null || noStr != null) {
-                errors.put("point", "クラス、科目、回数を選択してください。");
+                errors.put("point", "入学年度、クラス、科目、回数を選択してください。");
             }
         }
 
