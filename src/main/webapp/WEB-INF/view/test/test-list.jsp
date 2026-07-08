@@ -20,12 +20,85 @@
     h2.subject-title { font-size: 16px; font-weight: bold; background-color: transparent; padding: 0; margin: 20px 0 15px 0; color: #333; }
 
     /* 検索ボックスエリア(No2: 科目情報div) */
-    .search-box { border: 1px solid #ccc; border-radius: 4px; padding: 20px; margin-bottom: 30px; background-color: #ffffff; }
-    .search-box h3 { font-size: 13px; color: #333; margin: 0 0 10px 0; font-weight: bold; }
-    .form-group { display: flex; flex-direction: column; gap: 4px; }
-    .form-group label { font-size: 12px; color: #666; }
-    .search-form, .student-form { display: flex; align-items: flex-end; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
-    
+/* 検索エリア */
+.search-area{
+    display:flex;
+    align-items:center;
+    gap:30px;
+    margin-bottom:15px;
+}
+.search-box{
+    border:1px solid #dcdcdc;
+    border-radius:6px;
+    padding:20px;
+    margin-bottom:25px;
+    background:#fff;
+}
+.info-title{
+    width:90px;
+    font-size:13px;
+    font-weight:bold;
+    color:#333;
+    flex-shrink:0;
+}
+
+.search-form,
+.student-form{
+    display:flex;
+    align-items:flex-end;
+    gap:20px;
+    flex-wrap:nowrap;
+    margin:0;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.form-group label{
+    font-size:12px;
+    color:#666;
+}
+
+select{
+    width:120px;
+    height:32px;
+    padding:4px 8px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    font-size:14px;
+}
+
+.student-no{
+    width:210px;
+    height:32px;
+    padding:4px 8px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    font-size:14px;
+}
+
+button{
+    height:32px;
+    padding:0 20px;
+    background:#6c757d;
+    color:#fff;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#495057;
+}
+
+.divider{
+    border:none;
+    border-top:1px solid #e5e5e5;
+    margin:18px 0;
+}
     select, .student-no { height: 32px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
     button { height: 32px; padding: 0 20px; background-color: #666; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
     button:hover { background-color: #333; }
@@ -47,6 +120,7 @@
     font-size:13px;
     margin-bottom:15px;
 }
+
 </style>
 </head>
 <body>
@@ -69,63 +143,95 @@
 
         <!-- No2: 科目情報ブロック -->
         <div class="search-box">
-            <h3>科目情報</h3>
-            <form action="TestList.action" method="post" class="search-form">
-                <!-- No15: 科目識別用hidden -->
-                <input type="hidden" name="f" value="sj">
-                <div class="form-group">
-                    <label>入学年度</label>
-                    <select name="f1">
-                        <option value="">--------</option>
-                        <c:forEach items="${yearList}" var="year">
-                            <option value="${year}" ${f1 == year ? 'selected' : ''}>${year}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>クラス</label>
-                    <select name="f2">
-                        <option value="">--------</option>
-                        <c:forEach items="${classList}" var="cls">
-                            <option value="${cls}" ${f2 == cls ? 'selected' : ''}>${cls}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>科目</label>
-                    <select name="f3">
-                        <option value="">--------</option>
-                        <c:forEach items="${subjectList}" var="sub">
-                            <option value="${sub.cd}" ${f3 == sub.cd ? 'selected' : ''}>${sub.name}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <button type="submit">検索</button>
-            </form>
-            
-            <!-- 科目検索エラー -->
+	       <div class="search-area">
+	
+		    <div class="info-title">科目情報</div>
+		
+		    <form action="TestList.action" method="post" class="search-form">
+		
+		        <input type="hidden" name="f" value="sj">
+		
+		        <div class="form-group">
+		            <label>入学年度</label>
+		            <select name="f1">
+		                <option value="">--------</option>
+		                <c:forEach items="${yearList}" var="year">
+		                    <option value="${year}" ${f1 == year ? 'selected' : ''}>
+		                        ${year}
+		                    </option>
+		                </c:forEach>
+		            </select>
+		        </div>
+		
+		        <div class="form-group">
+		            <label>クラス</label>
+		            <select name="f2">
+		                <option value="">--------</option>
+		                <c:forEach items="${classList}" var="cls">
+		                    <option value="${cls}" ${f2 == cls ? 'selected' : ''}>
+		                        ${cls}
+		                    </option>
+		                </c:forEach>
+		            </select>
+		        </div>
+		
+		        <div class="form-group">
+		            <label>科目</label>
+		            <select name="f3">
+		                <option value="">--------</option>
+		                <c:forEach items="${subjectList}" var="sub">
+		                    <option value="${sub.cd}" ${f3 == sub.cd ? 'selected' : ''}>
+		                        ${sub.name}
+		                    </option>
+		                </c:forEach>
+		            </select>
+		        </div>
+		
+		        <button type="submit">検索</button>
+		
+		    </form>
+		
+		</div>
+
+
 <c:if test="${not empty inputError}">
     <p class="input-error">${inputError}</p>
 </c:if>
 
-            <hr class="divider">
+<hr class="divider">
 
-            <!-- No10: 学生情報タイトル -->
-            <p style="font-size: 13px; font-weight: bold; margin: 0 0 10px 0; color: #333;">学生情報</p>
-            <form action="TestList.action" method="post" class="student-form">
-                <!-- No16: 学生識別用hidden -->
-                <input type="hidden" name="f" value="st">
-                <input type="hidden" name="f1" value="${f1}">
-                <input type="hidden" name="f2" value="${f2}">
-                <input type="hidden" name="f3" value="${f3}">
-                <div class="form-group">
-                    <label>学生番号</label>
-                    <!-- No12: 1行入力・10文字最大・必須入力・案内プレースホルダー要件 -->
-                    <input type="text" name="f4" class="student-no" value="${f4}" maxlength="10" required placeholder="学生番号を入力してください">
-                </div>
-                <button type="submit">検索</button>
-            </form>
+
+<div class="search-area">
+
+    <div class="info-title">学生情報</div>
+
+    <form action="TestList.action" method="post" class="student-form">
+
+        <input type="hidden" name="f" value="st">
+        <input type="hidden" name="f1" value="${f1}">
+        <input type="hidden" name="f2" value="${f2}">
+        <input type="hidden" name="f3" value="${f3}">
+
+        <div class="form-group">
+            <label>学生番号</label>
+
+            <input
+                type="text"
+                name="f4"
+                class="student-no"
+                value="${f4}"
+                maxlength="10"
+                required
+                placeholder="学生番号を入力してください">
+
         </div>
+
+        <button type="submit">検索</button>
+
+    </form>
+
+</div>
+		</div>
 
         <!-- 科目エラー・共通エラー表示エリア -->
 <c:if test="${not empty message}">

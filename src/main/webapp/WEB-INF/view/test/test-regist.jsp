@@ -124,7 +124,6 @@ h2.subject-title {
         <!-- 検索結果および成績一覧テーブル（要件準拠） -->
         <c:if test="${not empty testList}">
             <!-- 🌟 見出し(H2): 科目名と何回目かを表示する要件 -->
-            <!-- 旧 <h2>${subjectName} （第 ${fNo} 回）</h2> -->
 <h2 class="subject-title">科目：${subjectName} （${fNo}回）</h2>
 
 
@@ -160,6 +159,7 @@ h2.subject-title {
                 </table>
 
                 <!-- 次のActionに検索条件を引き継ぐための隠しパラメータ（f2〜f4） -->
+                <input type="hidden" name="f1" value="${entYearList}">
                 <input type="hidden" name="f2" value="${fClassNum}">
                 <input type="hidden" name="f3" value="${fSubjectCd}">
                 <input type="hidden" name="f4" value="${fNo}">
