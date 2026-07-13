@@ -89,6 +89,16 @@
         color: #d9534f;
         text-decoration: underline;
     }
+    
+/* テーブルの偶数行（2, 4, 6行目...）の背景色を薄いグレーにする */
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* 【プロの小技】マウスを乗せた行の色を変えるとさらに分かりやすいです */
+table tr:hover {
+    background-color: #f0f5fa; /* ほんのり薄い青色 */
+}
 </style>
 </head>
 <body>

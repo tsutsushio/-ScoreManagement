@@ -176,11 +176,22 @@ table tr:hover td {
     color: #4a7c59; 
     font-size: 13px; 
 }
-.input-error { 
-    color: #e63946; /* スタイリッシュなくすみ赤 */
-    font-size: 13px; 
-    font-weight: 600;
-    margin: 8px 0; 
+
+    select, .student-no { height: 32px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    button { height: 32px; padding: 0 20px; background-color: #666; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background-color: #333; }
+    .divider { border: none; border-top: 1px solid #eee; margin: 20px 0; }
+
+    /* テーブル */
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+    table th { border-bottom: 2px solid #333; padding: 10px; text-align: left; color: #333; }
+    table td { border-bottom: 1px solid #eee; padding: 10px; color: #555; }
+    .initial-msg { color: #28a745; font-size: 13px; }
+.input-error{
+    color:#f0ad4e;
+    font-size:13px;
+    margin:8px 0;
+
 }
 .message-box { 
     color: #2c5234; 
@@ -190,6 +201,17 @@ table tr:hover td {
     background-color: #edf2ee; /* ミニマルなトーンに合わせた淡い緑背景 */
     border-radius: 8px;
     border-left: 3px solid #4a7c59;
+}
+
+
+/* テーブルの偶数行（2, 4, 6行目...）の背景色を薄いグレーにする */
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* 【プロの小技】マウスを乗せた行の色を変えるとさらに分かりやすいです */
+table tr:hover {
+    background-color: #f0f5fa; /* ほんのり薄い青色 */
 }
 
 </style>
