@@ -35,7 +35,7 @@
     table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
     table th { border-bottom: 2px solid #333; padding: 10px; text-align: left; color: #333; }
     table td { border-bottom: 1px solid #eee; padding: 10px; color: #555; }
-    .initial-msg { color: #0066cc; font-size: 13px; }
+    .initial-msg { color: #28a745; font-size: 13px; }
 .input-error{
     color:#f0ad4e;
     font-size:13px;
@@ -46,6 +46,16 @@
     color:#333;
     font-size:13px;
     margin-bottom:15px;
+}
+
+/* テーブルの偶数行（2, 4, 6行目...）の背景色を薄いグレーにする */
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* 【プロの小技】マウスを乗せた行の色を変えるとさらに分かりやすいです */
+table tr:hover {
+    background-color: #f0f5fa; /* ほんのり薄い青色 */
 }
 </style>
 </head>
