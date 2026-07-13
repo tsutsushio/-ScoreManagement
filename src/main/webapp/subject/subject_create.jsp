@@ -148,7 +148,9 @@ body {
                            required>
                     
                     <!-- メッセージに「コード」または「重複」が含まれる場合は科目コードの下に表示 -->
-                    <c:if test="${not empty errorMessage and (errorMessage.contains('コード') or errorMessage.contains('重複'))}">
+                    <c:if test="${not empty errorMessage and 
+                    (errorMessage.contains('コード') or 
+                    errorMessage.contains('重複'))}">
                         <div class="error-msg">
                             ${errorMessage}
                         </div>
@@ -176,8 +178,7 @@ body {
             </form>
 
             <div class="back-link-box">
-                <a href="${pageContext.request.contextPath}/action/SubjectList.action"
-                   class="back-link">戻る</a>
+                <a href="${pageContext.request.contextPath}/action/SubjectList.action"class="back-link">戻る</a>
             </div>
 
         </div>
