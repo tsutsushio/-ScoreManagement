@@ -119,7 +119,7 @@ public class StudentCreateExecuteAction extends Action {
     private void setDropdownLists(HttpServletRequest req) {
         int currentYear = LocalDate.now().getYear();
         List<Integer> entYearList = new ArrayList<>();
-        for (int i = currentYear - 3; i <= currentYear + 1; i++) {
+        for (int i = currentYear - 10; i <= currentYear + 10; i++) {
             entYearList.add(i);
         }
         List<String> classList = new ArrayList<>();
