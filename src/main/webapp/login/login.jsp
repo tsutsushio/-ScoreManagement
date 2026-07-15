@@ -12,14 +12,15 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: "Yu Gothic", sans-serif;
-    background-color: #ffffff; /* 画面全体の背景を白に変更 */
-    color: #333333;
+    /* フォントをより洗練されたモダンな並びに */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Yu Gothic Medium", sans-serif;
+    background-color: #f4f6f4; /* ★全体をリラックスできる薄い緑に変更 */
+    color: #2b2d42; /* 文字色を優しいチャコールに */
 }
 
 body {
     display: flex;
-    flex-direction: column; /* 上からヘッダー、中央メイン、下フッターの順 */
+    flex-direction: column; 
 }
 
 /* メインエリア：ログインカードを画面の縦横中央に綺麗に配置する */
@@ -29,63 +30,79 @@ body {
     justify-content: center;
     align-items: center;
     padding: 40px 20px;
+    background-color: #f4f6f4; /* 背景色を統一 */
     box-sizing: border-box;
 }
 
-/* ログインカード：①の外枠グレー線、角丸なし、幅広め、影なし */
+/* ログインカード（お堅いグレー線を廃止し、プレーンで上質な白い1枚のカードへ） */
 .login-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 440px; /* 少しシャープに縮めて洗練された印象に */
     background: #ffffff;
-    border: 1px solid #dcdcdc; /* 薄いグレーの枠線 */
+    border: 1px solid #edf0ee;
+    border-radius: 16px; /* 角丸を大きめにしてトレンド感のある柔らかさに */
     box-sizing: border-box;
+    /* 海外SaaS風の、ものすごく薄くて広い上質な影 */
+    box-shadow: 0 10px 40px rgba(140, 160, 140, 0.08); 
+    overflow: hidden; /* ヘッダーの角丸をきれいに見せる */
 }
 
 /* ①「ログイン」のヘッダータイトル部分 */
 .login-container h1 {
     margin: 0;
-    background-color: #f5f5f5; /* グレーの背景 */
-    color: #333333;
-    font-size: 18px;
+    background-color: #ffffff; /* グレー背景を廃止し、白でクリーンに */
+    color: #2c5234; /* メインの深緑 */
+    font-size: 20px;
     text-align: center;
-    font-weight: bold;
-    padding: 12px;
-    border-bottom: 1px solid #dcdcdc;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 30px 30px 10px 30px; /* 上下にゆとりを持たせる */
+    border-bottom: none; /* 境界線を消去 */
 }
 
-/* フォーム全体のパディング（中身を白枠内に収める） */
+/* フォーム全体のパディング */
 form {
     padding: 30px;
 }
 
-/* 入力グループ：②、③の青い背景と枠線 */
+/* 入力グループ（唐突な青色を廃止し、システム共通の薄いアッシュグレーに変更） */
 .input-group {
     margin-bottom: 20px;
-    background-color: #ebf2fe; /* 薄い青色の背景 */
-    border: 1px solid #c2d6fc; /* 青系の枠線 */
-    border-radius: 6px;
-    padding: 6px 12px;
+    background-color: #f1f3f1; /* 薄いアッシュグリーングレーの背景 */
+    border: 1px solid transparent; /* 通常時は線を消す */
+    border-radius: 8px; /* 角丸 */
+    padding: 8px 16px; /* 少し広げて入力しやすく */
     position: relative;
+    transition: all 0.25s ease;
+}
+
+/* 入力グループの中にマウスやカーソルが当たった時（フォーカス時）のエフェクト */
+.input-group:focus-within {
+    background-color: #ffffff;
+    border-color: #4a7c59; /* アクセントのグリーン */
+    box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
 }
 
 /* ラベル：入力欄内の上部に小さく配置 */
 .input-group label {
     display: block;
     font-size: 11px;
-    color: #666666;
-    margin-bottom: 2px;
+    color: #8a958f; /* 馴染むニュアンスグレー */
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: 0.03em;
 }
 
 /* 入力欄本体：背景を透明にして枠線を消去 */
 .input-group input[type="text"],
 .input-group input[type="password"] {
     width: 100%;
-    padding: 2px 0;
+    padding: 4px 0; /* ほんの少し高さを広げる */
     box-sizing: border-box;
     border: none;
     background-color: transparent;
     font-size: 14px;
-    color: #333333;
+    color: #2b2d42;
 }
 
 /* フォーカス時のアウトラインを無効化 */
@@ -94,54 +111,61 @@ form {
     outline: none;
 }
 
-/* パスワードを表示チェックボックス（④、⑤） */
+/* パスワードを表示チェックボックス（グリーンに合わせた優しいトーン） */
 .checkbox-group {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* 中央寄せから「左寄せ」にしてフォームの並びを綺麗に */
     align-items: center;
     margin-top: 15px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    color: #333333;
+    margin-bottom: 25px;
+    font-size: 13px;
+    color: #4a7c59; /* 親しみやすい緑色 */
+    font-weight: 500;
+    cursor: pointer;
 }
 
 .checkbox-group input {
-    margin-right: 6px;
-    transform: scale(1.1);
+    margin-right: 8px;
+    accent-color: #4a7c59; /* チェックボックス自体の色もほんnり緑に */
 }
 
-/* ⑥ログインボタン：鮮やかな青の単色 */
+/* ⑥ログインボタン（フラットで洗練されたメインの深緑ボタン仕様） */
 .login-btn {
     display: block;
-    width: 30%;
-    margin: 0 auto;
-    padding: 10px;
+    width: 100%; /* 30%から100%に広げ、海外ツールのような押しやすいモダンなボタンに */
+    padding: 12px;
     border: none;
-    border-radius: 6px;
-    background: #0066ff; /* 鮮やかな青色単色 */
+    border-radius: 8px;
+    background: #2c5234; /* メインの深緑 */
     color: #ffffff;
-    font-size: 15px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
     cursor: pointer;
     text-align: center;
+    transition: all 0.2s ease;
 }
 
 .login-btn:hover {
-    background: #0052cc;
+    background: #1e3b24; /* ホバー時はより深い緑に */
+    box-shadow: 0 4px 12px rgba(44, 82, 52, 0.2);
 }
 
-/* エラーメッセージ */
+/* エラーメッセージ（バリデーション赤文字） */
 .error-msg {
-    background: #ffe5e5;
-    color: #d33;
-    border-left: 5px solid #ff6b6b;
-    padding: 12px;
+    background: #fff5f5; /* 優しい薄赤 */
+    color: #e63946; /* スタイリッシュで目に留まりやすい「くすみ赤」 */
+    border-left: 4px solid #e63946; /* 左端の線だけ赤にしてスマートに */
+    padding: 14px;
     border-radius: 8px;
-    margin: 15px 30px 0 30px;
-    font-weight: bold;
-    font-size: 14px;
-    text-align: center;
+    margin: 0 30px 20px 30px; /* フォームの上部に綺麗に収まるマージンに調整 */
+    font-weight: 600;
+    font-size: 13px;
+    text-align: left; /* 左寄せにして読みやすく */
+    box-shadow: 0 2px 10px rgba(230, 57, 70, 0.03);
 }
+
+
 </style>
 </head>
 <body>
