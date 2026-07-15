@@ -20,13 +20,13 @@ public class StudentDeleteAction extends Action {
             return "/login/login.jsp"; 
         }
 
-        // 2. 画面から送られてきた「削除したい生徒の番号」を受け取る
+        // 2. パラメータ受け取り
         String no = req.getParameter("no");
         if (no == null || no.isEmpty()) {
             return "/action/StudentList.action";
         }
 
-        // 3. データベースからその学生の情報を取得する
+        // 3. 対象の学生情報を取得
         StudentDAO dao = new StudentDAO();
         StudentBean student = dao.get(no);
 
@@ -39,16 +39,20 @@ public class StudentDeleteAction extends Action {
         String studentSchoolCd = student.getSchool().getCd();
         
         if (!teacherSchoolCd.equals(studentSchoolCd)) {
-            // 他校の生徒の番号をイジって消そうとした場合はブロック！
             req.setAttribute("errorMsg", "エラー：他校の生徒は削除できません。");
             return "/action/StudentList.action";
         }
-        // =========================================================
 
-        // 4. 安全が確認できたので、StudentDAOを使ってデータベースから削除
-        dao.delete(student);
+        // 4. データベースから削除実行
+        try {
+            dao.delete(student);
+        } catch (Exception e) {
+            // 削除失敗時のエラーハンドリング
+            req.setAttribute("errorMsg", "エラー：削除に失敗しました。");
+            return "/action/StudentList.action";
+        }
 
-        // 5. 削除後は学生一覧画面へ戻る
+        // 5. 成功時は一覧へ
         return "/action/StudentList.action";
     }
 }

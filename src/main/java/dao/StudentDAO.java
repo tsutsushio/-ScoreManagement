@@ -168,15 +168,48 @@ public class StudentDAO extends DAO {
     public boolean delete(StudentBean student) throws Exception {
         boolean isSuccess = false;
         String no = student.getNo();
-        String sql = "DELETE FROM STUDENT WHERE NO = ?";
-        
-        try (Connection con = getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
-            
-            st.setString(1, no);
-            int result = st.executeUpdate();
+        Connection con = null;
+        PreparedStatement stTest = null;
+        PreparedStatement stStudent = null;
+
+        try {
+            con = getConnection();
+            // トランザクション開始：自動コミットをオフにする
+            con.setAutoCommit(false);
+
+            // 1. まず、その学生に関連するテストデータを削除
+            String sqlTest = "DELETE FROM TEST WHERE STUDENT_NO = ?";
+            stTest = con.prepareStatement(sqlTest);
+            stTest.setString(1, no);
+            stTest.executeUpdate();
+
+            // 2. 次に、学生データを削除
+            String sqlStudent = "DELETE FROM STUDENT WHERE NO = ?";
+            stStudent = con.prepareStatement(sqlStudent);
+            stStudent.setString(1, no);
+            int result = stStudent.executeUpdate();
+
+            // 削除できたか確認（学生データが削除されたら成功）
             if (result > 0) {
                 isSuccess = true;
+            }
+
+            // 全ての処理が成功したら確定（コミット）
+            con.commit();
+
+        } catch (Exception e) {
+            // エラーが発生したら取り消し（ロールバック）
+            if (con != null) {
+                con.rollback();
+            }
+            throw e; // エラーを呼び出し元（Action）に伝える
+        } finally {
+            // リソースの解放
+            if (stTest != null) stTest.close();
+            if (stStudent != null) stStudent.close();
+            if (con != null) {
+                con.setAutoCommit(true); // 自動コミットを元に戻す
+                con.close();
             }
         }
         return isSuccess;
