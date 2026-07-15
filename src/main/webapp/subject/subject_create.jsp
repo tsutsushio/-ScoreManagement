@@ -8,12 +8,15 @@
 <title>得点管理システム - 科目新規登録</title>
 
 <style>
+/* 全体レイアウト：他の画面と共通の縦幅いっぱいベース */
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: "Yu Gothic", sans-serif;
-    background-color: #ffffff;
+    /* フォントをモダンで美しい文字の並びに変更 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Yu Gothic Medium", sans-serif; 
+    background-color: #fafbfc; /* 明るく清潔感のあるモダンな背景 */
+    color: #2b2d42; /* 文字色を優しい黒にして洗練された印象に */
 }
 
 body {
@@ -21,6 +24,7 @@ body {
     flex-direction: column;
 }
 
+/* メインコンテナ（サイドバーとコンテンツの並び） */
 .container {
     display: flex;
     flex: 1;
@@ -28,99 +32,130 @@ body {
     align-items: stretch;
 }
 
+/* 右側メインエリア */
 .main-content {
     flex: 1;
-    padding: 20px 40px;
-    background-color: #ffffff;
+    padding: 40px 60px; /* 余白を広げてプレミアムな空気感に */
     box-sizing: border-box;
 }
 
+/* タイトル（グレーの帯を廃止し、シンプルな下線スタイルに） */
 .main-content h2 {
-    margin-top: 0;
-    margin-bottom: 25px;
-    padding: 12px 15px;
-    background-color: #f2f2f2;
-    color: #333;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 22px; 
+    font-weight: 500; 
+    letter-spacing: 0.05em;
+    background-color: transparent; 
+    padding: 0 0 15px 0; 
+    margin: 0 0 35px 0; 
+    color: #2c5234; 
+    border-bottom: 2px solid #e8ece9; /* 繊細な下線 */
 }
 
+/* フォームコンテナ（プレーンな白い1枚のカードに変身） */
 .form-container {
     max-width: 800px;
     width: 100%;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    font-size: 14px;
-    color: #333;
-    font-weight: normal;
-}
-
-.form-group input[type="text"] {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 40px; /* カード内の余白 */
+    box-shadow: 0 4px 20px rgba(140, 160, 140, 0.06); /* 非常に繊細で柔らかい影 */
     box-sizing: border-box;
 }
 
-.form-group input[type="text"]:focus {
+/* フォームグループ */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* ラベルと入力欄の隙間を少し広げて見やすく */
+    margin-bottom: 25px; /* グループ間の間隔 */
+}
+
+/* ラベルスタイル */
+.form-group label {
+    font-size: 11px;
+    color: #8a958f; /* 馴染むニュアンスグレー */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* テキスト入力欄（グレーの枠線をやめ、フラットデザインに） */
+.form-group input[type="text"] {
+    width: 100%;
+    height: 40px; /* 高さをしっかり持たせてスマートに */
+    padding: 0 14px; 
+    border: 1px solid transparent; /* 通常時は線を消す */
+    border-radius: 8px; 
+    font-size: 14px; 
+    background-color: #f1f3f1; /* 薄いアッシュグリーングレーの背景 */
+    color: #2b2d42;
     outline: none;
-    border-color: #007bff;
+    box-sizing: border-box;
+    transition: all 0.25s ease;
 }
 
+/* 入力中のエフェクト：背景が白になり、グリーンの細い線が浮き出る */
+.form-group input[type="text"]:focus {
+    background-color: #fff;
+    border-color: #4a7c59;
+    box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+}
+
+/* プレースホルダーの文字色 */
 .form-group input::placeholder {
-    color: #aaa;
+    color: #b5beb9;
 }
 
+/* 送信ボタン（フラットで洗練されたニュアンスグリーン） */
 .btn-submit {
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 16px;
+    height: 40px; 
+    padding: 0 28px; 
+    background-color: #4a7c59; /* 優しくくすんだ緑 */
+    color: #ffffff; 
+    border: none; 
+    border-radius: 8px; 
     font-size: 14px;
-    font-weight: normal;
-    cursor: pointer;
-    margin-bottom: 15px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    cursor: pointer; 
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
 }
 
 .btn-submit:hover {
-    background-color: #0056b3;
+    background-color: #3b6347; /* ホバー時は少し深いオリーブに */
+    box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2); /* 浮き上がる影 */
 }
 
+/* 戻るリンクのボックス */
 .back-link-box {
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
+/* 戻るリンク（野暮ったい下線を廃止し、テーマカラーのテキストリンクへ） */
 .back-link {
-    color: #007bff;
+    color: #8a958f; /* 普段は控えめなグレー */
     font-size: 14px;
-    text-decoration: underline;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
 }
 
 .back-link:hover {
-    color: #0056b3;
-    text-decoration: none;
+    color: #4a7c59; /* ホバーするとテーマカラーに */
 }
 
+/* エラーメッセージ（優しいオレンジ寄りの警告色でミニマルに表現） */
 .error-msg {
-    color: #ff0000;
-    font-size: 14px;
-    margin-top: 4px;
-    font-weight: normal;
+    color: #e67e22; 
+    font-size: 13px;
+    margin-top: 6px;
+    font-weight: 500;
     background: none;
     border-left: none;
     padding: 0;
 }
+
 </style>
 </head>
 <body>

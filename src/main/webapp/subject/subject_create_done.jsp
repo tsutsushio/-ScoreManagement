@@ -11,75 +11,104 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: "Yu Gothic", sans-serif;
-    background-color: #ffffff; /* 画像に合わせて背景を白に */
-    color: #333;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Yu Gothic Medium", sans-serif; 
+    background-color: #fafbfc; 
+    color: #2b2d42; 
 }
 
 body {
     display: flex;
-    flex-direction: column; /* 上からヘッダー、コンテンツの順 */
+    flex-direction: column; 
 }
 
-/* 全体レイアウト（サイドバーとメインコンテンツの横並びコンテナ） */
+/* 全体レイアウト */
 .container {
     display: flex;
-    flex: 1;            /* 画面の残りの高さをすべて使う */
+    flex: 1;            
     width: 100%;
     align-items: stretch;
 }
 
-/* メインエリア（左上の登録画面と同じ余白設定） */
+/* メインエリア */
 .main-content {
     flex: 1;
-    padding: 20px 40px;
+    padding: 40px 60px;
     box-sizing: border-box;
-    background-color: #ffffff;
+    background-color: transparent;
 }
 
-/* タイトルエリア（①） */
+/* タイトルエリア */
 .main-content h2 {
-    margin-top: 0;
-    margin-bottom: 25px;
-    padding: 12px 15px;
-    background-color: #f2f2f2; /* 画像の薄いグレー */
-    color: #333;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 22px; 
+    font-weight: 500; 
+    letter-spacing: 0.05em;
+    background-color: transparent; 
+    padding: 0 0 15px 0; 
+    margin: 0 0 35px 0; 
+    color: #2c5234; 
+    border-bottom: 2px solid #e8ece9; 
 }
 
-/* 登録完了メッセージ帯（②） */
+/* 登録完了メッセージ帯 */
 .done-message {
-    font-size: 14px;
-    color: #333;
-    background-color: #8cc6a5; /* 画像のような鮮やかで落ち着いた緑色 */
-    padding: 10px 15px;
-    margin-bottom: 25px;
+    color: #2c5234; 
+    font-size: 13px; 
+    font-weight: 500;
+    margin-bottom: 30px; 
+    padding: 14px 20px;
+    background-color: #edf2ee; 
+    border-radius: 8px;
+    border-left: 4px solid #4a7c59; 
     box-sizing: border-box;
+    box-shadow: 0 2px 12px rgba(140, 160, 140, 0.04);
 }
 
-/* ボタンエリア（③・④の横並びリンク用） */
+/* ボタンエリア */
 .button-area {
     display: flex;
-    justify-content: flex-start; /* 左寄せに変更 */
-    gap: 40px;                   /* リンクとリンクの間の広めのすき間 */
+    align-items: center; 
+    justify-content: flex-start; 
+    gap: 16px; /* ボタン同士の間隔を少しタイトにしてスマートに */
+    margin-top: 10px;
 }
 
-/* 各リンクのテキスト装飾（③、④） */
-.button-area a {
-    color: #007bff;              /* リンクの青色 */
-    text-decoration: underline;  /* 下線を表示 */
+/* 共通ボタンベーススタイル */
+.btn-primary, .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px; 
+    padding: 0 28px; 
+    border-radius: 8px; 
     font-size: 14px;
-    font-weight: normal;         /* 太字を解除 */
-    background: none;            /* ボタン風の背景色を削除 */
-    border: none;                /* ボタン風の枠線を削除 */
-    padding: 0;                  /* 余白を削除 */
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-decoration: none; 
+    transition: all 0.2s ease;
+    box-sizing: border-box;
 }
 
-.button-area a:hover {
-    color: #0056b3;
-    text-decoration: none;       /* ホバー時は下線を消す */
+/* メインボタン：続けて登録 */
+.btn-primary {
+    background-color: #4a7c59; /* 優しくくすんだ緑 */
+    color: #ffffff; 
 }
+.btn-primary:hover {
+    background-color: #3b6347; 
+    box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2); 
+}
+
+/* サブボタン：科目一覧（背景が白の枠線ボタン） */
+.btn-secondary {
+    background-color: #ffffff;
+    color: #4a7c59; 
+    border: 1px solid #4a7c59; /* グリーンの一本線枠 */
+}
+.btn-secondary:hover {
+    background-color: #f7f9f8; /* ほんのりグレー地に */
+    box-shadow: 0 4px 12px rgba(140, 160, 140, 0.1);
+}
+
 </style>
 </head>
 <body>
@@ -100,12 +129,12 @@ body {
             登録が完了しました
         </div>
 
-        <!-- 各種リンク（③「戻る」、④「科目一覧」） -->
+        <!-- 各種リンク（クラスを付与してそれぞれボタン化） -->
         <div class="button-area">
-            <a href="${pageContext.request.contextPath}/action/SubjectCreate.action">
+            <a href="${pageContext.request.contextPath}/action/SubjectCreate.action" class="btn-primary">
                 続けて登録
             </a>
-            <a href="${pageContext.request.contextPath}/action/SubjectList.action">
+            <a href="${pageContext.request.contextPath}/action/SubjectList.action" class="btn-secondary">
                 科目一覧
             </a>
         </div>

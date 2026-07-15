@@ -29,13 +29,13 @@ body {
 	flex: 1;
 	width: 100%;
 	align-items: stretch;
-	background-color: #f4f6f4;
+	background-color: #fafbfc;
 }
 
 .main-content {
 	flex: 1;
 	padding: 40px 60px; /* 余白を贅沢に広げてプレミアムな空気感に */
-	background-color: #f4f6f4;
+	background-color: #fafbfc;
 	box-sizing: border-box;
 }
 
