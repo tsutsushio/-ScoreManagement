@@ -190,6 +190,9 @@ footer {
                     <a href="${pageContext.request.contextPath}/action/StudentList.action">
                         学生管理
                     </a>
+                    <a href="${pageContext.request.contextPath}/action/SeatList.action">
+            席替え
+        </a>
                 </div>
             </div>
 

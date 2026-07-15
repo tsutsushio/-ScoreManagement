@@ -412,6 +412,7 @@ public class TestDAO extends DAO {
         return isSuccess;
     }
     
+    
  // =========================================================
  // 学生検索
  // =========================================================
@@ -525,4 +526,55 @@ public class TestDAO extends DAO {
      }
      return list;
  }
+ public List<TestBean> getSeatScore(
+	        int entYear,
+	        String classNum,
+	        String subjectCd,
+	        int testNo,
+	        SchoolBean school) throws Exception {
+
+	    List<TestBean> list = new ArrayList<>();
+
+	    String sql =
+	        "SELECT ST.NO, ST.NAME, T.POINT " +
+	        "FROM TEST T " +
+	        "JOIN STUDENT ST " +
+	        "ON T.STUDENT_NO = ST.NO " +
+	        "AND T.SCHOOL_CD = ST.SCHOOL_CD " +
+	        "WHERE ST.ENT_YEAR = ? " +
+	        "AND ST.CLASS_NUM = ? " +
+	        "AND T.SUBJECT_CD = ? " +
+	        "AND T.NO = ? " +
+	        "AND T.SCHOOL_CD = ? " +
+	        "ORDER BY T.POINT DESC";
+
+	    try (Connection con = getConnection();
+	         PreparedStatement st = con.prepareStatement(sql)) {
+
+	        st.setInt(1, entYear);
+	        st.setString(2, classNum);
+	        st.setString(3, subjectCd);
+	        st.setInt(4, testNo);
+	        st.setString(5, school.getCd());
+
+	        try (ResultSet rs = st.executeQuery()) {
+
+	            while (rs.next()) {
+
+	                TestBean test = new TestBean();
+
+	                StudentBean student = new StudentBean();
+	                student.setNo(rs.getString("NO"));
+	                student.setName(rs.getString("NAME"));
+
+	                test.setStudent(student);
+	                test.setPoint(rs.getInt("POINT"));
+
+	                list.add(test);
+	            }
+	        }
+	    }
+
+	    return list;
+	}
  }
