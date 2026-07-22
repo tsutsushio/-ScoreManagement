@@ -9,6 +9,8 @@ public class SeatBean {
     private int testNo;
     private int rowNo;
     private int colNo;
+    private int groupNo;
+    private int position;
 
     public String getStudentNo() {
         return studentNo;
@@ -57,11 +59,28 @@ public class SeatBean {
     public void setColNo(int colNo) {
         this.colNo = colNo;
     }
+
     public String getStudentName() {
         return studentName;
     }
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public int getGroupNo() {
+        return groupNo;
+    }
+
+    public void setGroupNo(int groupNo) {
+        this.groupNo = groupNo;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

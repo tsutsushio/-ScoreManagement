@@ -74,10 +74,13 @@
             <ul class="sub-menu">
                 <li><a href="${pageContext.request.contextPath}/action/TestRegist.action">成績登録</a></li>
                 <li><a href="${pageContext.request.contextPath}/action/TestList.action">成績参照</a></li>
+             
             </ul>
         </li>
         <li><a href="${pageContext.request.contextPath}/action/SubjectList.action">科目管理</a></li>
         <li><a href="${pageContext.request.contextPath}/action/ErrorList.action">エラー投稿・検索</a></li>
+        <li><a href="${pageContext.request.contextPath}/action/SeatList.action">席替え</a></li>
+        
     </ul>
   </c:if>
 </div>
