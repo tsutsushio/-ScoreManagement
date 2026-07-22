@@ -2,14 +2,88 @@
 <%@ include file="/header.jsp" %>
 
 <style>
-.content { max-width: 600px; margin: 40px auto; }
-.page-title { background: #eeeeee; padding: 12px 15px; font-size: 24px; font-weight: bold; margin-bottom: 20px; }
-.confirm-box { padding: 10px 0; }
-.message { font-size: 16px; margin-bottom: 20px; }
-.btn-delete { background: #d9534f; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 14px; }
-.btn-delete:hover { background: #c9302c; }
-.back-link { display: inline-block; margin-top: 25px; color: #3366cc; text-decoration: underline; }
-.error-msg { color: red; font-weight: bold; margin-bottom: 15px; }
+/* 画面中央にすっきりと収まるコンテナ（白カード化） */
+.content { 
+    max-width: 600px; 
+    margin: 40px auto; 
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 40px; /* カード内の余白を贅沢に確保 */
+    /* 影を少し濃いめにして、立体感をはっきりと強化 */
+    box-shadow: 0 4px 20px rgba(100, 120, 100, 0.12); 
+    box-sizing: border-box;
+}
+
+
+/* ページタイトル（グレーの帯を廃止し、シンプルな下線スタイルに） */
+.page-title { 
+    font-size: 22px; 
+    font-weight: 500; 
+    letter-spacing: 0.05em;
+    background-color: transparent; 
+    padding: 0 0 15px 0; 
+    margin: 0 0 35px 0; 
+    color: #2c5234; 
+    border-bottom: 2px solid #e8ece9; /* 繊細な下線 */
+}
+
+/* 確認エリアの調整 */
+.confirm-box { 
+    padding: 10px 0; 
+}
+
+/* 確認メッセージの文字色とサイズを微調整 */
+.message { 
+    font-size: 15px; 
+    line-height: 1.6;
+    color: #2b2d42; /* 優しい黒 */
+    margin-bottom: 30px; 
+}
+
+/* 削除ボタン（ギラギラした原色の赤を、少し上品で深みのある赤へ変更） */
+.btn-delete { 
+    height: 40px; /* 高さを揃えてスマートに */
+    padding: 0 28px; 
+    background-color: #c94a47; /* 落ち着いた大人の赤 */
+    color: #ffffff; 
+    border: none; 
+    border-radius: 8px; 
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    cursor: pointer; 
+    transition: all 0.2s ease;
+}
+
+.btn-delete:hover { 
+    background-color: #a83835; /* ホバー時は少し深い色合いに */
+    box-shadow: 0 4px 12px rgba(197, 74, 71, 0.2); /* 浮き上がる赤い影 */
+}
+
+/* 戻るリンク（野暮ったい下線と青色を廃止し、テーマカラーのテキストリンクへ） */
+.back-link { 
+    display: inline-block; 
+    margin-top: 25px; 
+    margin-left: 20px; /* ボタンとの間の適切な距離 */
+    color: #8a958f; /* 普段は控えめなグレー */
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover { 
+    color: #4a7c59; /* ホバーするとテーマカラーのグリーンに */
+}
+
+/* エラーメッセージ（強すぎる赤から、ミニマルな画面に美しく馴染むオレンジ寄りの警告色へ） */
+.error-msg { 
+    color: #e67e22; 
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 20px; 
+}
+
 </style>
 
 <div class="content">

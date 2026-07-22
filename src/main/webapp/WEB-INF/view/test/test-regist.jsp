@@ -26,7 +26,7 @@ body {
     flex: 1; 
     width: 100%; 
     align-items: stretch; 
-    background-color: #f4f6f4; /* ★ コンテナの背景も薄い緑に統一 */
+    background-color: #fafbfc; /* ★ コンテナの背景も薄い緑に統一 */
 }
 .main-content { 
     flex: 1; 

@@ -190,6 +190,7 @@ footer {
                     <a href="${pageContext.request.contextPath}/action/StudentList.action">
                         学生管理
                     </a>
+
                 </div>
             </div>
 
@@ -216,6 +217,15 @@ footer {
                     <a href="${pageContext.request.contextPath}/action/SubjectList.action">
                         科目管理
                     </a>
+                </div>
+            </div>
+            
+                        <div class="menu-card card-student">
+                <div class="menu-links">
+
+                    <a href="${pageContext.request.contextPath}/action/SeatList.action">
+			            席替え
+			        </a>
                 </div>
             </div>
 

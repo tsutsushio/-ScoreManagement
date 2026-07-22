@@ -10,128 +10,183 @@
 <title>得点管理システム - 科目変更</title>
 
 <style>
+/* 全体：画面縦幅いっぱいのベースを作る */
 html, body {
-    height: 100%;
+    height: 100%; /* 古いブラウザ用のフォールバック */
     margin: 0;
     padding: 0;
-    font-family: "Yu Gothic", sans-serif;
-    background-color: #f4f7fb;
+    /* フォントをモダンで美しい文字の並びに変更 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Yu Gothic Medium", sans-serif; 
+    background-color: #fafbfc; /* 明るく清潔感のあるモダンな背景 */
+    color: #2b2d42; /* 文字色を優しい黒にして洗練された印象に */
 }
 
+body {
+    display: flex;
+    flex-direction: column; /* 上からヘッダー、メイン、フッターの順 */
+    min-height: 100vh; /* ⚡フッター固定用：画面の縦幅を最低100%確保 */
+}
+
+/* 全体レイアウト（サイドバーとメインコンテンツの並び） */
 .container {
     display: flex;
-    min-height: 100vh;
+    flex: 1 0 auto; /* ⚡フッター固定用：コンテンツが少なくても、残りの高さをすべて使い切る */
+    width: 100%;
+    align-items: stretch;
 }
 
+/* メインコンテンツ（余白を広げてプレミアムな空気感に） */
 .main-content {
     flex: 1;
-    padding: 40px 20px;
-    background-color: #ffffff; /* 💡 背景を白にしてよりシンプルに */
+    padding: 40px 60px;
+    box-sizing: border-box;
+    background-color: transparent;
     display: flex;
     justify-content: center;
 }
 
+/* 中央配置用のラッパー（プレーンな白い1枚のカードに変身） */
 .content-wrapper {
     width: 100%;
     max-width: 600px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 40px; /* カード内の余白 */
+    /* ご要望に合わせて、影を少しはっきりと濃いめに設定 */
+    box-shadow: 0 4px 20px rgba(100, 120, 100, 0.12);
+    box-sizing: border-box;
 }
 
-/* 💡 戻るリンクを画像のようなシンプルな青文字に */
+/* 上部の戻るリンク（野暮ったい下線と青色を廃止） */
 .back-link {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 .back-link a {
-    color: #007bff;
+    color: #8a958f; /* 普段は控えめなグレー */
     text-decoration: none;
     font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s ease;
 }
 .back-link a:hover {
-    text-decoration: underline;
+    color: #4a7c59; /* ホバーするとテーマカラーのグリーンに */
 }
 
-/* 💡 タイトルエリアを画像①のようなシンプルなグレー背景に変更 */
+/* タイトルエリア（グレーの帯を廃止し、シンプルな下線スタイルに） */
 .title-area {
-    margin-bottom: 25px;
-    padding: 12px 20px;
-    background: #f1f3f5;
-    border-radius: 4px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333333;
+    font-size: 22px; 
+    font-weight: 500; 
+    letter-spacing: 0.05em;
+    background-color: transparent; 
+    padding: 0 0 15px 0; 
+    margin: 0 0 35px 0; 
+    color: #2c5234; 
+    border-bottom: 2px solid #e8ece9; /* 繊細な下線 */
 }
 
-/* 💡 外枠のシャドウや背景を無くして、極限までシンプルに */
+/* フォームエリア */
 .form-area {
     background: transparent;
-    padding: 10px 0;
+    padding: 0;
 }
 
-/* 💡 画像②④のように、ラベルと入力欄をゆったり配置 */
+/* ラベルと入力欄をゆったり配置 */
 .form-row {
-    margin-bottom: 24px;
+    margin-bottom: 25px;
 }
 
+/* ラベルスタイル */
 .form-row label {
     display: block;
-    font-weight: bold;
+    font-size: 11px;
+    color: #8a958f; /* 馴染むニュアンスグレー */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     margin-bottom: 8px;
-    color: #495057;
-    font-size: 15px;
 }
 
-/* 💡 画像③⑤のような、すっきりした入力フォームのデザイン */
+/* すっきりした入力フォーム（グレーの枠線をやめ、フラットデザインに） */
 .form-row input[type="text"] {
     width: 100%;
+    height: 40px; /* 高さをしっかり持たせてスマートに */
+    padding: 0 14px; 
+    border: 1px solid transparent; /* 通常時は線を消す */
+    border-radius: 8px; 
+    font-size: 14px; 
+    background-color: #f1f3f1; /* 薄いアッシュグリーングレーの背景 */
+    color: #2b2d42;
+    outline: none;
     box-sizing: border-box;
-    padding: 10px 14px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-size: 15px;
-    background-color: #ffffff;
+    transition: all 0.2s ease;
 }
 
-/* 💡 読み取り専用（科目コード）の背景を画像③のような薄いグレーに */
+/* 入力中のエフェクト：背景が白になり、グリーンの細い線が浮き出る */
+.form-row input[type="text"]:focus {
+    background-color: #fff;
+    border-color: #4a7c59;
+    box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+}
+
+/* 読み取り専用（科目コード）の背景スタイル */
 .form-row input[readonly] {
-    background-color: #f8f9fa;
-    color: #495057;
-    border-color: #dee2e6;
+    background-color: #e6ece8; /* 少しグリーンの入った落ち着いたアッシュグレー */
+    color: #8a958f;
+    border-color: transparent;
+    cursor: not-allowed; /* 入力不可のカーソル */
+}
+.form-row input[readonly]:focus {
+    background-color: #e6ece8;
+    border-color: transparent;
+    box-shadow: none;
 }
 
-/* 💡 ボタンエリアの配置を左寄せに変更 */
+/* ボタンエリア */
 .button-area {
     text-align: left;
-    margin-top: 30px;
+    margin-top: 35px;
 }
 
-/* 💡 画像⑥のような、パキッとした鮮やかな青色ボタン */
+/* 送信ボタン（フラットで洗練されたニュアンスグリーン） */
 .button-area input[type="submit"] {
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    padding: 10px 24px;
-    font-size: 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s;
+    height: 40px; 
+    padding: 0 28px; 
+    background-color: #4a7c59; /* 優しくくすんだ緑 */
+    color: #ffffff; 
+    border: none; 
+    border-radius: 8px; 
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    cursor: pointer; 
+    transition: all 0.2s ease;
 }
 
 .button-area input[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #3b6347; /* ホバー時は少し深いオリーブに */
+    box-shadow: 0 4px 12px rgba(74, 124, 89, 0.2); /* 浮き上がる影 */
 }
 
-/* 💡 画像⑦のような、ボタンの下に配置するテキストリンクの「戻る」 */
+/* ボタンの下に配置するテキストリンクの「戻る」 */
 .button-area a {
     display: block;
-    margin-top: 15px;
-    color: #007bff;
-    text-decoration: none;
+    margin-top: 20px;
+    color: #8a958f; /* 普段は控えめなグレー */
     font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
 }
 
 .button-area a:hover {
-    text-decoration: underline;
+    color: #4a7c59; /* ホバーするとテーマカラーに */
 }
+
+/* フッターの潰れ防止（※共通スタイルに組み込んでください） */
+footer, .footer {
+    flex-shrink: 0; 
+}
+
 </style>
 
 </head>
@@ -215,6 +270,6 @@ html, body {
     </div>
 
 </div>
-
+<%@ include file="/footer.jsp" %>
 </body>
 </html>

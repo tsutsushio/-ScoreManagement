@@ -5,7 +5,7 @@
 <%@ include file="/header.jsp" %>
 
 <style>
-/* 全体レイアウト（もし他画面と合わせるためのコンテナが必要な場合はここに記述） */
+/* 全体レイアウト（他画面と共通のコンテナ） */
 .container {
     display: flex;
     flex: 1;
@@ -13,53 +13,107 @@
     align-items: stretch;
 }
 
-/* メインコンテンツ（左寄せ・登録画面などと同じ余白設定） */
+/* メインコンテンツ（余白を広げてプレミアムな空気感に） */
 .main-content {
     flex: 1;
-    padding: 20px 40px;
+    padding: 40px 60px;
     box-sizing: border-box;
-    background-color: #ffffff;
+    background-color: transparent;
 }
 
-/* タイトルエリア（①） */
+/* タイトルエリア（①：グレーの帯を廃止し、シンプルな下線スタイルに） */
 .main-content h2 {
-    margin-top: 0;
-    margin-bottom: 25px;
-    padding: 12px 15px;
-    background-color: #f2f2f2; /* 画像の薄いグレー */
-    color: #333;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 22px; 
+    font-weight: 500; 
+    letter-spacing: 0.05em;
+    background-color: transparent; 
+    padding: 0 0 15px 0; 
+    margin: 0 0 35px 0; 
+    color: #2c5234; 
+    border-bottom: 2px solid #e8ece9; /* 繊細な下線 */
 }
 
-/* 削除完了メッセージ帯（②） */
+/* 削除完了メッセージ帯（②：濃いめの影で立体感を強めたメッセージボックス） */
 .done-message {
-    font-size: 14px;
-    color: #333;
-    background-color: #8cc6a5; /* 画像と同じ鮮やかで落ち着いた緑色 */
-    padding: 10px 15px;
-    margin-bottom: 25px;
+    color: #2c5234; 
+    font-size: 13px; 
+    font-weight: 500;
+    margin-bottom: 30px; 
+    padding: 14px 20px;
+    background-color: #edf2ee; /* 心地よいニュアンスグリーンの背景 */
+    border-radius: 8px;
+    border-left: 4px solid #4a7c59; /* 左側にアクセントライン */
     box-sizing: border-box;
+    /* ご要望に合わせて、影を少しはっきりと濃いめに設定 */
+    box-shadow: 0 4px 15px rgba(100, 120, 100, 0.12);
 }
 
 /* リンクエリア（③） */
 .back-link-box {
-    margin-top: 5px;
+    margin-top: 15px;
     text-align: left;
 }
 
-/* リンクのテキスト装飾（③） */
+/* リンクのテキスト装飾（③：野暮ったい下線と原色の青を廃止） */
 .back-link {
-    color: #007bff;              /* リンクの青色 */
-    text-decoration: underline;  /* 下線を表示 */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* 前回の「科目一覧」と同様に、スマートな白抜き枠線ボタンとしてリデザイン */
+    height: 40px; 
+    padding: 0 28px; 
+    background-color: #ffffff;
+    color: #4a7c59; 
+    border: 1px solid #4a7c59; /* グリーンの一本線枠 */
+    border-radius: 8px; 
     font-size: 14px;
-    font-weight: normal;         /* 太字を解除 */
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-decoration: none; 
+    transition: all 0.2s ease;
+    box-sizing: border-box;
 }
 
 .back-link:hover {
-    color: #0056b3;
-    text-decoration: none;       /* ホバー時は下線を消す */
+    background-color: #f7f9f8; /* ほんのりグレー地に */
+    /* ここも連動して少し濃いめの美しい影を適用 */
+    box-shadow: 0 4px 12px rgba(100, 120, 100, 0.12);
 }
+/* 全体：画面縦幅いっぱいのベースを作る */
+html, body {
+    height: 100%; /* 古いブラウザ用のフォールバック */
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Yu Gothic Medium", sans-serif; 
+    background-color: #fafbfc; 
+    color: #2b2d42; 
+}
+
+body {
+    display: flex;
+    flex-direction: column; /* 上からヘッダー、メイン、フッターの順 */
+    min-height: 100vh; /* 画面の縦幅を最低でも100%確保する */
+}
+
+/* 全体レイアウト（サイドバーとメインコンテンツのコンテナ） */
+.container {
+    display: flex;
+    flex: 1 0 auto; /* ⚡最重要：コンテンツが少なくても、画面の残りの高さをすべて使い切る */
+    width: 100%;
+    align-items: stretch;
+}
+
+/* フッターのスタイル例（もし個別に設定していない場合は、こちらを参考にしてください） */
+footer, .footer {
+    flex-shrink: 0; /* ⚡最重要：フッターが潰れるのを防ぐ */
+    background-color: #ffffff; /* デザインに合わせた白背景 */
+    border-top: 1px solid #edf0ee; /* 繊細な区切り線 */
+    padding: 15px 0;
+    text-align: center;
+    font-size: 12px;
+    color: #8a958f;
+}
+
 </style>
 
 <!-- 他の画面と同じくサイドバーを挟むためのレイアウト構造 -->
