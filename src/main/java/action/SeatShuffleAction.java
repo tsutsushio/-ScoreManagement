@@ -15,63 +15,68 @@ import tool.Action;
 
 public class SeatShuffleAction extends Action {
 
-	@Override
-	public String execute(HttpServletRequest req,
-	        HttpServletResponse res) throws Exception {
+    @Override
+    public String execute(HttpServletRequest req,
+            HttpServletResponse res) throws Exception {
 
-	    HttpSession session = req.getSession();
+        HttpSession session = req.getSession();
 
-	    TeacherBean loginUser =
-	            (TeacherBean) session.getAttribute("loginUser");
+        TeacherBean loginUser =
+                (TeacherBean) session.getAttribute("loginUser");
 
-	    if (loginUser == null) {
-	        return "/login/login.jsp";
-	    }
+        if (loginUser == null) {
+            return "/login/login.jsp";
+        }
 
-	    SchoolBean school = loginUser.getSchool();
+        SchoolBean school = loginUser.getSchool();
 
-	    // パラメータ取得
-	    String entYearStr = req.getParameter("entYear");
-	    String classNum = req.getParameter("classNum");
-	    String subjectCd = req.getParameter("subject");
-	    String testNoStr = req.getParameter("no");
+        // パラメータ取得
+        String entYearStr = req.getParameter("entYear");
+        String classNum = req.getParameter("classNum");
+        String subjectCd = req.getParameter("subject");
+        String testNoStr = req.getParameter("no");
 
-	    // 入力チェック
-	    if (entYearStr == null || entYearStr.isEmpty()
-	            || classNum == null || classNum.isEmpty()
-	            || subjectCd == null || subjectCd.isEmpty()
-	            || testNoStr == null || testNoStr.isEmpty()) {
+        // 入力チェック
+        if (entYearStr == null || entYearStr.isEmpty()
+                || classNum == null || classNum.isEmpty()
+                || subjectCd == null || subjectCd.isEmpty()
+                || testNoStr == null || testNoStr.isEmpty()) {
 
-	        req.setAttribute("message", "すべての項目を選択してください。");
+            req.setAttribute("message", "すべての項目を選択してください。");
 
-	        // プルダウン用データを再取得
-	        return new SeatListAction().execute(req, res);
-	    }
+            // プルダウン用データを再取得
+            return new SeatListAction().execute(req, res);
+        }
 
-	    int entYear = Integer.parseInt(entYearStr);
-	    int testNo = Integer.parseInt(testNoStr);
+        int entYear = Integer.parseInt(entYearStr);
+        int testNo = Integer.parseInt(testNoStr);
 
-	    TestDAO dao = new TestDAO();
+        TestDAO dao = new TestDAO();
 
-	    List<TestBean> scoreList =
-	            dao.getSeatScore(
-	                    entYear,
-	                    classNum,
-	                    subjectCd,
-	                    testNo,
-	                    school);
+        List<TestBean> scoreList =
+                dao.getSeatScore(
+                        entYear,
+                        classNum,
+                        subjectCd,
+                        testNo,
+                        school);
 
-	    List<SeatBean> seatList =
-	            shuffle(
-	                    scoreList,
-	                    classNum,
-	                    subjectCd,
-	                    testNo);
+        // 総班数の計算 (1班4人とし、端数を繰り上げ)
+        int groupCount =
+                (int) Math.ceil((double) scoreList.size() / 4);
 
-	    req.setAttribute("seatList", seatList);
+        List<SeatBean> seatList =
+                shuffle(
+                        scoreList,
+                        classNum,
+                        subjectCd,
+                        testNo);
 
-	    return "/WEB-INF/view/seat/seat.jsp";
-	}
+        req.setAttribute("seatList", seatList);
+        req.setAttribute("groupCount", groupCount);
+
+        return "/WEB-INF/view/seat/seat.jsp";
+    }
 
     /**
      * 実力均等席替え
@@ -93,8 +98,8 @@ public class SeatShuffleAction extends Action {
         int groupSize = 4;
 
         int groupCount =
-                (int)Math.ceil(
-                        (double)scoreList.size() / groupSize);
+                (int) Math.ceil(
+                        (double) scoreList.size() / groupSize);
 
         // 班リスト作成
         List<List<TestBean>> groups =
@@ -134,6 +139,7 @@ public class SeatShuffleAction extends Action {
 
         // 席へ配置
         int baseCol = 1;
+        int groupNo = 1;
 
         for (List<TestBean> group : groups) {
 
@@ -147,6 +153,10 @@ public class SeatShuffleAction extends Action {
                 seat.setTestNo(testNo);
                 seat.setStudentNo(test.getStudent().getNo());
                 seat.setStudentName(test.getStudent().getName());
+
+                // 班番号と班内位置（1〜4）の保持
+                seat.setGroupNo(groupNo);
+                seat.setPosition(i + 1);
 
                 switch (i) {
                 case 0:
@@ -170,8 +180,9 @@ public class SeatShuffleAction extends Action {
                 result.add(seat);
             }
 
-            // 次の班は右へ2列ずらす
+            // 次の班は右へ2列ずらし、班番号をカウントアップ
             baseCol += 2;
+            groupNo++;
         }
         return result;
     }
