@@ -78,7 +78,7 @@
             </ul>
         </li>
         <li><a href="${pageContext.request.contextPath}/action/SubjectList.action">科目管理</a></li>
-                            <li><a href="${pageContext.request.contextPath}/action/SeatList.action">ooo</a></li>
+        <li><a href="${pageContext.request.contextPath}/action/SeatList.action"></a>席替え</li>
         
     </ul>
   </c:if>
