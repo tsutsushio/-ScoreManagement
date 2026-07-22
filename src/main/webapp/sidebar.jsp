@@ -78,7 +78,8 @@
             </ul>
         </li>
         <li><a href="${pageContext.request.contextPath}/action/SubjectList.action">科目管理</a></li>
-        <li><a href="${pageContext.request.contextPath}/action/SeatList.action"></a>席替え</li>
+        <li><a href="${pageContext.request.contextPath}/action/ErrorList.action">エラー投稿・検索</a></li>
+        <li><a href="${pageContext.request.contextPath}/action/SeatList.action">席替え</a></li>
         
     </ul>
   </c:if>
