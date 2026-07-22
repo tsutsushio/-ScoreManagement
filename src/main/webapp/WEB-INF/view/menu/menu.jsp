@@ -32,7 +32,7 @@ body {
     flex: 1;
     width: 100%;
     align-items: stretch;
-    background-color: #fafbfc;
+    background-color: #fffff;
 }
 
 /* メインエリア */
@@ -48,7 +48,7 @@ body {
     margin-bottom: 35px;
     padding: 0 0 15px 0;
     background-color: transparent;
-    border-bottom: 2px solid #edf0ee; /* 洗練された細い下線 */
+    border-bottom: 2px solid #000000; /* 洗練された細い下線 */
     color: #2c5234; /* メインの深緑 */
     font-size: 22px;
     font-weight: 500;
@@ -161,7 +161,7 @@ footer {
     color: #8a958f;
     width: 100%;
     box-sizing: border-box;
-    border-top: 1px solid #edf0ee;
+    border-top: 1px solid #000000;
 }
 
 

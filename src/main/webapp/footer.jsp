@@ -6,14 +6,14 @@
 /* フッター共通スタイル（形は変えず、色を画面に馴染ませる） */
 footer {
     /* 暗いグレーから、ごく薄いニュアンスグレーに変更 */
-    background-color: #f1f3f1; 
+    background-color: #e6e6e6; 
     
     text-align: center;
     padding: 18px; /* 上下の余白を少しだけ広げてゆったりと */
     font-size: 12px;
     
     /* 文字色も真っ黒ではなく、全体のトーンに合わせたセージグレーに */
-    color: #8a958f; 
+    color: #000000; 
     
     width: 100%;
     box-sizing: border-box;
